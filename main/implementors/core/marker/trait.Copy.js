@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["custodian_password"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"custodian_password/enum.Error.html\" title=\"enum custodian_password::Error\">Error</a>","synthetic":false,"types":["custodian_password::Error"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

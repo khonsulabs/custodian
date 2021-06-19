@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","`Error` type for this crate."]],"mod":[["client","OPAQUE client side handling."],["server","OPAQUE server side handling."]],"struct":[["Config","Common password configuration between server and client."]],"type":[["Result","`Result` for this crate."]]});
