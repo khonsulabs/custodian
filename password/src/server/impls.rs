@@ -14,7 +14,7 @@ use super::{LoginState, ServerRegistration};
 impl Debug for LoginState {
 	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
 		f.debug_tuple("LoginState")
-			.field(&"opaque_ke::ServerLogin<Config>")
+			.field(&"opaque_ke::ServerLogin<CipherSuite>")
 			.finish()
 	}
 }
@@ -75,7 +75,7 @@ impl Serialize for LoginState {
 impl Debug for ServerRegistration {
 	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
 		f.debug_tuple("State")
-			.field(&"opaque_ke::ServerRegistration<Config>")
+			.field(&"opaque_ke::ServerRegistration<CipherSuite>")
 			.finish()
 	}
 }

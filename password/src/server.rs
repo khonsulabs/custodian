@@ -4,14 +4,14 @@ mod impls;
 
 use generic_bytes::SizedBytes;
 use opaque_ke::{
-	ciphersuite::CipherSuite, keypair::Key, rand::rngs::OsRng, CredentialRequest,
+	ciphersuite::CipherSuite as _, keypair::Key, rand::rngs::OsRng, CredentialRequest,
 	RegistrationRequest, RegistrationUpload, ServerLogin, ServerLoginStartParameters,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
 	client::{self, LoginRequest},
-	Config, Error, Result,
+	CipherSuite, Config, Error, Result,
 };
 
 /// Login process on the server.
@@ -109,11 +109,14 @@ impl RegistrationBuilder {
 	) -> Result<(Self, RegistrationResponse)> {
 		let request =
 			RegistrationRequest::deserialize(request.message()).map_err(|_| Error::Registration)?;
-		let keypair = Config::generate_random_keypair(&mut OsRng);
+		let keypair = CipherSuite::generate_random_keypair(&mut OsRng);
 
-		let result =
-			opaque_ke::ServerRegistration::<Config>::start(&mut OsRng, request, keypair.public())
-				.map_err(|_| Error::Registration)?;
+		let result = opaque_ke::ServerRegistration::<CipherSuite>::start(
+			&mut OsRng,
+			request,
+			keypair.public(),
+		)
+		.map_err(|_| Error::Registration)?;
 
 		let private_key = keypair.private().to_arr().into();
 		let state = ServerRegistration(result.state);
@@ -155,11 +158,11 @@ impl RegistrationBuilder {
 
 /// Wraps around [`ServerLogin`](ServerLogin) because common traits aren't
 /// implemented in the dependency.
-struct LoginState(ServerLogin<Config>);
+struct LoginState(ServerLogin<CipherSuite>);
 
 /// Wraps around [`ServerRegistration`](opaque_ke::ServerRegistration) because
 /// common traits aren't implemented in the dependency.
-struct ServerRegistration(opaque_ke::ServerRegistration<Config>);
+struct ServerRegistration(opaque_ke::ServerRegistration<CipherSuite>);
 
 /// Send this back to the client to drive the login process.
 #[must_use = "Does nothing if not sent to the client"]

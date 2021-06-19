@@ -8,7 +8,7 @@ use opaque_ke::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::{server, Config, Error, Result};
+use crate::{server, CipherSuite, Config, Error, Result};
 
 /// Starts a login process on the client.
 #[must_use = "Does nothing if not `finish`ed"]
@@ -27,7 +27,7 @@ impl Login {
 	/// # Errors
 	/// [`Error::Login`] on login failure.
 	pub fn login(config: Config, password: &[u8]) -> Result<(Self, LoginRequest)> {
-		let result = ClientLogin::<Config>::start(
+		let result = ClientLogin::<CipherSuite>::start(
 			&mut OsRng,
 			password,
 			ClientLoginStartParameters::default(),
@@ -77,7 +77,7 @@ impl Register {
 	/// # Errors
 	/// [`Error::Registration`] on registration failure.
 	pub fn register(config: Config, password: &[u8]) -> Result<(Self, RegistrationRequest)> {
-		let result = opaque_ke::ClientRegistration::<Config>::start(&mut OsRng, password)
+		let result = opaque_ke::ClientRegistration::<CipherSuite>::start(&mut OsRng, password)
 			.map_err(|_| Error::Registration)?;
 
 		let state = RegisterState(result.state);
@@ -111,11 +111,11 @@ impl Register {
 
 /// Wraps around [`ClientLogin`] because common traits aren't implemented in the
 /// dependency.
-struct LoginState(ClientLogin<Config>);
+struct LoginState(ClientLogin<CipherSuite>);
 
 /// Wraps around [`ClientRegistration`] because common traits aren't implemented
 /// in the dependency.
-struct RegisterState(ClientRegistration<Config>);
+struct RegisterState(ClientRegistration<CipherSuite>);
 
 /// Send this back to the server to finish the registration process.
 #[must_use = "Does nothing if not sent to the server"]

@@ -67,7 +67,6 @@
 // TODO: expose session key
 // TODO: expose export key
 // TODO: rename all structures and equalize them between client and server
-// TODO: move `Config` to a different module
 // TODO: turn `Config` into an `Arc`
 // TODO: expose custom identifier
 // TODO: expose further configurations
@@ -76,16 +75,16 @@
 // TODO: expose server keypair with types from `custodian-shared` and enable
 // optional external keypairs
 
+mod cipher_suite;
 pub mod client;
+mod config;
 pub mod server;
 
-use curve25519_dalek::ristretto::RistrettoPoint;
-use opaque_ke::{ciphersuite::CipherSuite, key_exchange::tripledh::TripleDH};
-use scrypt::ScryptParams;
 pub use serde;
-use serde::{Deserialize, Serialize};
-use sha2::Sha512;
 use thiserror::Error;
+
+use crate::cipher_suite::CipherSuite;
+pub use crate::config::Config;
 
 /// [`Result`](std::result::Result) for this crate.
 pub type Result<T, E = Error> = std::result::Result<T, E>;
@@ -99,28 +98,6 @@ pub enum Error {
 	/// Error during login.
 	#[error("Error during login")]
 	Login,
-}
-
-/// Common password configuration between server and client.
-#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-// TODO: remove `non_exhaustive` and `allow(missing_copy_implementations)` when members are added
-#[allow(missing_copy_implementations)]
-#[non_exhaustive]
-pub struct Config;
-
-impl CipherSuite for Config {
-	type Group = RistrettoPoint;
-	type Hash = Sha512;
-	type KeyExchange = TripleDH;
-	type SlowHash = ScryptParams;
-}
-
-impl Config {
-	/// Builds new default [`Config`].
-	#[must_use]
-	pub const fn new() -> Self {
-		Self
-	}
 }
 
 #[test]
