@@ -23,6 +23,7 @@
 <span id="21">21</span>
 <span id="22">22</span>
 <span id="23">23</span>
+<span id="24">24</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Password configuration.</span>
 
@@ -33,8 +34,9 @@
 <span class="doccomment">/// Common password configuration between server and client.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Config</span> {
-	<span class="doccomment">/// Inner type implementing [`CipherSuite`](ciphersuite::CipherSuite) to</span>
-	<span class="doccomment">/// prevent exposing it publicly.</span>
+	<span class="doccomment">/// Inner type implementing</span>
+	<span class="doccomment">/// [`CipherSuite`](opaque_ke::ciphersuite::CipherSuite) to prevent exposing</span>
+	<span class="doccomment">/// it publicly.</span>
 	<span class="ident">cipher_suite</span>: <span class="ident">CipherSuite</span>,
 }
 
