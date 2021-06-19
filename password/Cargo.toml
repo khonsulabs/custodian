@@ -13,10 +13,10 @@ edition = "2018"
 bincode = "1"
 curve25519-dalek = "3"
 generic-bytes = "0.1"
-opaque-ke = { version="0.5", features=["slow-hash"] }
+opaque-ke = { version = "0.5", features = ["slow-hash"] }
 scrypt = "0.5"
 sha2 = "0.9"
-serde = { version="1", features=["derive"] }
+serde = { version = "1", features = ["derive"] }
 thiserror = "1"
 
 [dev-dependencies]
