@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["custodian_password"] = [{"text":"impl CipherSuite for <a class=\"struct\" href=\"custodian_password/struct.Config.html\" title=\"struct custodian_password::Config\">Config</a>","synthetic":false,"types":["custodian_password::Config"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
