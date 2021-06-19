@@ -23,7 +23,7 @@
         <div>
             <p class="heading">Functions</p>
             <p class="title has-text-danger">
-                <abbr title="8 / 14">57.14 %</abbr></p>
+                <abbr title="8 / 212">3.77 %</abbr></p>
         </div>
     </div>
 
@@ -177,7 +177,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use crate::{server, Config, Error, Result};</pre>
+                <pre class="has-background-white py-0 px-2">use crate::{server, CipherSuite, Config, Error, Result};</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -424,7 +424,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let result = ClientLogin::&lt;Config&gt;::start(</pre>
+                <pre class="has-background-success-light py-0 px-2">		let result = ClientLogin::&lt;CipherSuite&gt;::start(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1074,7 +1074,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let result = opaque_ke::ClientRegistration::&lt;Config&gt;::start(&amp;mut OsRng, password)</pre>
+                <pre class="has-background-success-light py-0 px-2">		let result = opaque_ke::ClientRegistration::&lt;CipherSuite&gt;::start(&amp;mut OsRng, password)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1516,7 +1516,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">struct LoginState(ClientLogin&lt;Config&gt;);</pre>
+                <pre class="has-background-white py-0 px-2">struct LoginState(ClientLogin&lt;CipherSuite&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1568,7 +1568,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">struct RegisterState(ClientRegistration&lt;Config&gt;);</pre>
+                <pre class="has-background-white py-0 px-2">struct RegisterState(ClientRegistration&lt;CipherSuite&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2197,7 +2197,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-06-19 20:40</p>
+                <p class="heading">Date: 2021-06-19 22:40</p>
             </div>
         </footer>
     </body>

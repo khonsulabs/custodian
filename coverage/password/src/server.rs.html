@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-success">
-                <abbr title="72 / 77">93.51 %</abbr></p>
+                <abbr title="75 / 80">93.75 %</abbr></p>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
         <div>
             <p class="heading">Functions</p>
             <p class="title has-text-danger">
-                <abbr title="6 / 12">50 %</abbr></p>
+                <abbr title="6 / 190">3.16 %</abbr></p>
         </div>
     </div>
 
@@ -125,7 +125,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	ciphersuite::CipherSuite, keypair::Key, rand::rngs::OsRng, CredentialRequest,</pre>
+                <pre class="has-background-white py-0 px-2">	ciphersuite::CipherSuite as _, keypair::Key, rand::rngs::OsRng, CredentialRequest,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -216,7 +216,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Config, Error, Result,</pre>
+                <pre class="has-background-white py-0 px-2">	CipherSuite, Config, Error, Result,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1490,7 +1490,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let keypair = Config::generate_random_keypair(&amp;mut OsRng);</pre>
+                <pre class="has-background-success-light py-0 px-2">		let keypair = CipherSuite::generate_random_keypair(&amp;mut OsRng);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1516,7 +1516,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let result =</pre>
+                <pre class="has-background-success-light py-0 px-2">		let result = opaque_ke::ServerRegistration::&lt;CipherSuite&gt;::start(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1529,7 +1529,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			opaque_ke::ServerRegistration::&lt;Config&gt;::start(&amp;mut OsRng, request, keypair.public())</pre>
+                <pre class="has-background-success-light py-0 px-2">			&amp;mut OsRng,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1542,7 +1542,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				.map_err(|_| Error::Registration)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">			request,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1551,11 +1551,11 @@
                 <a href="#117">117</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			keypair.public(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1568,7 +1568,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let private_key = keypair.private().to_arr().into();</pre>
+                <pre class="has-background-success-light py-0 px-2">		)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1581,7 +1581,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let state = ServerRegistration(result.state);</pre>
+                <pre class="has-background-success-light py-0 px-2">		.map_err(|_| Error::Registration)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1590,11 +1590,11 @@
                 <a href="#120">120</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let message = RegistrationResponse(result.message.serialize());</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1607,7 +1607,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
+                <pre class="has-background-success-light py-0 px-2">		let private_key = keypair.private().to_arr().into();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1620,7 +1620,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok((</pre>
+                <pre class="has-background-success-light py-0 px-2">		let state = ServerRegistration(result.state);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1633,7 +1633,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			Self {</pre>
+                <pre class="has-background-success-light py-0 px-2">		let message = RegistrationResponse(result.message.serialize());</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1646,7 +1646,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				config,</pre>
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1659,7 +1659,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				private_key,</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok((</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1672,7 +1672,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				state,</pre>
+                <pre class="has-background-success-light py-0 px-2">			Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1685,7 +1685,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			},</pre>
+                <pre class="has-background-success-light py-0 px-2">				config,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1698,7 +1698,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			message,</pre>
+                <pre class="has-background-success-light py-0 px-2">				private_key,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1711,7 +1711,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		))</pre>
+                <pre class="has-background-success-light py-0 px-2">				state,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1724,7 +1724,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">			},</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1733,11 +1733,11 @@
                 <a href="#131">131</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			message,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1746,11 +1746,11 @@
                 <a href="#132">132</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Finishes the registration process. The returned [`Registration`] is</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1759,11 +1759,11 @@
                 <a href="#133">133</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; needed for [`login`](Registration::login), typically this is saved in a</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1776,7 +1776,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; database.</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1789,7 +1789,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Finishes the registration process. The returned [`Registration`] is</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1802,7 +1802,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; needed for [`login`](Registration::login), typically this is saved in a</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1815,7 +1815,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::Registration`] on registration failure.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; database.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1824,11 +1824,11 @@
                 <a href="#138">138</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	pub fn finish(self, response: &amp;client::RegistrationResponse) -&gt; Result&lt;Registration&gt; {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1837,11 +1837,11 @@
                 <a href="#139">139</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let response =</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1850,11 +1850,11 @@
                 <a href="#140">140</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			RegistrationUpload::deserialize(response.message()).map_err(|_| Error::Registration)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::Registration`] on registration failure.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1863,11 +1863,11 @@
                 <a href="#141">141</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	pub fn finish(self, response: &amp;client::RegistrationResponse) -&gt; Result&lt;Registration&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1880,7 +1880,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let file = self</pre>
+                <pre class="has-background-success-light py-0 px-2">		let response =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1893,7 +1893,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.state</pre>
+                <pre class="has-background-success-light py-0 px-2">			RegistrationUpload::deserialize(response.message()).map_err(|_| Error::Registration)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1902,11 +1902,11 @@
                 <a href="#144">144</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.0</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1919,7 +1919,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.finish(response)</pre>
+                <pre class="has-background-success-light py-0 px-2">		let file = self</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1932,7 +1932,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.map_err(|_| Error::Registration)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">			.state</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1941,11 +1941,11 @@
                 <a href="#147">147</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			.0</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1958,7 +1958,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok(Registration {</pre>
+                <pre class="has-background-success-light py-0 px-2">			.finish(response)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1971,7 +1971,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			config: self.config,</pre>
+                <pre class="has-background-success-light py-0 px-2">			.map_err(|_| Error::Registration)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1980,11 +1980,11 @@
                 <a href="#150">150</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			file: ServerRegistration(file),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1997,7 +1997,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			private_key: self.private_key,</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok(Registration {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2010,7 +2010,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		})</pre>
+                <pre class="has-background-success-light py-0 px-2">			config: self.config,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2023,7 +2023,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">			file: ServerRegistration(file),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2032,11 +2032,11 @@
                 <a href="#154">154</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			private_key: self.private_key,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2045,11 +2045,11 @@
                 <a href="#155">155</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		})</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2058,11 +2058,11 @@
                 <a href="#156">156</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Wraps around [`ServerLogin`](ServerLogin) because common traits aren&#x27;t</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2075,7 +2075,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; implemented in the dependency.</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2088,7 +2088,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">struct LoginState(ServerLogin&lt;Config&gt;);</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2101,7 +2101,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Wraps around [`ServerLogin`](ServerLogin) because common traits aren&#x27;t</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2114,7 +2114,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Wraps around [`ServerRegistration`](opaque_ke::ServerRegistration) because</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; implemented in the dependency.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2127,7 +2127,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; common traits aren&#x27;t implemented in the dependency.</pre>
+                <pre class="has-background-white py-0 px-2">struct LoginState(ServerLogin&lt;CipherSuite&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2140,7 +2140,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">struct ServerRegistration(opaque_ke::ServerRegistration&lt;Config&gt;);</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2153,7 +2153,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Wraps around [`ServerRegistration`](opaque_ke::ServerRegistration) because</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2166,7 +2166,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Send this back to the client to drive the login process.</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; common traits aren&#x27;t implemented in the dependency.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2179,7 +2179,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[must_use = &quot;Does nothing if not sent to the client&quot;]</pre>
+                <pre class="has-background-white py-0 px-2">struct ServerRegistration(opaque_ke::ServerRegistration&lt;CipherSuite&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2188,11 +2188,11 @@
                 <a href="#166">166</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2205,7 +2205,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct LoginResponse(Vec&lt;u8&gt;);</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Send this back to the client to drive the login process.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2218,7 +2218,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">#[must_use = &quot;Does nothing if not sent to the client&quot;]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2227,11 +2227,11 @@
                 <a href="#169">169</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl LoginResponse {</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2244,65 +2244,13 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Getter for message.</pre>
+                <pre class="has-background-white py-0 px-2">pub struct LoginResponse(Vec&lt;u8&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="171">
                 <a href="#171">171</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	pub(crate) fn message(&amp;self) -&gt; &amp;[u8] {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="172">
-                <a href="#172">172</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		&amp;self.0</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="173">
-                <a href="#173">173</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="174">
-                <a href="#174">174</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
-            </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="175">
-                <a href="#175">175</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -2314,15 +2262,67 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="176">
-                <a href="#176">176</a>
+                id="172">
+                <a href="#172">172</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Send this back to the client to drive the registration process.</pre>
+                <pre class="has-background-white py-0 px-2">impl LoginResponse {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="173">
+                <a href="#173">173</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Getter for message.</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="174">
+                <a href="#174">174</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	pub(crate) fn message(&amp;self) -&gt; &amp;[u8] {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="175">
+                <a href="#175">175</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		&amp;self.0</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="176">
+                <a href="#176">176</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2335,7 +2335,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[must_use = &quot;Does nothing if not sent to the client&quot;]</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2344,11 +2344,11 @@
                 <a href="#178">178</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2361,7 +2361,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct RegistrationResponse(Vec&lt;u8&gt;);</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Send this back to the client to drive the registration process.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2374,7 +2374,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">#[must_use = &quot;Does nothing if not sent to the client&quot;]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2383,11 +2383,11 @@
                 <a href="#181">181</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl RegistrationResponse {</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2400,13 +2400,52 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Getter for message.</pre>
+                <pre class="has-background-white py-0 px-2">pub struct RegistrationResponse(Vec&lt;u8&gt;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="183">
                 <a href="#183">183</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="184">
+                <a href="#184">184</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl RegistrationResponse {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="185">
+                <a href="#185">185</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Getter for message.</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="186">
+                <a href="#186">186</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2418,8 +2457,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="184">
-                <a href="#184">184</a>
+                id="187">
+                <a href="#187">187</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2431,8 +2470,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="185">
-                <a href="#185">185</a>
+                id="188">
+                <a href="#188">188</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2444,8 +2483,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="186">
-                <a href="#186">186</a>
+                id="189">
+                <a href="#189">189</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -2457,7 +2496,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-06-19 20:40</p>
+                <p class="heading">Date: 2021-06-19 22:40</p>
             </div>
         </footer>
     </body>
