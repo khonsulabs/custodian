@@ -62,19 +62,19 @@
 	)
 )]
 
-//! TODO: docs
-//! TODO: improve errors
-//! TODO: expose session key
-//! TODO: expose export key
-//! TODO: rename all structures and equalize them between client and server
-//! TODO: move `Config` to a different module
-//! TODO: turn `Config` into an `Arc`
-//! TODO: expose custom identifier
-//! TODO: expose further configurations
-//! TODO: start `custodian-shared` for keypair types, algorithms and whatnot
-//! TODO: start `custodian-pki` for shared pki system and key generation
-//! TODO: expose server keypair with types from `custodian-shared` and enable
-//! optional external keypairs
+//! TODO
+// TODO: improve errors
+// TODO: expose session key
+// TODO: expose export key
+// TODO: rename all structures and equalize them between client and server
+// TODO: move `Config` to a different module
+// TODO: turn `Config` into an `Arc`
+// TODO: expose custom identifier
+// TODO: expose further configurations
+// TODO: start `custodian-shared` for keypair types, algorithms and whatnot
+// TODO: start `custodian-pki` for shared pki system and key generation
+// TODO: expose server keypair with types from `custodian-shared` and enable
+// optional external keypairs
 
 pub mod client;
 pub mod server;
