@@ -83,12 +83,7 @@ jobs:
           curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
       - name: Run code coverage
         run: |
-          LLVM_PROFILE_FILE="profraw/%m.profraw" cargo test --workspace --all-targets --all-features
-          ./grcov profraw -b target/debug -s . -t html --branch --ignore-not-existing -o coverage
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-Zinstrument-coverage"
-          RUSTDOCFLAGS: "-Cpanic=abort"
+          PATH=".:$PATH" cargo xtask generate-code-coverage-report
 
       - name: Deploy Coverage
         if: github.ref == 'refs/heads/main'

@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.0.0"
+edition = "2018"
+repository = "https://github.com/khonsulabs/custodian"
+publish = false
+
+[dependencies]
+khonsu-tools = { git = "https://github.com/khonsulabs/khonsu-tools.git" }
+structopt = "0.3"
