@@ -1,0 +1,119 @@
+﻿name: CI
+
+on: [push]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Audit
+        run: |
+          cargo audit -D warnings
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run unit tests
+        run: |
+          cargo test --workspace --all-targets --all-features
+      - name: Run doc tests
+        run: |
+          rustup toolchain install nightly --profile minimal --allow-downgrade
+          cargo +nightly test --workspace --doc --all-features
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install nightly Rust
+        run: |
+          rustup toolchain install nightly --profile minimal --component clippy --allow-downgrade
+          rustup default nightly
+      - name: Run Clippy
+        continue-on-error: true
+        run: |
+          cargo clippy --workspace --all-targets --all-features
+      - name: Run rustdoc
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: |
+          cargo doc --no-deps --document-private-items --workspace --all-features
+  docs:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate Docs
+        run: |
+          rustup install nightly --profile minimal
+          cargo +nightly doc --no-deps --workspace --all-features
+      - name: Deploy Docs
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          branch: gh-pages
+          folder: target/doc/
+          git-config-name: kl-botsu
+          git-config-email: botsu@khonsulabs.com
+          target-folder: /main/
+          clean: true
+
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install code coverage requirements
+        run: |
+          rustup toolchain install nightly --profile minimal --component llvm-tools-preview --allow-downgrade
+          # grcov uses "llvm-tools-preview" of the current default toolchain
+          rustup default nightly
+          curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
+      - name: Run code coverage
+        run: |
+          LLVM_PROFILE_FILE="profraw/%m.profraw" cargo test --workspace --all-targets --all-features
+          ./grcov profraw -b target/debug -s . -t html --branch --ignore-not-existing -o coverage
+        env:
+          CARGO_INCREMENTAL: 0
+          RUSTFLAGS: "-Zinstrument-coverage"
+          RUSTDOCFLAGS: "-Cpanic=abort"
+
+      - name: Deploy Coverage
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          branch: gh-pages
+          folder: coverage/
+          git-config-name: kl-botsu
+          git-config-email: botsu@khonsulabs.com
+          target-folder: /coverage/
+          clean: true
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Rust Formatting
+        continue-on-error: true
+        run: |
+          rustup toolchain install nightly --profile minimal --component rustfmt --allow-downgrade
+          cargo +nightly fmt -- --check
+      - name: Prettier
+        run: |
+          sudo npm install -g prettier prettier-plugin-toml
+          npx prettier -l .
