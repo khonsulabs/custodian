@@ -1,0 +1,23 @@
+[package]
+name = "custodian-password"
+version = "0.0.0-dev.1"
+description = "Password management simplified."
+readme = "../README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/khonsulabs/custodian"
+keywords = ["password", "authentication", "login", "pake", "opaque"]
+categories = ["authentication"]
+edition = "2018"
+
+[dependencies]
+bincode = "1"
+curve25519-dalek = "3"
+generic-bytes = "0.1"
+opaque-ke = { version="0.5", features=["slow-hash"] }
+scrypt = "0.5"
+sha2 = "0.9"
+serde = { version="1", features=["derive"] }
+thiserror = "1"
+
+[dev-dependencies]
+anyhow = "1"
