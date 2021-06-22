@@ -34,7 +34,7 @@ impl<D: Hash> SlowHash<D> for Argon2 {
 		let mut output = vec![0; <D as Digest>::OutputSize::to_usize()];
 		params
 			.hash_password_into(
-				Algorithm::Argon2i,
+				Algorithm::Argon2id,
 				&input,
 				&[0; argon2::MIN_SALT_LENGTH],
 				&[],
