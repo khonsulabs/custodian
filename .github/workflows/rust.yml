@@ -22,7 +22,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          cargo test --workspace --all-targets --all-features
+          cargo test --workspace --all-targets --all-features --exclude custodian-opaque
       - name: Run doc tests
         run: |
           rustup toolchain install nightly --profile minimal --allow-downgrade
@@ -58,7 +58,7 @@ jobs:
       - name: Generate Docs
         run: |
           rustup install nightly --profile minimal
-          cargo +nightly doc --no-deps --workspace --all-features
+          cargo +nightly doc --no-deps --workspace --all-features --exclude custodian-opaque
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
