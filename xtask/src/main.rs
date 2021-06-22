@@ -12,7 +12,7 @@ pub enum Commands {
 fn main() -> anyhow::Result<()> {
 	let command = Commands::from_args();
 	match command {
-		Commands::GenerateCodeCoverageReport => CodeCoverage::<CoverageConfig>::execute(),
+		Commands::GenerateCodeCoverageReport => CodeCoverage::<CoverageConfig>::execute(true),
 	}
 }
 
