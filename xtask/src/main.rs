@@ -22,4 +22,8 @@ impl code_coverage::Config for CoverageConfig {
 	fn ignore_paths() -> Vec<String> {
 		vec![String::from("password/examples/*")]
 	}
+
+	fn ignore_packages() -> Vec<String> {
+		vec![String::from("custodian-opaque")]
+	}
 }

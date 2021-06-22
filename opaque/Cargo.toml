@@ -50,3 +50,5 @@ rustyline = "6.3.0"
 [lib]
 test = false
 doctest = false
+doc = false
+bench = false
