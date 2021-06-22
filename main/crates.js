@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["custodian_password","xtask"];
+window.ALL_CRATES = ["custodian_password"];
