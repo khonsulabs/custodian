@@ -26,7 +26,7 @@ jobs:
       - name: Run doc tests
         run: |
           rustup toolchain install nightly --profile minimal --allow-downgrade
-          cargo +nightly test --workspace --doc --all-features
+          cargo +nightly test --workspace --doc --all-features --exclude custodian-opaque
   lint:
     runs-on: ubuntu-latest
 
@@ -41,12 +41,12 @@ jobs:
       - name: Run Clippy
         continue-on-error: true
         run: |
-          cargo clippy --workspace --all-targets --all-features
+          cargo clippy --workspace --all-targets --all-features --exclude custodian-opaque
       - name: Run rustdoc
         env:
           RUSTDOCFLAGS: -D warnings
         run: |
-          cargo doc --no-deps --document-private-items --workspace --all-features
+          cargo doc --no-deps --document-private-items --workspace --all-features --exclude custodian-opaque
   docs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
