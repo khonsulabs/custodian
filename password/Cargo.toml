@@ -11,14 +11,16 @@ edition = "2018"
 
 [dependencies]
 argon2 = "0.2"
-bincode = "1"
 curve25519-dalek = "3"
-generic-array = "0.14"
-generic-bytes = "0.1"
-opaque-ke = "0.5"
+generic-array = { version = "0.14", features = ["more_lengths"] }
+opaque-ke = { package = "custodian-opaque", path = "../opaque", version = "0.6.0-pre.1", features = [
+    "slow-hash"
+] }
+serde-big-array = { version = "0.3", features = ["const-generics"] }
 sha2 = "0.9"
 serde = { version = "1", features = ["derive"] }
 thiserror = "1"
 
 [dev-dependencies]
 anyhow = "1"
+bincode = "1"

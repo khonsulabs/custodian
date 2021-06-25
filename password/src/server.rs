@@ -1,189 +1,168 @@
+#![allow(clippy::module_name_repetitions)]
+
 //! OPAQUE server side handling.
 
-mod impls;
-
-use generic_bytes::SizedBytes;
 use opaque_ke::{
-	ciphersuite::CipherSuite as _, keypair::Key, rand::rngs::OsRng, CredentialRequest,
-	RegistrationRequest, RegistrationUpload, ServerLogin, ServerLoginStartParameters,
+	rand::rngs::OsRng, ServerLoginStartParameters, ServerLoginStartResult, ServerSetup,
 };
 use serde::{Deserialize, Serialize};
 
 use crate::{
-	client::{self, LoginRequest},
-	CipherSuite, Config, Error, Result,
+	CipherSuite, Config, Error, LoginFinalization, LoginRequest, LoginResponse, PublicKey,
+	RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
 };
 
-/// Login process on the server.
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-#[must_use = "Does nothing if not `finish`ed"]
-pub struct Login {
+/// Server configuration. This contains the secret key needed to create and use
+/// [`ServerFile`]s, if it is lost, all [`ServerFile`]s become unusable.
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ServerConfig {
 	/// Common config.
 	config: Config,
-	/// Client login state.
-	state: LoginState,
+	/// Server key pair.
+	key_pair: ServerSetup<CipherSuite>,
 }
 
-impl Login {
-	/// Finishes the login. Authentication is successful if this returns [`Ok`].
-	///
-	/// # Errors
-	/// [`Error::Login`] on login failure.
-	pub fn finish(self, response: &client::LoginResponse) -> Result<()> {
-		let response = opaque_ke::CredentialFinalization::deserialize(response.message())
-			.map_err(|_| Error::Login)?;
+impl ServerConfig {
+	/// Create a new [`ServerConfig`]. This contains the secret key needed to
+	/// create and use [`ServerFile`]s, if it is lost, all corresponding
+	/// [`ServerFile`]s become unusable.
+	#[must_use]
+	pub fn new(config: Config) -> Self {
+		let key_pair = ServerSetup::new(&mut OsRng);
 
-		let _result = self.state.0.finish(response).map_err(|_| Error::Login)?;
+		Self { config, key_pair }
+	}
 
-		Ok(())
+	/// Returns the [`Config`] associated with this [`ServerConfig`].
+	#[must_use]
+	pub const fn config(&self) -> Config {
+		self.config
+	}
+
+	/// Returns the [`PublicKey`] associated with this [`ServerConfig`].
+	#[must_use]
+	pub fn public_key(&self) -> PublicKey {
+		PublicKey::from_opaque(self.key_pair.keypair().public())
 	}
 }
 
-/// Registration object needed to [`login`](Self::login). Typically this is
-/// saved in a database.
-#[must_use = "Does nothing if not used to `login`"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct Registration {
-	/// Common config.
-	config: Config,
-	/// Password file.
-	file: ServerRegistration,
-	/// Private key.
-	private_key: [u8; 32],
-}
-
-impl Registration {
-	/// Starts the login process. The returned [`RegistrationResponse`] has to
-	/// be send back to the client to drive the login process.
-	///
-	/// # Errors
-	/// [`Error::Login`] on login failure.
-	pub fn login(self, request: &LoginRequest) -> Result<(Login, LoginResponse)> {
-		let key = Key::from_arr(&self.private_key.into()).map_err(|_| Error::Login)?;
-		let request =
-			CredentialRequest::deserialize(request.message()).map_err(|_| Error::Login)?;
-
-		let result = ServerLogin::start(
-			&mut OsRng,
-			self.file.0,
-			&key,
-			request,
-			ServerLoginStartParameters::default(),
-		)
-		.map_err(|_| Error::Login)?;
-
-		let state = LoginState(result.state);
-		let message = LoginResponse(result.message.serialize());
-
-		Ok((
-			Login {
-				config: self.config,
-				state,
-			},
-			message,
-		))
-	}
-}
-
-/// Starts a registration process on the server.
+/// Starts a registration process on the server. See
+/// [`register`](Self::register).
+#[allow(missing_copy_implementations)]
 #[must_use = "Does nothing if not `finish`ed"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct RegistrationBuilder {
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ServerRegistration {
 	/// Common config.
 	config: Config,
-	/// Private key.
-	private_key: [u8; 32],
-	/// Server registration state.
-	state: ServerRegistration,
 }
 
-impl RegistrationBuilder {
+impl ServerRegistration {
 	/// Starts the registration process. The returned [`RegistrationResponse`]
-	/// has to be send back to the client to drive the registration process.
+	/// has to be send back to the client to drive the registration process. See
+	/// [`ClientRegistration::finish()`](crate::ClientRegistration::finish).
 	///
 	/// # Errors
-	/// [`Error::Registration`] on registration failure.
+	/// [`Error::Opaque`] on internal OPAQUE error.
 	pub fn register(
-		config: Config,
-		request: &client::RegistrationRequest,
+		config: &ServerConfig,
+		request: RegistrationRequest,
 	) -> Result<(Self, RegistrationResponse)> {
-		let request =
-			RegistrationRequest::deserialize(request.message()).map_err(|_| Error::Registration)?;
-		let keypair = CipherSuite::generate_random_keypair(&mut OsRng);
-
-		let result = opaque_ke::ServerRegistration::<CipherSuite>::start(
-			&mut OsRng,
-			request,
-			keypair.public(),
-		)
-		.map_err(|_| Error::Registration)?;
-
-		let private_key = keypair.private().to_arr().into();
-		let state = ServerRegistration(result.state);
-		let message = RegistrationResponse(result.message.serialize());
+		let message =
+			opaque_ke::ServerRegistration::start(&config.key_pair, request.0, &[])?.message;
 
 		Ok((
 			Self {
-				config,
-				private_key,
-				state,
+				config: config.config,
 			},
-			message,
+			RegistrationResponse(message),
 		))
 	}
 
-	/// Finishes the registration process. The returned [`Registration`] is
-	/// needed for [`login`](Registration::login), typically this is saved in a
+	/// Finishes the registration process. The returned [`ServerFile`] is
+	/// needed for [`login`](ServerLogin::login), typically this is saved in a
 	/// database.
+	pub fn finish(self, finalization: RegistrationFinalization) -> ServerFile {
+		let file = opaque_ke::ServerRegistration::finish(finalization.0);
+
+		ServerFile {
+			config: self.config,
+			file,
+		}
+	}
+}
+
+/// Represents a registered client, store this to to allow login. See
+/// [`ServerLogin::login`].
+#[must_use = "This data has to stored for login to function"]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ServerFile {
+	/// Common config.
+	config: Config,
+	/// Password file.
+	file: opaque_ke::ServerRegistration<CipherSuite>,
+}
+
+/// Starts the login process on the server.
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[must_use = "Does nothing if not `finish`ed"]
+pub struct ServerLogin {
+	/// Common config.
+	config: Config,
+	/// Client login state.
+	state: opaque_ke::ServerLogin<CipherSuite>,
+}
+
+impl ServerLogin {
+	/// Starts the login process. The returned [`LoginResponse`] has to
+	/// be send back to the client to drive the login process. See
+	/// [`ClientLogin::finish()`](crate::ClientLogin::finish).
+	///
+	/// If no corresponding client was registered, pass [`None`] to `file`,
+	/// otherwise pass the appropriate [`ServerFile`]. Passing [`None`]
+	/// simulates a login attempt in a way that doesn't let an attacker
+	/// determine if a corresponding client is registered or not.
 	///
 	/// # Errors
-	/// [`Error::Registration`] on registration failure.
-	pub fn finish(self, response: &client::RegistrationResponse) -> Result<Registration> {
-		let response =
-			RegistrationUpload::deserialize(response.message()).map_err(|_| Error::Registration)?;
+	/// - [`Error::Config`] if [`ServerConfig`] and [`ServerFile`] were not
+	///   created with the same [`Config`]
+	/// - [`Error::Opaque`] on internal OPAQUE error
+	pub fn login(
+		config: &ServerConfig,
+		file: Option<ServerFile>,
+		request: LoginRequest,
+	) -> Result<(Self, LoginResponse)> {
+		if let Some(file) = &file {
+			if file.config != config.config {
+				return Err(Error::Config);
+			}
+		}
 
-		let file = self
-			.state
-			.0
-			.finish(response)
-			.map_err(|_| Error::Registration)?;
+		let result = opaque_ke::ServerLogin::start(
+			&mut OsRng,
+			&config.key_pair,
+			file.map(|file| file.file),
+			request.0,
+			&[],
+			ServerLoginStartParameters::default(),
+		)?;
+		let ServerLoginStartResult { state, message } = result;
 
-		Ok(Registration {
-			config: self.config,
-			file: ServerRegistration(file),
-			private_key: self.private_key,
-		})
+		Ok((
+			Self {
+				config: config.config,
+				state,
+			},
+			LoginResponse(message),
+		))
 	}
-}
 
-/// Wraps around [`ServerLogin`](ServerLogin) because common traits aren't
-/// implemented in the dependency.
-struct LoginState(ServerLogin<CipherSuite>);
+	/// Finishes the login process.
+	///
+	/// # Errors
+	/// [`Error::Opaque`] on internal OPAQUE error.
+	pub fn finish(self, finalization: LoginFinalization) -> Result<()> {
+		let _result = self.state.finish(finalization.0)?;
 
-/// Wraps around [`ServerRegistration`](opaque_ke::ServerRegistration) because
-/// common traits aren't implemented in the dependency.
-struct ServerRegistration(opaque_ke::ServerRegistration<CipherSuite>);
-
-/// Send this back to the client to drive the login process.
-#[must_use = "Does nothing if not sent to the client"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct LoginResponse(Vec<u8>);
-
-impl LoginResponse {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
-	}
-}
-
-/// Send this back to the client to drive the registration process.
-#[must_use = "Does nothing if not sent to the client"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct RegistrationResponse(Vec<u8>);
-
-impl RegistrationResponse {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
+		Ok(())
 	}
 }
