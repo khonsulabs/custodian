@@ -14,7 +14,7 @@ argon2 = "0.2"
 curve25519-dalek = "3"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 opaque-ke = { package = "custodian-opaque", path = "../opaque", version = "0.6.0-pre.1", features = [
-    "slow-hash"
+	"slow-hash"
 ] }
 serde-big-array = { version = "0.3", features = ["const-generics"] }
 sha2 = "0.9"
