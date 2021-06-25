@@ -1,166 +1,298 @@
+#![allow(clippy::module_name_repetitions)]
+
 //! OPAQUE client side handling.
 
-mod impls;
-
 use opaque_ke::{
-	rand::rngs::OsRng, ClientLogin, ClientLoginFinishParameters, ClientLoginStartParameters,
-	ClientRegistration, ClientRegistrationFinishParameters,
+	errors::{PakeError, ProtocolError},
+	rand::rngs::OsRng,
+	ClientLoginFinishParameters, ClientLoginFinishResult, ClientLoginStartResult,
+	ClientRegistrationFinishParameters, ClientRegistrationFinishResult,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::{server, CipherSuite, Config, Error, Result};
+use crate::{
+	CipherSuite, Config, Error, ExportKey, LoginFinalization, LoginRequest, LoginResponse,
+	PublicKey, RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
+};
 
-/// Starts a login process on the client.
-#[must_use = "Does nothing if not `finish`ed"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct Login {
+/// Client configuration.
+#[allow(missing_copy_implementations)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ClientConfig {
 	/// Common config.
 	config: Config,
-	/// Client login state.
-	state: LoginState,
+	/// Server key pair.
+	public_key: Option<PublicKey>,
 }
 
-impl Login {
-	/// Starts the login process. The returned [`LoginRequest`] has to be send
-	/// to the server to drive the login process.
+impl ClientConfig {
+	/// Create a new [`ClientConfig`].
 	///
-	/// # Errors
-	/// [`Error::Login`] on login failure.
-	pub fn login(config: Config, password: &[u8]) -> Result<(Self, LoginRequest)> {
-		let result = ClientLogin::<CipherSuite>::start(
-			&mut OsRng,
-			password,
-			ClientLoginStartParameters::default(),
-		)
-		.map_err(|_| Error::Login)?;
-
-		let state = LoginState(result.state);
-		let message = LoginRequest(result.message.serialize());
-
-		Ok((Self { config, state }, message))
+	/// A [public key](PublicKey) can be used to ensure the servers identity
+	/// during registration or login. If no [`PublicKey`] could be obtained
+	/// before registration or login, it can be retrieved after successful
+	/// registration or login.
+	#[must_use]
+	pub const fn new(config: Config, public_key: Option<PublicKey>) -> Self {
+		Self { config, public_key }
 	}
 
-	/// Finishes the login. The returned [`LoginResponse`] has to be send back
-	/// to the server to finish the login process. Authentication is successful
-	/// if this returns [`Ok`].
-	///
-	/// # Errors
-	/// [`Error::Login`] on login failure.
-	pub fn finish(self, response: &server::LoginResponse) -> Result<LoginResponse> {
-		let response = opaque_ke::CredentialResponse::deserialize(response.message())
-			.map_err(|_| Error::Login)?;
+	/// Returns the [`Config`] associated with this [`ClientConfig`].
+	#[must_use]
+	pub const fn config(&self) -> Config {
+		self.config
+	}
 
-		let result = self
-			.state
-			.0
-			.finish(response, ClientLoginFinishParameters::default())
-			.map_err(|_| Error::Login)?;
+	/// Returns the [`PublicKey`] associated with this [`ClientConfig`].
+	#[must_use]
+	pub const fn public_key(self) -> Option<PublicKey> {
+		self.public_key
+	}
 
-		Ok(LoginResponse(result.message.serialize()))
+	/// Sets the [`PublicKey`] to validate the server during registration or
+	/// login.
+	pub fn set_public_key(&mut self, public_key: Option<PublicKey>) -> &mut Self {
+		self.public_key = public_key;
+		self
 	}
 }
 
-/// Starts a registration process on the client.
+/// Starts a registration process. See [`register`](Self::register).
 #[must_use = "Does nothing if not `finish`ed"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct Register {
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ClientRegistration {
 	/// Common password config.
 	config: Config,
+	/// Server public key.
+	public_key: Option<PublicKey>,
 	/// Client registration state.
-	state: RegisterState,
+	state: opaque_ke::ClientRegistration<CipherSuite>,
 }
 
-impl Register {
+impl ClientRegistration {
+	/// Returns [`Config`].
+	#[must_use]
+	pub const fn config(&self) -> Config {
+		self.config
+	}
+
+	/// Returns the configured server public key for validation.
+	#[must_use]
+	pub const fn public_key(&self) -> Option<PublicKey> {
+		self.public_key
+	}
+
 	/// Starts the registration process. The returned [`RegistrationRequest`]
-	/// has to be send to the server to drive the registration process.
+	/// has to be send to the server to drive the registration process. See
+	/// [`ServerRegistration::register()`](crate::ServerRegistration::register).
 	///
 	/// # Errors
-	/// [`Error::Registration`] on registration failure.
-	pub fn register(config: Config, password: &[u8]) -> Result<(Self, RegistrationRequest)> {
-		let result = opaque_ke::ClientRegistration::<CipherSuite>::start(&mut OsRng, password)
-			.map_err(|_| Error::Registration)?;
+	/// [`Error::Opaque`] on internal OPAQUE error.
+	pub fn register<P: AsRef<[u8]>>(
+		config: &ClientConfig,
+		password: P,
+	) -> Result<(Self, RegistrationRequest)> {
+		use opaque_ke::ClientRegistrationStartResult;
 
-		let state = RegisterState(result.state);
-		let message = RegistrationRequest(result.message.serialize());
+		let result = opaque_ke::ClientRegistration::start(&mut OsRng, password.as_ref())?;
+		let ClientRegistrationStartResult { state, message } = result;
 
-		Ok((Self { config, state }, message))
+		Ok((
+			Self {
+				config: config.config,
+				public_key: config.public_key,
+				state,
+			},
+			RegistrationRequest(message),
+		))
 	}
 
-	/// Finishes the registration. The returned [`RegistrationResponse`]
-	/// has to be send back to the server to finish the registration process.
+	/// Finishes the registration process. The returned
+	/// [`RegistrationFinalization`] has to be send back to the server to finish
+	/// the registration process. See
+	/// [`ServerRegistration::finish()`](crate::ServerRegistration::finish).
+	///
+	/// [`ClientFile`] can be used to validate the server during login. See
+	/// [`ClientLogin::login_with_file()`].
+	///
+	/// [`ExportKey`] can be used to encrypt data and store it on safely on
+	/// the server. See [`ExportKey`] for more details.
 	///
 	/// # Errors
-	/// [`Error::Registration`] on registration failure.
-	pub fn finish(self, response: &server::RegistrationResponse) -> Result<RegistrationResponse> {
-		let response = opaque_ke::RegistrationResponse::deserialize(response.message())
-			.map_err(|_| Error::Registration)?;
+	/// - [`Error::InvalidServer`] if the public key given in
+	///   [`register()`](Self::register) does not match the servers public key
+	/// - [`Error::Opaque`] on internal OPAQUE error
+	pub fn finish(
+		self,
+		response: RegistrationResponse,
+	) -> Result<(ClientFile, RegistrationFinalization, ExportKey)> {
+		let public_key = if let Some(public_key) = self.public_key {
+			if !public_key.is_opaque(response.0.public_key()) {
+				return Err(Error::InvalidServer);
+			}
 
-		let result = self
+			public_key
+		} else {
+			PublicKey::from_opaque(response.0.public_key())
+		};
+
+		let result = self.state.finish(
+			&mut OsRng,
+			response.0,
+			ClientRegistrationFinishParameters::default(),
+		)?;
+		let ClientRegistrationFinishResult {
+			message,
+			export_key,
+		} = result;
+
+		Ok((
+			ClientFile {
+				config: self.config,
+				public_key,
+			},
+			RegistrationFinalization(message),
+			ExportKey(export_key.into()),
+		))
+	}
+}
+
+/// Store this to enable server validation during login.
+#[allow(missing_copy_implementations)]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ClientFile {
+	/// Persistant [`Config`] between login and registration.
+	config: Config,
+	/// Server public key.
+	public_key: PublicKey,
+}
+
+impl ClientFile {
+	/// Returns the [`Config`] associated with this [`ClientFile`].
+	#[must_use]
+	pub const fn config(&self) -> Config {
+		self.config
+	}
+
+	/// Returns the [`PublicKey`] associated with this [`ClientFile`].
+	#[must_use]
+	pub const fn public_key(self) -> PublicKey {
+		self.public_key
+	}
+}
+
+/// Starts the login process on the client.
+#[must_use = "Does nothing if not `finish`ed"]
+#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+pub struct ClientLogin {
+	/// Common config.
+	config: Config,
+	/// Server public key.
+	public_key: Option<PublicKey>,
+	/// Client login state.
+	state: opaque_ke::ClientLogin<CipherSuite>,
+}
+
+impl ClientLogin {
+	/// Starts the login process. The returned [`LoginRequest`] has to be send
+	/// to the server to drive the login process. See
+	/// [`ServerLogin::login()`](crate::ServerLogin::login).
+	///
+	/// If a [`ClientFile`] was stored during registration, it can help validate
+	/// the server when passed.
+	///
+	/// # Errors
+	/// - [`Error::Config`] if [`ClientConfig`] and [`ClientFile`] were not
+	///   created with the same [`Config`]
+	/// - [`Error::PublicKey`] if [`PublicKey`] in [`ClientConfig`] and
+	///   [`ClientFile`] don't match
+	/// - [`Error::Opaque`] on internal OPAQUE error
+	#[allow(clippy::needless_pass_by_value)]
+	pub fn login<P: AsRef<[u8]>>(
+		config: &ClientConfig,
+		file: Option<ClientFile>,
+		password: P,
+	) -> Result<(Self, LoginRequest)> {
+		let public_key = if let Some(file) = &file {
+			if file.config != config.config {
+				return Err(Error::Config);
+			}
+
+			if let Some(public_key) = config.public_key {
+				if public_key != file.public_key {
+					return Err(Error::PublicKey);
+				}
+			}
+
+			Some(file.public_key)
+		} else {
+			config.public_key
+		};
+
+		let result = opaque_ke::ClientLogin::start(&mut OsRng, password.as_ref())?;
+		let ClientLoginStartResult { state, message } = result;
+
+		Ok((
+			Self {
+				config: config.config,
+				public_key,
+				state,
+			},
+			LoginRequest(message),
+		))
+	}
+
+	/// Finishes the login process. The returned [`LoginFinalization`] has to be
+	/// send back to the server to finish the login process.
+	///
+	/// [`ClientFile`] can be used to validate the server during the next login.
+	/// See [`login_with_file()`](Self::login_with_file).
+	///
+	/// [`ExportKey`] can be used to encrypt data and store it on safely on
+	/// the server. See [`ExportKey`] for more details.
+	///
+	/// # Errors
+	/// - [`Error::Credentials`] if credentials don't match
+	/// - [`Error::InvalidServer`] if the public key given in
+	///   [`login()`](Self::login) does not match the servers public key
+	/// - [`Error::Opaque`] on internal OPAQUE error
+	pub fn finish(
+		self,
+		response: LoginResponse,
+	) -> Result<(ClientFile, LoginFinalization, ExportKey)> {
+		let result = match self
 			.state
-			.0
-			.finish(
-				&mut OsRng,
-				response,
-				ClientRegistrationFinishParameters::default(),
-			)
-			.map_err(|_| Error::Registration)?;
+			.finish(response.0, ClientLoginFinishParameters::default())
+		{
+			Ok(result) => result,
+			Err(ProtocolError::VerificationError(PakeError::InvalidLoginError)) =>
+				return Err(Error::Credentials),
+			Err(error) => return Err(error.into()),
+		};
+		let ClientLoginFinishResult {
+			message,
+			export_key,
+			server_s_pk,
+			..
+		} = result;
 
-		Ok(RegistrationResponse(result.message.serialize()))
-	}
-}
+		let public_key = if let Some(public_key) = self.public_key {
+			if !public_key.is_opaque(&server_s_pk) {
+				return Err(Error::InvalidServer);
+			}
 
-/// Wraps around [`ClientLogin`] because common traits aren't implemented in the
-/// dependency.
-struct LoginState(ClientLogin<CipherSuite>);
+			public_key
+		} else {
+			PublicKey::from_opaque(&server_s_pk)
+		};
 
-/// Wraps around [`ClientRegistration`] because common traits aren't implemented
-/// in the dependency.
-struct RegisterState(ClientRegistration<CipherSuite>);
-
-/// Send this back to the server to finish the registration process.
-#[must_use = "Does nothing if not sent to the server"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct LoginResponse(Vec<u8>);
-
-impl LoginResponse {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
-	}
-}
-
-/// Send this to the server to drive the login process.
-#[must_use = "Does nothing if not sent to the server"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct LoginRequest(Vec<u8>);
-
-impl LoginRequest {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
-	}
-}
-
-/// Send this to the server to drive the registration process.
-#[must_use = "Does nothing if not sent to the server"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct RegistrationRequest(Vec<u8>);
-
-impl RegistrationRequest {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
-	}
-}
-
-/// Send this to the server to finish the registration.
-#[must_use = "Does nothing if not sent to the server"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub struct RegistrationResponse(Vec<u8>);
-
-impl RegistrationResponse {
-	/// Getter for message.
-	pub(crate) fn message(&self) -> &[u8] {
-		&self.0
+		Ok((
+			ClientFile {
+				config: self.config,
+				public_key,
+			},
+			LoginFinalization(message),
+			ExportKey(export_key.into()),
+		))
 	}
 }

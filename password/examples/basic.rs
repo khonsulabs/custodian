@@ -1,7 +1,10 @@
 use std::{sync::mpsc, thread};
 
 use anyhow::Result;
-use custodian_password::{client, server, Config};
+use custodian_password::{
+	ClientConfig, ClientLogin, ClientRegistration, Config, ServerConfig, ServerLogin,
+	ServerRegistration,
+};
 use serde::{de::DeserializeOwned, Serialize};
 
 fn simulate_network() -> (Network, Network) {
@@ -39,14 +42,16 @@ impl Network {
 	}
 }
 
-const PASSWORD: &[u8] = b"password";
-const CONFIG: Config = Config::new();
-
+#[cfg_attr(test, test)]
 fn main() -> Result<()> {
 	let (client_network, server_network) = simulate_network();
 
-	let client = thread::spawn(|| client(client_network));
-	let server = thread::spawn(|| server(server_network));
+	let config = Config::new();
+	let server_config = ServerConfig::new(config);
+	let client_config = ClientConfig::new(config, Some(server_config.public_key()));
+
+	let client = thread::spawn(|| client(client_network, client_config));
+	let server = thread::spawn(|| server(server_network, server_config));
 
 	client.join().expect("client panicked")?;
 	server.join().expect("server panicked")?;
@@ -54,46 +59,48 @@ fn main() -> Result<()> {
 	Ok(())
 }
 
-fn client(network: Network) -> Result<()> {
+fn client(network: Network, config: ClientConfig) -> Result<()> {
+	const PASSWORD: &[u8] = b"password";
+
 	// Registration
-	let (client, request) = client::Register::register(CONFIG.clone(), PASSWORD)?;
+	let (client, request) = ClientRegistration::register(&config, PASSWORD)?;
 	network.send(&request)?;
 
 	let response = network.receive()?;
-	let response = client.finish(&response)?;
+	let (file, response, _) = client.finish(response)?;
 
 	network.send(&response)?;
 
 	// Login
-	let (client, request) = client::Login::login(CONFIG.clone(), PASSWORD)?;
+	let (client, request) = ClientLogin::login(&config, Some(file), PASSWORD)?;
 	network.send(&request)?;
 
 	let response = network.receive()?;
-	let response = client.finish(&response)?;
+	let (_, finalization, _) = client.finish(response)?;
 
-	network.send(&response)?;
+	network.send(&finalization)?;
 
 	Ok(())
 }
 
-fn server(network: Network) -> Result<()> {
+fn server(network: Network, config: ServerConfig) -> Result<()> {
 	// Registration
 	let request = network.receive()?;
 
-	let (server, response) = server::RegistrationBuilder::register(CONFIG.clone(), &request)?;
+	let (server, response) = ServerRegistration::register(&config, request)?;
 	network.send(&response)?;
 
-	let response = network.receive()?;
-	let server = server.finish(&response)?;
+	let finalization = network.receive()?;
+	let file = server.finish(finalization);
 
 	// Login
 	let request = network.receive()?;
 
-	let (server, response) = server.login(&request)?;
+	let (server, response) = ServerLogin::login(&config, Some(file), request)?;
 	network.send(&response)?;
 
 	let response = network.receive()?;
-	server.finish(&response)?;
+	server.finish(response)?;
 
 	Ok(())
 }
