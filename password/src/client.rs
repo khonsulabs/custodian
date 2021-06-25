@@ -113,7 +113,7 @@ impl ClientRegistration {
 	/// [`ServerRegistration::finish()`](crate::ServerRegistration::finish).
 	///
 	/// [`ClientFile`] can be used to validate the server during login. See
-	/// [`ClientLogin::login_with_file()`].
+	/// [`ClientLogin::login()`].
 	///
 	/// [`ExportKey`] can be used to encrypt data and store it on safely on
 	/// the server. See [`ExportKey`] for more details.
@@ -246,7 +246,7 @@ impl ClientLogin {
 	/// send back to the server to finish the login process.
 	///
 	/// [`ClientFile`] can be used to validate the server during the next login.
-	/// See [`login_with_file()`](Self::login_with_file).
+	/// See [`login()`](Self::login).
 	///
 	/// [`ExportKey`] can be used to encrypt data and store it on safely on
 	/// the server. See [`ExportKey`] for more details.
