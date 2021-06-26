@@ -17,9 +17,36 @@ impl PartialEq<CipherSuite> for Config {
 }
 
 impl Config {
-	/// Builds new default [`Config`].
+	/// Builds new [`Config`].
 	#[must_use]
-	pub fn new() -> Self {
-		Self(CipherSuite::default())
+	pub const fn new(slow_hash: SlowHash) -> Self {
+		Self(match slow_hash {
+			SlowHash::Argon2id => CipherSuite::Curve25519Sha512Argon2id,
+			SlowHash::Argon2d => CipherSuite::Curve25519Sha512Argon2d,
+		})
+	}
+
+	/// Returns [`SlowHash`] of this [`Config`].
+	#[must_use]
+	pub const fn slow_hash(self) -> SlowHash {
+		match self.0 {
+			CipherSuite::Curve25519Sha512Argon2id => SlowHash::Argon2id,
+			CipherSuite::Curve25519Sha512Argon2d => SlowHash::Argon2d,
+		}
+	}
+}
+
+/// Slow hash algorithm for OPAQUE.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum SlowHash {
+	/// Argon2id.
+	Argon2id,
+	/// Argon2d.
+	Argon2d,
+}
+
+impl Default for SlowHash {
+	fn default() -> Self {
+		Self::Argon2id
 	}
 }
