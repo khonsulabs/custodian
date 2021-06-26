@@ -87,7 +87,7 @@ pub use serde;
 
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::Config,
+	config::{Config, SlowHash},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{
@@ -210,6 +210,38 @@ fn wrong_server_config() -> anyhow::Result<()> {
 		ServerLogin::login(&server_config_wrong, Some(server_file), request),
 		Err(Error::ServerConfig)
 	);
+
+	Ok(())
+}
+
+#[test]
+fn cipher_suites() -> anyhow::Result<()> {
+	const PASSWORD: &[u8] = b"password";
+
+	fn cipher_suite(slow_hash: SlowHash) -> anyhow::Result<()> {
+		let config = Config::new(slow_hash);
+		let server_config = ServerConfig::new(config);
+		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
+
+		let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+		let (server, response) = ServerRegistration::register(&server_config, request)?;
+		let (client_file, finalization, export_key) = client.finish(response)?;
+		let server_file = server.finish(finalization)?;
+
+		let (client, request) =
+			ClientLogin::login(&client_config, Some(client_file.clone()), PASSWORD)?;
+		let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
+		let (new_client_file, finalization, new_export_key) = client.finish(response)?;
+		server.finish(finalization)?;
+
+		assert_eq!(client_file, new_client_file);
+		assert_eq!(export_key, new_export_key);
+
+		Ok(())
+	}
+
+	cipher_suite(SlowHash::Argon2id)?;
+	cipher_suite(SlowHash::Argon2d)?;
 
 	Ok(())
 }

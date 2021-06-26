@@ -46,7 +46,7 @@ impl Network {
 fn main() -> Result<()> {
 	let (client_network, server_network) = simulate_network();
 
-	let config = Config::new();
+	let config = Config::default();
 	let server_config = ServerConfig::new(config);
 	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
 
