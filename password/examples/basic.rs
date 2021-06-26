@@ -48,7 +48,7 @@ fn main() -> Result<()> {
 
 	let config = Config::new();
 	let server_config = ServerConfig::new(config);
-	let client_config = ClientConfig::new(config, Some(server_config.public_key()));
+	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
 
 	let client = thread::spawn(|| client(client_network, client_config));
 	let server = thread::spawn(|| server(server_network, server_config));
@@ -91,7 +91,7 @@ fn server(network: Network, config: ServerConfig) -> Result<()> {
 	network.send(&response)?;
 
 	let finalization = network.receive()?;
-	let file = server.finish(finalization);
+	let file = server.finish(finalization)?;
 
 	// Login
 	let request = network.receive()?;

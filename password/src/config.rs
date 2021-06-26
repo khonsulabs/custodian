@@ -8,19 +8,18 @@ use crate::cipher_suite::CipherSuite;
 #[derive(
 	Clone, Copy, Debug, Default, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize,
 )]
-pub struct Config {
-	/// Inner type implementing
-	/// [`CipherSuite`](opaque_ke::ciphersuite::CipherSuite) to prevent exposing
-	/// it publicly.
-	cipher_suite: CipherSuite,
+pub struct Config(pub(crate) CipherSuite);
+
+impl PartialEq<CipherSuite> for Config {
+	fn eq(&self, other: &CipherSuite) -> bool {
+		&self.0 == other
+	}
 }
 
 impl Config {
 	/// Builds new default [`Config`].
 	#[must_use]
-	pub const fn new() -> Self {
-		Self {
-			cipher_suite: CipherSuite,
-		}
+	pub fn new() -> Self {
+		Self(CipherSuite::default())
 	}
 }
