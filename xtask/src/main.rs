@@ -20,7 +20,10 @@ struct CoverageConfig;
 
 impl code_coverage::Config for CoverageConfig {
 	fn ignore_paths() -> Vec<String> {
-		vec![String::from("password/examples/*")]
+		vec![
+			String::from("password/examples/*"),
+			String::from("opaque/*"),
+		]
 	}
 
 	fn ignore_packages() -> Vec<String> {
