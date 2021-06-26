@@ -28,4 +28,8 @@ pub enum Error {
 	/// Credentials don't match.
 	#[error("Credentials don't match")]
 	Credentials,
+	/// [`ServerFile`](crate::ServerFile) was not created with the same
+	/// [`ServerConfig`](crate::ServerConfig).
+	#[error("Server file was not created with the same server configuration")]
+	ServerConfig,
 }

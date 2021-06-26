@@ -2,39 +2,46 @@
 
 //! OPAQUE client side handling.
 
-use opaque_ke::{
-	errors::{PakeError, ProtocolError},
-	rand::rngs::OsRng,
-	ClientLoginFinishParameters, ClientLoginFinishResult, ClientLoginStartResult,
-	ClientRegistrationFinishParameters, ClientRegistrationFinishResult,
-};
+use opaque_ke::errors::{PakeError, ProtocolError};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-	CipherSuite, Config, Error, ExportKey, LoginFinalization, LoginRequest, LoginResponse,
+	cipher_suite, Config, Error, ExportKey, LoginFinalization, LoginRequest, LoginResponse,
 	PublicKey, RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
 };
 
 /// Client configuration.
 #[allow(missing_copy_implementations)]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientConfig {
 	/// Common config.
 	config: Config,
 	/// Server key pair.
-	public_key: Option<PublicKey>,
+	public_key: Option<[u8; 32]>,
 }
 
 impl ClientConfig {
 	/// Create a new [`ClientConfig`].
 	///
-	/// A [public key](PublicKey) can be used to ensure the servers identity
+	/// A [`PublicKey`] can be used to ensure the servers identity
 	/// during registration or login. If no [`PublicKey`] could be obtained
-	/// before registration or login, it can be retrieved after successful
-	/// registration or login.
-	#[must_use]
-	pub const fn new(config: Config, public_key: Option<PublicKey>) -> Self {
-		Self { config, public_key }
+	/// beforehand, it can be retrieved after successful registration or login.
+	///
+	/// # Errors
+	/// [`Error::Config`] if [`PublicKey`] was not created with the same
+	/// [`Config`].
+	pub fn new(config: Config, public_key: Option<PublicKey>) -> Result<Self> {
+		let public_key = if let Some(public_key) = public_key {
+			if public_key.config != config {
+				return Err(Error::Config);
+			}
+
+			Some(public_key.key)
+		} else {
+			None
+		};
+
+		Ok(Self { config, public_key })
 	}
 
 	/// Returns the [`Config`] associated with this [`ClientConfig`].
@@ -46,40 +53,47 @@ impl ClientConfig {
 	/// Returns the [`PublicKey`] associated with this [`ClientConfig`].
 	#[must_use]
 	pub const fn public_key(self) -> Option<PublicKey> {
-		self.public_key
-	}
-
-	/// Sets the [`PublicKey`] to validate the server during registration or
-	/// login.
-	pub fn set_public_key(&mut self, public_key: Option<PublicKey>) -> &mut Self {
-		self.public_key = public_key;
-		self
+		#[allow(clippy::option_if_let_else)]
+		if let Some(key) = self.public_key {
+			Some(PublicKey {
+				config: self.config,
+				key,
+			})
+		} else {
+			None
+		}
 	}
 }
 
-/// Starts a registration process. See [`register`](Self::register).
-#[must_use = "Does nothing if not `finish`ed"]
+/// Holds the state of a registration process. See [`register`](Self::register).
+#[must_use = "Use `finish()` to complete the registration process"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientRegistration {
-	/// Common password config.
-	config: Config,
-	/// Server public key.
-	public_key: Option<PublicKey>,
 	/// Client registration state.
-	state: opaque_ke::ClientRegistration<CipherSuite>,
+	state: cipher_suite::ClientRegistration,
+	/// Server public key.
+	public_key: Option<[u8; 32]>,
 }
 
 impl ClientRegistration {
-	/// Returns [`Config`].
+	/// Returns the [`Config`] associated with this [`ClientRegistration`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		self.config
+		Config(self.state.cipher_suite())
 	}
 
-	/// Returns the configured server public key for validation.
+	/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].
 	#[must_use]
 	pub const fn public_key(&self) -> Option<PublicKey> {
-		self.public_key
+		#[allow(clippy::option_if_let_else)]
+		if let Some(key) = self.public_key {
+			Some(PublicKey {
+				config: Config(self.state.cipher_suite()),
+				key,
+			})
+		} else {
+			None
+		}
 	}
 
 	/// Starts the registration process. The returned [`RegistrationRequest`]
@@ -92,16 +106,13 @@ impl ClientRegistration {
 		config: &ClientConfig,
 		password: P,
 	) -> Result<(Self, RegistrationRequest)> {
-		use opaque_ke::ClientRegistrationStartResult;
-
-		let result = opaque_ke::ClientRegistration::start(&mut OsRng, password.as_ref())?;
-		let ClientRegistrationStartResult { state, message } = result;
+		let (state, message) =
+			cipher_suite::ClientRegistration::register(config.config.0, password.as_ref())?;
 
 		Ok((
 			Self {
-				config: config.config,
-				public_key: config.public_key,
 				state,
+				public_key: config.public_key,
 			},
 			RegistrationRequest(message),
 		))
@@ -115,10 +126,12 @@ impl ClientRegistration {
 	/// [`ClientFile`] can be used to validate the server during login. See
 	/// [`ClientLogin::login()`].
 	///
-	/// [`ExportKey`] can be used to encrypt data and store it on safely on
+	/// [`ExportKey`] can be used to encrypt data and store it safely on
 	/// the server. See [`ExportKey`] for more details.
 	///
 	/// # Errors
+	/// - [`Error::Config`] if [`ClientRegistration`] and
+	///   [`RegistrationResponse`] were not created with the same [`Config`]
 	/// - [`Error::InvalidServer`] if the public key given in
 	///   [`register()`](Self::register) does not match the servers public key
 	/// - [`Error::Opaque`] on internal OPAQUE error
@@ -126,80 +139,83 @@ impl ClientRegistration {
 		self,
 		response: RegistrationResponse,
 	) -> Result<(ClientFile, RegistrationFinalization, ExportKey)> {
-		let public_key = if let Some(public_key) = self.public_key {
-			if !public_key.is_opaque(response.0.public_key()) {
+		let config = self.config();
+		let (finalization, public_key, export_key) = self.state.finish(response.0)?;
+
+		let public_key = if let Some(key) = self.public_key {
+			if !PublicKey::is_opaque(key, &public_key) {
 				return Err(Error::InvalidServer);
 			}
 
-			public_key
+			PublicKey { config, key }
 		} else {
-			PublicKey::from_opaque(response.0.public_key())
+			PublicKey::new(config, &public_key)
 		};
 
-		let result = self.state.finish(
-			&mut OsRng,
-			response.0,
-			ClientRegistrationFinishParameters::default(),
-		)?;
-		let ClientRegistrationFinishResult {
-			message,
-			export_key,
-		} = result;
-
 		Ok((
-			ClientFile {
-				config: self.config,
-				public_key,
-			},
-			RegistrationFinalization(message),
-			ExportKey(export_key.into()),
+			ClientFile(public_key),
+			RegistrationFinalization(finalization),
+			ExportKey(export_key),
 		))
 	}
 }
 
-/// Store this to enable server validation during login.
+/// Use this to enable server validation during login.
 #[allow(missing_copy_implementations)]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub struct ClientFile {
-	/// Persistant [`Config`] between login and registration.
-	config: Config,
-	/// Server public key.
-	public_key: PublicKey,
-}
+#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub struct ClientFile(PublicKey);
 
 impl ClientFile {
 	/// Returns the [`Config`] associated with this [`ClientFile`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		self.config
+		self.0.config
 	}
 
-	/// Returns the [`PublicKey`] associated with this [`ClientFile`].
+	/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].
 	#[must_use]
 	pub const fn public_key(self) -> PublicKey {
-		self.public_key
+		self.0
 	}
 }
 
-/// Starts the login process on the client.
+/// Holds the state of a login process. See [`login`](Self::login).
 #[must_use = "Does nothing if not `finish`ed"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientLogin {
-	/// Common config.
-	config: Config,
-	/// Server public key.
-	public_key: Option<PublicKey>,
 	/// Client login state.
-	state: opaque_ke::ClientLogin<CipherSuite>,
+	state: cipher_suite::ClientLogin,
+	/// Server public key.
+	public_key: Option<[u8; 32]>,
 }
 
 impl ClientLogin {
+	/// Returns the [`Config`] associated with this [`ClientLogin`].
+	#[must_use]
+	pub const fn config(&self) -> Config {
+		Config(self.state.cipher_suite())
+	}
+
+	/// Returns the servers [`ClientLogin`] associated with this [`ClientFile`].
+	#[must_use]
+	pub const fn public_key(&self) -> Option<PublicKey> {
+		#[allow(clippy::option_if_let_else)]
+		if let Some(key) = self.public_key {
+			Some(PublicKey {
+				config: Config(self.state.cipher_suite()),
+				key,
+			})
+		} else {
+			None
+		}
+	}
+
 	/// Starts the login process. The returned [`LoginRequest`] has to be send
 	/// to the server to drive the login process. See
 	/// [`ServerLogin::login()`](crate::ServerLogin::login).
 	///
-	/// If a [`ClientFile`] was stored during registration, it can help validate
-	/// the server when passed.
+	/// If a [`ClientFile`] was stored during registration, it can validate the
+	/// server when passed.
 	///
 	/// # Errors
 	/// - [`Error::Config`] if [`ClientConfig`] and [`ClientFile`] were not
@@ -214,32 +230,25 @@ impl ClientLogin {
 		password: P,
 	) -> Result<(Self, LoginRequest)> {
 		let public_key = if let Some(file) = &file {
-			if file.config != config.config {
+			if file.0.config != config.config {
 				return Err(Error::Config);
 			}
 
 			if let Some(public_key) = config.public_key {
-				if public_key != file.public_key {
+				if public_key != file.0.key {
 					return Err(Error::PublicKey);
 				}
 			}
 
-			Some(file.public_key)
+			Some(file.0.key)
 		} else {
 			config.public_key
 		};
 
-		let result = opaque_ke::ClientLogin::start(&mut OsRng, password.as_ref())?;
-		let ClientLoginStartResult { state, message } = result;
+		let (state, request) =
+			cipher_suite::ClientLogin::login(config.config.0, password.as_ref())?;
 
-		Ok((
-			Self {
-				config: config.config,
-				public_key,
-				state,
-			},
-			LoginRequest(message),
-		))
+		Ok((Self { state, public_key }, LoginRequest(request)))
 	}
 
 	/// Finishes the login process. The returned [`LoginFinalization`] has to be
@@ -252,6 +261,8 @@ impl ClientLogin {
 	/// the server. See [`ExportKey`] for more details.
 	///
 	/// # Errors
+	/// - [`Error::Config`] if [`ClientLogin`] and [`LoginResponse`] were not
+	///   created with the same [`Config`]
 	/// - [`Error::Credentials`] if credentials don't match
 	/// - [`Error::InvalidServer`] if the public key given in
 	///   [`login()`](Self::login) does not match the servers public key
@@ -260,39 +271,28 @@ impl ClientLogin {
 		self,
 		response: LoginResponse,
 	) -> Result<(ClientFile, LoginFinalization, ExportKey)> {
-		let result = match self
-			.state
-			.finish(response.0, ClientLoginFinishParameters::default())
-		{
+		let config = Config(self.state.cipher_suite());
+		let (finalization, public_key, export_key) = match self.state.finish(response.0) {
 			Ok(result) => result,
-			Err(ProtocolError::VerificationError(PakeError::InvalidLoginError)) =>
+			Err(Error::Opaque(ProtocolError::VerificationError(PakeError::InvalidLoginError))) =>
 				return Err(Error::Credentials),
-			Err(error) => return Err(error.into()),
+			Err(error) => return Err(error),
 		};
-		let ClientLoginFinishResult {
-			message,
-			export_key,
-			server_s_pk,
-			..
-		} = result;
 
-		let public_key = if let Some(public_key) = self.public_key {
-			if !public_key.is_opaque(&server_s_pk) {
+		let public_key = if let Some(key) = self.public_key {
+			if !PublicKey::is_opaque(key, &public_key) {
 				return Err(Error::InvalidServer);
 			}
 
-			public_key
+			PublicKey { config, key }
 		} else {
-			PublicKey::from_opaque(&server_s_pk)
+			PublicKey::new(config, &public_key)
 		};
 
 		Ok((
-			ClientFile {
-				config: self.config,
-				public_key,
-			},
-			LoginFinalization(message),
-			ExportKey(export_key.into()),
+			ClientFile(public_key),
+			LoginFinalization(finalization),
+			ExportKey(export_key),
 		))
 	}
 }
