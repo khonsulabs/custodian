@@ -435,6 +435,12 @@
 <span id="435">435</span>
 <span id="436">436</span>
 <span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
 </pre><pre class="rust">
 <span class="doccomment">//! [`CipherSuite`](ciphersuite::CipherSuite) implementations and all</span>
 <span class="doccomment">//! corresponding types.</span>
@@ -776,7 +782,7 @@
 			<span class="doccomment">/// [`opaque_ke::ServerLogin::start()`] wrapper.</span>
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">login</span>(
 				<span class="ident">setup</span>: <span class="kw-2">&amp;</span><span class="ident">ServerSetup</span>,
-				<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span>,
+				<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">ServerFile</span>, [<span class="ident">u8</span>; <span class="number">32</span>])<span class="op">&gt;</span>,
 				<span class="ident">request</span>: <span class="ident">LoginRequest</span>,
 			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="ident">setup</span>, <span class="ident">request</span>) {
@@ -785,7 +791,13 @@
 						<span class="ident">LoginRequest</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">request</span>),
 					) <span class="op">=</span><span class="op">&gt;</span> {
 						<span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">file</span> {
-							<span class="prelude-val">Some</span>(<span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">file</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>),
+							<span class="prelude-val">Some</span>((<span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">file</span>), <span class="ident">public_key</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+								<span class="kw">if</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">setup</span>.<span class="ident">public_key</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">public_key</span> {
+									<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ServerConfig</span>);
+								}
+
+								<span class="prelude-val">Some</span>(<span class="ident">file</span>)
+							},
 							<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unreachable_patterns</span>)]</span>
 							<span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 							<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,

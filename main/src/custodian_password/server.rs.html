@@ -180,7 +180,6 @@
 <span id="180">180</span>
 <span id="181">181</span>
 <span id="182">182</span>
-<span id="183">183</span>
 </pre><pre class="rust">
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_name_repetitions</span>)]</span>
 
@@ -188,10 +187,12 @@
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Error</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
 	<span class="ident">cipher_suite</span>::{<span class="self">self</span>, <span class="ident">CipherSuite</span>},
-	<span class="ident">Config</span>, <span class="ident">Error</span>, <span class="ident">LoginFinalization</span>, <span class="ident">LoginRequest</span>, <span class="ident">LoginResponse</span>, <span class="ident">PublicKey</span>,
-	<span class="ident">RegistrationFinalization</span>, <span class="ident">RegistrationRequest</span>, <span class="ident">RegistrationResponse</span>, <span class="prelude-ty">Result</span>,
+	<span class="ident">Config</span>, <span class="ident">LoginFinalization</span>, <span class="ident">LoginRequest</span>, <span class="ident">LoginResponse</span>, <span class="ident">PublicKey</span>, <span class="ident">RegistrationFinalization</span>,
+	<span class="ident">RegistrationRequest</span>, <span class="ident">RegistrationResponse</span>, <span class="prelude-ty">Result</span>,
 };
 
 <span class="doccomment">/// Server configuration. This contains the secret key needed to create and use</span>
@@ -345,14 +346,11 @@
 		<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span>,
 		<span class="ident">request</span>: <span class="ident">LoginRequest</span>,
 	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
-		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span> {
-			<span class="kw">if</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">config</span>.<span class="number">0</span>.<span class="ident">public_key</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">file</span>.<span class="ident">public_key</span> {
-				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ServerConfig</span>);
-			}
-		}
-
-		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">response</span>) <span class="op">=</span>
-			<span class="ident">cipher_suite::ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="number">0</span>, <span class="ident">file</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">file</span><span class="op">|</span> <span class="ident">file</span>.<span class="ident">file</span>), <span class="ident">request</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">cipher_suite::ServerLogin::login</span>(
+			<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="number">0</span>,
+			<span class="ident">file</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">file</span><span class="op">|</span> (<span class="ident">file</span>.<span class="ident">file</span>, <span class="ident">file</span>.<span class="ident">public_key</span>)),
+			<span class="ident">request</span>.<span class="number">0</span>,
+		)<span class="question-mark">?</span>;
 
 		<span class="prelude-val">Ok</span>((<span class="self">Self</span>(<span class="ident">state</span>), <span class="ident">LoginResponse</span>(<span class="ident">response</span>)))
 	}
