@@ -66,7 +66,6 @@
 // TODO: start registration and login process from `Server/ClientConfig`
 // TODO: implement credential identifier
 // TODO: option to save credential identifier in plaintext to support renaming
-// TODO: expose session key
 // TODO: implement encryption for export key
 // TODO: expose custom identifier
 // TODO: start `custodian-shared` for keypair types, algorithms and whatnot
