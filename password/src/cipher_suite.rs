@@ -338,7 +338,7 @@ macro_rules! cipher_suite {
 			/// [`opaque_ke::ServerLogin::start()`] wrapper.
 			pub(crate) fn login(
 				setup: &ServerSetup,
-				file: Option<ServerFile>,
+				file: Option<(ServerFile, [u8; 32])>,
 				request: LoginRequest,
 			) -> Result<(Self, LoginResponse)> {
 				match (setup, request) {
@@ -347,7 +347,13 @@ macro_rules! cipher_suite {
 						LoginRequest::$cipher_suite(request),
 					) => {
 						let file = match file {
-							Some(ServerFile::$cipher_suite(file)) => Some(file),
+							Some((ServerFile::$cipher_suite(file), public_key)) => {
+								if ***setup.public_key() != public_key {
+									return Err(Error::ServerConfig);
+								}
+
+								Some(file)
+							},
 							#[allow(unreachable_patterns)]
 							Some(_) => return Err(Error::Config),
 							None => None,

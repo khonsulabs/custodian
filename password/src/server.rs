@@ -4,10 +4,12 @@
 
 use serde::{Deserialize, Serialize};
 
+#[cfg(doc)]
+use crate::Error;
 use crate::{
 	cipher_suite::{self, CipherSuite},
-	Config, Error, LoginFinalization, LoginRequest, LoginResponse, PublicKey,
-	RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
+	Config, LoginFinalization, LoginRequest, LoginResponse, PublicKey, RegistrationFinalization,
+	RegistrationRequest, RegistrationResponse, Result,
 };
 
 /// Server configuration. This contains the secret key needed to create and use
@@ -161,14 +163,11 @@ impl ServerLogin {
 		file: Option<ServerFile>,
 		request: LoginRequest,
 	) -> Result<(Self, LoginResponse)> {
-		if let Some(file) = &file {
-			if ***config.0.public_key() != file.public_key {
-				return Err(Error::ServerConfig);
-			}
-		}
-
-		let (state, response) =
-			cipher_suite::ServerLogin::login(&config.0, file.map(|file| file.file), request.0)?;
+		let (state, response) = cipher_suite::ServerLogin::login(
+			&config.0,
+			file.map(|file| (file.file, file.public_key)),
+			request.0,
+		)?;
 
 		Ok((Self(state), LoginResponse(response)))
 	}

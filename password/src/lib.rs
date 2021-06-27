@@ -244,3 +244,106 @@ fn cipher_suites() -> anyhow::Result<()> {
 
 	Ok(())
 }
+
+#[test]
+fn wrong_config() -> anyhow::Result<()> {
+	// Configuration
+	const PASSWORD: &[u8] = b"password";
+
+	let config = Config::new(SlowHash::Argon2id);
+	let wrong_config = Config::new(SlowHash::Argon2d);
+	let server_config = ServerConfig::new(config);
+	let wrong_server_config = ServerConfig::new(wrong_config);
+	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
+	let wrong_client_config =
+		ClientConfig::new(wrong_config, Some(wrong_server_config.public_key()))?;
+
+	assert_eq!(
+		ClientConfig::new(config, Some(wrong_server_config.public_key())),
+		Err(Error::Config)
+	);
+
+	// Registration
+	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (server, response) = ServerRegistration::register(&server_config, request.clone())?;
+	let (client_file, finalization, _) = client.clone().finish(response.clone())?;
+	let server_file = server.clone().finish(finalization.clone())?;
+
+	let (wrong_client, wrong_request) =
+		ClientRegistration::register(&wrong_client_config, PASSWORD)?;
+	let (wrong_server, wrong_response) =
+		ServerRegistration::register(&wrong_server_config, wrong_request.clone())?;
+	let (wrong_client_file, wrong_finalization, _) =
+		wrong_client.clone().finish(wrong_response.clone())?;
+	let wrong_server_file = wrong_server.clone().finish(wrong_finalization.clone())?;
+
+	assert_eq!(
+		ServerRegistration::register(&wrong_server_config, request),
+		Err(Error::Config)
+	);
+	assert_eq!(
+		ServerRegistration::register(&server_config, wrong_request),
+		Err(Error::Config)
+	);
+
+	assert_eq!(wrong_client.finish(response), Err(Error::Config));
+	assert_eq!(client.finish(wrong_response), Err(Error::Config));
+
+	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));
+	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));
+
+	// Login
+	let (client, request) =
+		ClientLogin::login(&client_config, Some(client_file.clone()), PASSWORD)?;
+	let (server, response) =
+		ServerLogin::login(&server_config, Some(server_file.clone()), request.clone())?;
+	let (_, finalization, _) = client.clone().finish(response.clone())?;
+	server.clone().finish(finalization.clone())?;
+
+	let (wrong_client, wrong_request) = ClientLogin::login(
+		&wrong_client_config,
+		Some(wrong_client_file.clone()),
+		PASSWORD,
+	)?;
+	let (wrong_server, wrong_response) = ServerLogin::login(
+		&wrong_server_config,
+		Some(wrong_server_file.clone()),
+		wrong_request.clone(),
+	)?;
+	let (_, wrong_finalization, _) = wrong_client.clone().finish(wrong_response.clone())?;
+	wrong_server.clone().finish(wrong_finalization.clone())?;
+
+	assert_eq!(
+		ClientLogin::login(&wrong_client_config, Some(client_file), PASSWORD),
+		Err(Error::Config)
+	);
+	assert_eq!(
+		ClientLogin::login(&client_config, Some(wrong_client_file), PASSWORD),
+		Err(Error::Config)
+	);
+
+	assert_eq!(
+		ServerLogin::login(
+			&wrong_server_config,
+			Some(server_file.clone()),
+			request.clone()
+		),
+		Err(Error::Config)
+	);
+	assert_eq!(
+		ServerLogin::login(&server_config, Some(wrong_server_file), request),
+		Err(Error::Config)
+	);
+	assert_eq!(
+		ServerLogin::login(&server_config, Some(server_file), wrong_request),
+		Err(Error::Config)
+	);
+
+	assert_eq!(wrong_client.finish(response), Err(Error::Config));
+	assert_eq!(client.finish(wrong_response), Err(Error::Config));
+
+	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));
+	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));
+
+	Ok(())
+}
