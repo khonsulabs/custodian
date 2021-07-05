@@ -20,41 +20,56 @@ impl Config {
 	/// Builds new [`Config`].
 	#[must_use]
 	pub const fn new(hash: Hash, slow_hash: SlowHash) -> Self {
+		#[allow(clippy::enum_glob_use)]
+		use self::{CipherSuite::*, Hash::*, SlowHash::*};
+
 		Self(match (hash, slow_hash) {
-			(Hash::Sha512, SlowHash::Argon2id) => CipherSuite::Curve25519Sha512Argon2id,
-			(Hash::Sha512, SlowHash::Argon2d) => CipherSuite::Curve25519Sha512Argon2d,
+			(Sha512, Argon2id) => Curve25519Sha512Argon2id,
+			(Sha512, Argon2d) => Curve25519Sha512Argon2d,
 			#[cfg(feature = "sha3")]
-			(Hash::Sha3_512, SlowHash::Argon2id) => CipherSuite::Curve25519Sha3_512Argon2id,
+			(Sha3_512, Argon2id) => Curve25519Sha3_512Argon2id,
 			#[cfg(feature = "sha3")]
-			(Hash::Sha3_512, SlowHash::Argon2d) => CipherSuite::Curve25519Sha3_512Argon2d,
+			(Sha3_512, Argon2d) => Curve25519Sha3_512Argon2d,
+			#[cfg(feature = "blake3")]
+			(Blake3, Argon2id) => Curve25519Blake3Argon2id,
+			#[cfg(feature = "blake3")]
+			(Blake3, Argon2d) => Curve25519Blake3Argon2d,
 		})
 	}
 
 	/// Returns [`Hash`](self::Hash) of this [`Config`].
 	#[must_use]
 	pub const fn hash(self) -> Hash {
-		#[allow(clippy::match_same_arms)]
+		#[allow(clippy::enum_glob_use)]
+		use CipherSuite::*;
+
 		match self.0 {
-			CipherSuite::Curve25519Sha512Argon2id => Hash::Sha512,
-			CipherSuite::Curve25519Sha512Argon2d => Hash::Sha512,
+			Curve25519Sha512Argon2id | Curve25519Sha512Argon2d => Hash::Sha512,
 			#[cfg(feature = "sha3")]
-			CipherSuite::Curve25519Sha3_512Argon2id => Hash::Sha3_512,
-			#[cfg(feature = "sha3")]
-			CipherSuite::Curve25519Sha3_512Argon2d => Hash::Sha3_512,
+			Curve25519Sha3_512Argon2id | Curve25519Sha3_512Argon2d => Hash::Sha3_512,
+			#[cfg(feature = "blake3")]
+			Curve25519Blake3Argon2id | Curve25519Blake3Argon2d => Hash::Blake3,
 		}
 	}
 
 	/// Returns [`SlowHash`] of this [`Config`].
 	#[must_use]
 	pub const fn slow_hash(self) -> SlowHash {
+		#[allow(clippy::enum_glob_use)]
+		use CipherSuite::*;
+
 		#[allow(clippy::match_same_arms)]
 		match self.0 {
-			CipherSuite::Curve25519Sha512Argon2id => SlowHash::Argon2id,
-			CipherSuite::Curve25519Sha512Argon2d => SlowHash::Argon2d,
+			Curve25519Sha512Argon2id => SlowHash::Argon2id,
+			Curve25519Sha512Argon2d => SlowHash::Argon2d,
 			#[cfg(feature = "sha3")]
-			CipherSuite::Curve25519Sha3_512Argon2id => SlowHash::Argon2id,
+			Curve25519Sha3_512Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "sha3")]
-			CipherSuite::Curve25519Sha3_512Argon2d => SlowHash::Argon2d,
+			Curve25519Sha3_512Argon2d => SlowHash::Argon2d,
+			#[cfg(feature = "blake3")]
+			Curve25519Blake3Argon2id => SlowHash::Argon2id,
+			#[cfg(feature = "blake3")]
+			Curve25519Blake3Argon2d => SlowHash::Argon2d,
 		}
 	}
 }
@@ -67,6 +82,9 @@ pub enum Hash {
 	/// SHA3-512
 	#[cfg(feature = "sha3")]
 	Sha3_512,
+	/// BLAKE3
+	#[cfg(feature = "blake3")]
+	Blake3,
 }
 
 impl Default for Hash {

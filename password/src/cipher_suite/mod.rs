@@ -7,7 +7,9 @@
 //! instantiate [`Config`](crate::Config) with arbitrary settings and store all
 //! states and files in the same container.
 
-mod impls;
+mod argon2d;
+#[cfg(feature = "blake3")]
+mod blake3;
 
 use argon2::Argon2;
 use curve25519_dalek::ristretto::RistrettoPoint;
@@ -22,7 +24,9 @@ use sha2::Sha512;
 #[cfg(feature = "sha3")]
 use sha3::Sha3_512;
 
-use self::impls::Argon2d;
+use self::argon2d::Argon2d;
+#[cfg(feature = "blake3")]
+use self::blake3::Blake3;
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
@@ -39,6 +43,12 @@ pub(crate) enum CipherSuite {
 	#[cfg(feature = "sha3")]
 	/// Curve25519 + Sha3-512 + Argon2d
 	Curve25519Sha3_512Argon2d,
+	#[cfg(feature = "blake3")]
+	/// Curve25519 + BLAKE3 + Argon2id
+	Curve25519Blake3Argon2id,
+	#[cfg(feature = "blake3")]
+	/// Curve25519 + BLAKE3 + Argon2d
+	Curve25519Blake3Argon2d,
 }
 
 impl Default for CipherSuite {
@@ -94,6 +104,32 @@ pub(crate) struct Curve25519Sha3_512Argon2d;
 impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2d {
 	type Group = RistrettoPoint;
 	type Hash = Sha3_512;
+	type KeyExchange = TripleDH;
+	type SlowHash = Argon2d;
+}
+
+#[cfg(feature = "blake3")]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Blake3Argon2id;
+
+#[cfg(feature = "blake3")]
+impl ciphersuite::CipherSuite for Curve25519Blake3Argon2id {
+	type Group = RistrettoPoint;
+	type Hash = Blake3;
+	type KeyExchange = TripleDH;
+	type SlowHash = Argon2<'static>;
+}
+
+#[cfg(feature = "blake3")]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Blake3Argon2d;
+
+#[cfg(feature = "blake3")]
+impl ciphersuite::CipherSuite for Curve25519Blake3Argon2d {
+	type Group = RistrettoPoint;
+	type Hash = Blake3;
 	type KeyExchange = TripleDH;
 	type SlowHash = Argon2d;
 }
@@ -458,4 +494,8 @@ cipher_suite!(
 	Curve25519Sha3_512Argon2id,
 	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2d,
+	#[cfg(feature = "blake3")]
+	Curve25519Blake3Argon2id,
+	#[cfg(feature = "blake3")]
+	Curve25519Blake3Argon2d,
 );

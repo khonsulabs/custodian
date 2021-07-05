@@ -1,11 +1,10 @@
-//! [`CipherSuite`](opaque_ke::ciphersuite::CipherSuite) trait associated type
-//! implementations.
+//! See [`Argon2d`].
 
 use digest::Digest;
 use generic_array::{typenum::Unsigned, GenericArray};
 use opaque_ke::{errors::InternalPakeError, hash::Hash, slow_hash::SlowHash};
 
-/// Object implementing [`SlowHash`] with
+/// Object implementing [`SlowHash`] for
 /// [`Argon2d`](argon2::Algorithm::Argon2d).
 pub(crate) struct Argon2d;
 

@@ -23,7 +23,6 @@
 	unused_import_braces,
 	unused_lifetimes,
 	unused_qualifications,
-	unused_results,
 	variant_size_differences
 )]
 #![allow(
@@ -324,6 +323,10 @@ fn cipher_suites() -> anyhow::Result<()> {
 	cipher_suite(Hash::Sha3_512, SlowHash::Argon2id)?;
 	#[cfg(feature = "sha3")]
 	cipher_suite(Hash::Sha3_512, SlowHash::Argon2d)?;
+	#[cfg(feature = "blake3")]
+	cipher_suite(Hash::Blake3, SlowHash::Argon2id)?;
+	#[cfg(feature = "blake3")]
+	cipher_suite(Hash::Blake3, SlowHash::Argon2d)?;
 
 	Ok(())
 }
