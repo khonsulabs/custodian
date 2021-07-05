@@ -1,10 +1,10 @@
 //! See [`Blake3`].
 
-use blake3_::Hasher;
+use blake3::Hasher;
 use digest::{consts::U64, BlockInput, FixedOutput, Reset, Update};
 
 /// Object implementing [`Hash`](opaque_ke::hash::Hash) for BLAKE3. This
-/// encapsulates [`blake3::Hasher`](blake3_::Hasher) over a 64-bit output size.
+/// encapsulates [`blake3::Hasher`] over a 64-bit output size.
 #[derive(Clone, Default)]
 pub(crate) struct Blake3(Hasher);
 
