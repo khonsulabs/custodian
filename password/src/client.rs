@@ -52,7 +52,7 @@ impl ClientConfig {
 
 	/// Returns the [`PublicKey`] associated with this [`ClientConfig`].
 	#[must_use]
-	pub const fn public_key(self) -> Option<PublicKey> {
+	pub const fn public_key(&self) -> Option<PublicKey> {
 		#[allow(clippy::option_if_let_else)]
 		if let Some(key) = self.public_key {
 			Some(PublicKey {
@@ -174,7 +174,7 @@ impl ClientFile {
 
 	/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].
 	#[must_use]
-	pub const fn public_key(self) -> PublicKey {
+	pub const fn public_key(&self) -> PublicKey {
 		self.0
 	}
 }
