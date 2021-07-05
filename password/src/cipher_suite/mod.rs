@@ -7,19 +7,22 @@
 //! instantiate [`Config`](crate::Config) with arbitrary settings and store all
 //! states and files in the same container.
 
+mod impls;
+
 use argon2::Argon2;
 use curve25519_dalek::ristretto::RistrettoPoint;
-use digest::Digest;
-use generic_array::{typenum::Unsigned, GenericArray};
 use opaque_ke::{
-	ciphersuite, errors::InternalPakeError, hash::Hash, key_exchange::tripledh::TripleDH,
-	keypair::PublicKey, rand::rngs::OsRng, slow_hash::SlowHash, ClientLoginFinishResult,
-	ClientLoginStartResult, ClientRegistrationFinishResult, ClientRegistrationStartResult,
-	ServerLoginFinishResult, ServerLoginStartParameters, ServerLoginStartResult,
+	ciphersuite, key_exchange::tripledh::TripleDH, keypair::PublicKey, rand::rngs::OsRng,
+	ClientLoginFinishResult, ClientLoginStartResult, ClientRegistrationFinishResult,
+	ClientRegistrationStartResult, ServerLoginFinishResult, ServerLoginStartParameters,
+	ServerLoginStartResult,
 };
 use serde::{Deserialize, Serialize};
 use sha2::Sha512;
+#[cfg(feature = "sha3")]
+use sha3::Sha3_512;
 
+use self::impls::Argon2d;
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
@@ -30,6 +33,12 @@ pub(crate) enum CipherSuite {
 	Curve25519Sha512Argon2id,
 	/// Curve25519 + Sha512 + Argon2d
 	Curve25519Sha512Argon2d,
+	#[cfg(feature = "sha3")]
+	/// Curve25519 + Sha3-512 + Argon2id
+	Curve25519Sha3_512Argon2id,
+	#[cfg(feature = "sha3")]
+	/// Curve25519 + Sha3-512 + Argon2d
+	Curve25519Sha3_512Argon2d,
 }
 
 impl Default for CipherSuite {
@@ -58,28 +67,6 @@ impl ciphersuite::CipherSuite for Curve25519Sha512Argon2d {
 	type Hash = Sha512;
 	type KeyExchange = TripleDH;
 	type SlowHash = Argon2d;
-}
-
-#[allow(clippy::missing_docs_in_private_items)]
-pub(crate) struct Argon2d;
-
-impl<D: Hash> SlowHash<D> for Argon2d {
-	fn hash(
-		input: GenericArray<u8, <D as Digest>::OutputSize>,
-	) -> Result<Vec<u8>, InternalPakeError> {
-		let params = argon2::Argon2::default();
-		let mut output = vec![0; <D as Digest>::OutputSize::to_usize()];
-		params
-			.hash_password_into(
-				argon2::Algorithm::Argon2d,
-				&input,
-				&[0; argon2::MIN_SALT_LENGTH],
-				&[],
-				&mut output,
-			)
-			.map_err(|_| InternalPakeError::SlowHashError)?;
-		Ok(output)
-	}
 }
 
 macro_rules! cipher_suite {
