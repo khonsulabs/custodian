@@ -407,6 +407,82 @@
 <span id="407">407</span>
 <span id="408">408</span>
 <span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
 </pre><pre class="rust">
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(
@@ -509,32 +585,75 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">basic</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
-	<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::default</span>();
-	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
-	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
 
 	<span class="comment">// registration process</span>
 	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 
 	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
 
-	<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
 
 	<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
 	<span class="comment">// login process</span>
-	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span>
-		<span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">Some</span>(<span class="ident">client_file</span>.<span class="ident">clone</span>()), <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">Some</span>(<span class="ident">client_file</span>), <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 
 	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>), <span class="ident">request</span>)<span class="question-mark">?</span>;
 
-	<span class="kw">let</span> (<span class="ident">new_client_file</span>, <span class="ident">finalization</span>, <span class="ident">new_export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
 
 	<span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
-	<span class="comment">// checks</span>
+	<span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">consistency</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>), <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">new_client_file</span>, <span class="ident">finalization</span>, <span class="ident">new_export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+
 	<span class="macro">assert_eq!</span>(<span class="ident">client_file</span>, <span class="ident">new_client_file</span>);
 	<span class="macro">assert_eq!</span>(<span class="ident">export_key</span>, <span class="ident">new_export_key</span>);
+
+	<span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">not_validated</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
+
+	<span class="macro">assert_eq!</span>(<span class="ident">client_config</span>.<span class="ident">public_key</span>(), <span class="prelude-val">None</span>);
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+
+	<span class="macro">assert_eq!</span>(<span class="ident">client</span>.<span class="ident">public_key</span>(), <span class="prelude-val">None</span>);
+
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+
+	<span class="macro">assert_eq!</span>(<span class="ident">client</span>.<span class="ident">public_key</span>(), <span class="prelude-val">None</span>);
+
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>), <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
 	<span class="prelude-val">Ok</span>(())
 }
@@ -561,7 +680,7 @@
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 
-	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="string">&quot;wrong password&quot;</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="string">&quot;password&quot;</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">None</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
 	<span class="macro">assert_eq!</span>(<span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>), <span class="prelude-val">Err</span>(<span class="ident">Error::Credentials</span>));
 
@@ -570,10 +689,10 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">wrong_server_register</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::default</span>();
-	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
-	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
-	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_config_wrong</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span>
+		<span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config_wrong</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
 
 	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="string">&quot;password&quot;</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
@@ -584,18 +703,19 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">wrong_server_login</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::default</span>();
-	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
-	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
+	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 
-	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">config</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
-	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="string">&quot;password&quot;</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
-	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_config_wrong</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
-	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="string">&quot;password&quot;</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span>
+		<span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config_wrong</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>), <span class="ident">request</span>)<span class="question-mark">?</span>;
 	<span class="macro">assert_eq!</span>(<span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>), <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidServer</span>));
 
@@ -604,19 +724,51 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">wrong_server_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 
-	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="string">&quot;right password&quot;</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
 	<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
-	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="string">&quot;wrong password&quot;</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">None</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
 	<span class="macro">assert_eq!</span>(
 		<span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config_wrong</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>), <span class="ident">request</span>),
 		<span class="prelude-val">Err</span>(<span class="ident">Error::ServerConfig</span>)
+	);
+
+	<span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">wrong_client_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
+	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
+	<span class="kw">let</span> <span class="ident">client_config_wrong</span> <span class="op">=</span>
+		<span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config_wrong</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">_server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+
+	<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">client_config_wrong</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config_wrong</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> (<span class="ident">client_file_wrong</span>, <span class="ident">finalization</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+	<span class="kw">let</span> <span class="ident">_server_file_wrong</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+
+	<span class="macro">assert_eq!</span>(
+		<span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config</span>, <span class="prelude-val">Some</span>(<span class="ident">client_file_wrong</span>), <span class="ident">PASSWORD</span>),
+		<span class="prelude-val">Err</span>(<span class="ident">Error::PublicKey</span>)
+	);
+	<span class="macro">assert_eq!</span>(
+		<span class="ident">ClientLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">client_config_wrong</span>, <span class="prelude-val">Some</span>(<span class="ident">client_file</span>), <span class="ident">PASSWORD</span>),
+		<span class="prelude-val">Err</span>(<span class="ident">Error::PublicKey</span>)
 	);
 
 	<span class="prelude-val">Ok</span>(())
