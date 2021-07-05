@@ -64,6 +64,15 @@ impl ServerRegistration {
 		Config(self.state.cipher_suite())
 	}
 
+	/// Returns the [`PublicKey`] associated with this [`ServerRegistration`].
+	#[must_use]
+	pub const fn public_key(&self) -> PublicKey {
+		PublicKey {
+			config: self.config(),
+			key: self.public_key,
+		}
+	}
+
 	/// Starts the registration process. The returned [`RegistrationResponse`]
 	/// has to be send back to the client to drive the registration process. See
 	/// [`ClientRegistration::finish()`](crate::ClientRegistration::finish).
