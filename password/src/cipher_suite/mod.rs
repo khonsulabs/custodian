@@ -51,15 +51,6 @@ pub(crate) enum CipherSuite {
 	Curve25519Blake3Argon2d,
 }
 
-impl Default for CipherSuite {
-	fn default() -> Self {
-		#[cfg(feature = "sha3")]
-		return Self::Curve25519Sha3_512Argon2id;
-		#[cfg(not(feature = "sha3"))]
-		Self::Curve25519Sha512Argon2id
-	}
-}
-
 #[allow(clippy::missing_docs_in_private_items)]
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub(crate) struct Curve25519Sha512Argon2id;

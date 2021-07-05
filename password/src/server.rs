@@ -7,9 +7,8 @@ use serde::{Deserialize, Serialize};
 #[cfg(doc)]
 use crate::Error;
 use crate::{
-	cipher_suite::{self, CipherSuite},
-	Config, LoginFinalization, LoginRequest, LoginResponse, PublicKey, RegistrationFinalization,
-	RegistrationRequest, RegistrationResponse, Result,
+	cipher_suite, Config, LoginFinalization, LoginRequest, LoginResponse, PublicKey,
+	RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
 };
 
 /// Server configuration. This contains the secret key needed to create and use
@@ -20,7 +19,7 @@ pub struct ServerConfig(cipher_suite::ServerSetup);
 
 impl Default for ServerConfig {
 	fn default() -> Self {
-		Self(cipher_suite::ServerSetup::new(CipherSuite::default()))
+		Self(cipher_suite::ServerSetup::new(Config::default().0))
 	}
 }
 
