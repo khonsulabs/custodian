@@ -39,11 +39,11 @@
 </pre><pre class="rust">
 <span class="doccomment">//! See [`Blake3`].</span>
 
-<span class="kw">use</span> <span class="ident">blake3_::Hasher</span>;
+<span class="kw">use</span> <span class="ident">blake3::Hasher</span>;
 <span class="kw">use</span> <span class="ident">digest</span>::{<span class="ident">consts::U64</span>, <span class="ident">BlockInput</span>, <span class="ident">FixedOutput</span>, <span class="ident">Reset</span>, <span class="ident">Update</span>};
 
 <span class="doccomment">/// Object implementing [`Hash`](opaque_ke::hash::Hash) for BLAKE3. This</span>
-<span class="doccomment">/// encapsulates [`blake3::Hasher`](blake3_::Hasher) over a 64-bit output size.</span>
+<span class="doccomment">/// encapsulates [`blake3::Hasher`] over a 64-bit output size.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Blake3</span>(<span class="ident">Hasher</span>);
 
