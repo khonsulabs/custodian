@@ -347,3 +347,57 @@ fn wrong_config() -> anyhow::Result<()> {
 
 	Ok(())
 }
+
+#[test]
+fn getters() -> anyhow::Result<()> {
+	// Configuration
+	const PASSWORD: &[u8] = b"password";
+
+	let config = Config::new(SlowHash::Argon2id);
+	let server_config = ServerConfig::new(config);
+	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
+	let public_key = server_config.public_key();
+
+	assert_eq!(config.slow_hash(), SlowHash::Argon2id);
+	assert_eq!(server_config.config(), config);
+	assert_eq!(client_config.config(), config);
+	assert_eq!(client_config.public_key(), Some(server_config.public_key()));
+
+	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+
+	assert_eq!(client.config(), config);
+	assert_eq!(client.public_key(), Some(public_key));
+
+	let (server, response) = ServerRegistration::register(&server_config, request)?;
+
+	assert_eq!(server.config(), config);
+	assert_eq!(server.public_key(), public_key);
+
+	let (client_file, finalization, _) = client.finish(response)?;
+
+	assert_eq!(client_file.config(), config);
+	assert_eq!(client_file.public_key(), public_key);
+
+	let server_file = server.finish(finalization)?;
+
+	assert_eq!(server_file.config(), config);
+	assert_eq!(server_file.public_key(), public_key);
+
+	let (client, request) = ClientLogin::login(&client_config, Some(client_file), PASSWORD)?;
+
+	assert_eq!(client.config(), config);
+	assert_eq!(client.public_key(), Some(public_key));
+
+	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
+
+	assert_eq!(server.config(), config);
+
+	let (new_client_file, finalization, _) = client.finish(response)?;
+
+	assert_eq!(new_client_file.config(), config);
+	assert_eq!(new_client_file.public_key(), public_key);
+
+	server.finish(finalization)?;
+
+	Ok(())
+}
