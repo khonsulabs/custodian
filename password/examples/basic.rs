@@ -46,9 +46,8 @@ impl Network {
 fn main() -> Result<()> {
 	let (client_network, server_network) = simulate_network();
 
-	let config = Config::default();
-	let server_config = ServerConfig::new(config);
-	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
+	let server_config = ServerConfig::default();
+	let client_config = ClientConfig::new(Config::default(), Some(server_config.public_key()))?;
 
 	let client = thread::spawn(|| client(client_network, client_config));
 	let server = thread::spawn(|| server(server_network, server_config));
