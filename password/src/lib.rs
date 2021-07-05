@@ -447,6 +447,7 @@ fn getters() -> anyhow::Result<()> {
 	assert_eq!(server_config.config(), config);
 	assert_eq!(client_config.config(), config);
 	assert_eq!(client_config.public_key(), Some(server_config.public_key()));
+	assert_eq!(public_key.config(), config);
 
 	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
 

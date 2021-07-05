@@ -394,7 +394,6 @@ macro_rules! cipher_suite {
 
 								Some(file)
 							},
-							#[allow(unreachable_patterns)]
 							Some(_) => return Err(Error::Config),
 							None => None,
 						};
