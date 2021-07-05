@@ -96,10 +96,10 @@ impl Config {
 pub enum Hash {
 	/// SHA-512.
 	Sha512,
-	/// SHA3-512
+	/// SHA3-512.
 	#[cfg(feature = "sha3")]
 	Sha3_512,
-	/// BLAKE3
+	/// BLAKE3.
 	#[cfg(feature = "blake3")]
 	Blake3,
 }
@@ -120,7 +120,7 @@ pub enum SlowHash {
 	Argon2id,
 	/// Argon2d.
 	Argon2d,
-	/// PBKDF2.
+	/// PBKDF2-SHA256.
 	#[cfg(feature = "pbkdf2")]
 	Pbkdf2,
 }
