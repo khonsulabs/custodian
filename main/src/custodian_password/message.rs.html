@@ -78,7 +78,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LoginResponse</span>(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cipher_suite::LoginResponse</span>);
 
-<span class="doccomment">/// Send this back to the client to finish the login process. See</span>
+<span class="doccomment">/// Send this back to the server to finish the login process. See</span>
 <span class="doccomment">/// [`ClientLogin::finish()`](crate::ClientLogin::finish).</span>
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Does nothing if not sent to the server&quot;</span>]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
