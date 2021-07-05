@@ -33,3 +33,8 @@ thiserror = "1"
 [dev-dependencies]
 anyhow = "1"
 bincode = "1"
+criterion = "0.3"
+
+[[bench]]
+name = "cipher_suites"
+harness = false
