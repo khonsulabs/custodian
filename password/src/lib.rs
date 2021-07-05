@@ -85,7 +85,7 @@ pub use serde;
 
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::{Config, SlowHash},
+	config::{Config, Hash, SlowHash},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{
@@ -216,8 +216,12 @@ fn wrong_server_config() -> anyhow::Result<()> {
 fn cipher_suites() -> anyhow::Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
-	fn cipher_suite(slow_hash: SlowHash) -> anyhow::Result<()> {
-		let config = Config::new(slow_hash);
+	fn cipher_suite(hash: Hash, slow_hash: SlowHash) -> anyhow::Result<()> {
+		let config = Config::new(hash, slow_hash);
+
+		assert_eq!(config.hash(), hash);
+		assert_eq!(config.slow_hash(), slow_hash);
+
 		let server_config = ServerConfig::new(config);
 		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
 
@@ -238,8 +242,12 @@ fn cipher_suites() -> anyhow::Result<()> {
 		Ok(())
 	}
 
-	cipher_suite(SlowHash::Argon2id)?;
-	cipher_suite(SlowHash::Argon2d)?;
+	cipher_suite(Hash::Sha512, SlowHash::Argon2id)?;
+	cipher_suite(Hash::Sha512, SlowHash::Argon2d)?;
+	#[cfg(feature = "sha3")]
+	cipher_suite(Hash::Sha3_512, SlowHash::Argon2id)?;
+	#[cfg(feature = "sha3")]
+	cipher_suite(Hash::Sha3_512, SlowHash::Argon2d)?;
 
 	Ok(())
 }
@@ -249,8 +257,8 @@ fn wrong_config() -> anyhow::Result<()> {
 	// Configuration
 	const PASSWORD: &[u8] = b"password";
 
-	let config = Config::new(SlowHash::Argon2id);
-	let wrong_config = Config::new(SlowHash::Argon2d);
+	let config = Config::new(Hash::default(), SlowHash::Argon2id);
+	let wrong_config = Config::new(Hash::default(), SlowHash::Argon2d);
 	let server_config = ServerConfig::new(config);
 	let wrong_server_config = ServerConfig::new(wrong_config);
 	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
@@ -352,12 +360,11 @@ fn getters() -> anyhow::Result<()> {
 	// Configuration
 	const PASSWORD: &[u8] = b"password";
 
-	let config = Config::new(SlowHash::Argon2id);
+	let config = Config::default();
 	let server_config = ServerConfig::new(config);
 	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
 	let public_key = server_config.public_key();
 
-	assert_eq!(config.slow_hash(), SlowHash::Argon2id);
 	assert_eq!(server_config.config(), config);
 	assert_eq!(client_config.config(), config);
 	assert_eq!(client_config.public_key(), Some(server_config.public_key()));

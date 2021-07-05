@@ -43,6 +43,9 @@ pub(crate) enum CipherSuite {
 
 impl Default for CipherSuite {
 	fn default() -> Self {
+		#[cfg(feature = "sha3")]
+		return Self::Curve25519Sha3_512Argon2id;
+		#[cfg(not(feature = "sha3"))]
 		Self::Curve25519Sha512Argon2id
 	}
 }
@@ -69,20 +72,46 @@ impl ciphersuite::CipherSuite for Curve25519Sha512Argon2d {
 	type SlowHash = Argon2d;
 }
 
+#[cfg(feature = "sha3")]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Sha3_512Argon2id;
+
+#[cfg(feature = "sha3")]
+impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2id {
+	type Group = RistrettoPoint;
+	type Hash = Sha3_512;
+	type KeyExchange = TripleDH;
+	type SlowHash = Argon2<'static>;
+}
+
+#[cfg(feature = "sha3")]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Sha3_512Argon2d;
+
+#[cfg(feature = "sha3")]
+impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2d {
+	type Group = RistrettoPoint;
+	type Hash = Sha3_512;
+	type KeyExchange = TripleDH;
+	type SlowHash = Argon2d;
+}
+
 macro_rules! cipher_suite {
-	($($cipher_suite:ident),+) => {
+	($($(#[$attr:meta])? $cipher_suite:ident),+$(,)?) => {
 		/// [`opaque_ke::ClientRegistration`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum ClientRegistration {
-			$($cipher_suite(opaque_ke::ClientRegistration<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::ClientRegistration<$cipher_suite>),)+
 		}
 
 		impl ClientRegistration {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ClientRegistration::$cipher_suite(_) =>
+					$($(#[$attr])? ClientRegistration::$cipher_suite(_) =>
 						CipherSuite::$cipher_suite,)+
 				}
 			}
@@ -93,7 +122,7 @@ macro_rules! cipher_suite {
 				password: &[u8],
 			) -> Result<(Self, RegistrationRequest)> {
 				match cipher_suite {
-					$(CipherSuite::$cipher_suite => {
+					$($(#[$attr])? CipherSuite::$cipher_suite => {
 						let result = opaque_ke::ClientRegistration::start(&mut OsRng, password)?;
 						let ClientRegistrationStartResult { state, message } = result;
 						Ok((
@@ -110,7 +139,7 @@ macro_rules! cipher_suite {
 				response: RegistrationResponse,
 			) -> Result<(RegistrationFinalization, PublicKey, [u8; 64])> {
 				match (self, response) {
-					$((
+					$($(#[$attr])? (
 						Self::$cipher_suite(state),
 						RegistrationResponse::$cipher_suite(response),
 					) => {
@@ -130,7 +159,6 @@ macro_rules! cipher_suite {
 							export_key.into(),
 						))
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -140,14 +168,14 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum ClientLogin {
-			$($cipher_suite(opaque_ke::ClientLogin<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::ClientLogin<$cipher_suite>),)+
 		}
 
 		impl ClientLogin {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ClientLogin::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
+					$($(#[$attr])? ClientLogin::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
 				}
 			}
 
@@ -157,7 +185,7 @@ macro_rules! cipher_suite {
 				password: &[u8],
 			) -> Result<(Self, LoginRequest)> {
 				match cipher_suite {
-					$(CipherSuite::$cipher_suite => {
+					$($(#[$attr])? CipherSuite::$cipher_suite => {
 						let result = opaque_ke::ClientLogin::start(&mut OsRng, password)?;
 						let ClientLoginStartResult { state, message } = result;
 						Ok((
@@ -174,7 +202,7 @@ macro_rules! cipher_suite {
 				response: LoginResponse,
 			) -> Result<(LoginFinalization, PublicKey, [u8; 64])> {
 				match (self, response) {
-					$((
+					$($(#[$attr])? (
 						Self::$cipher_suite(state),
 						LoginResponse::$cipher_suite(response),
 					) => {
@@ -195,7 +223,6 @@ macro_rules! cipher_suite {
 							export_key.into(),
 						))
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -205,21 +232,21 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum ServerSetup {
-			$($cipher_suite(opaque_ke::ServerSetup<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::ServerSetup<$cipher_suite>),)+
 		}
 
 		impl ServerSetup {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ServerSetup::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
+					$($(#[$attr])? ServerSetup::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
 				}
 			}
 
 			/// [`opaque_ke::ServerSetup::new()`] wrapper.
 			pub(crate) fn new(cipher_suite: CipherSuite) -> Self {
 				match cipher_suite {
-					$(CipherSuite::$cipher_suite =>
+					$($(#[$attr])? CipherSuite::$cipher_suite =>
 						Self::$cipher_suite(opaque_ke::ServerSetup::new(&mut OsRng)),)+
 				}
 			}
@@ -227,7 +254,7 @@ macro_rules! cipher_suite {
 			/// [`opaque_ke::ServerSetup::keypair()`] wrapper.
 			pub(crate) fn public_key(&self) -> &PublicKey {
 				match self {
-					$(ServerSetup::$cipher_suite(server_setup) =>
+					$($(#[$attr])? ServerSetup::$cipher_suite(server_setup) =>
 						server_setup.keypair().public(),)+
 				}
 			}
@@ -237,14 +264,14 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum ServerFile {
-			$($cipher_suite(opaque_ke::ServerRegistration<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::ServerRegistration<$cipher_suite>),)+
 		}
 
 		impl ServerFile {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ServerFile::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
+					$($(#[$attr])? ServerFile::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
 				}
 			}
 		}
@@ -253,14 +280,15 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 		pub(crate) enum ServerRegistration {
-			$($cipher_suite,)+
+			$($(#[$attr])? $cipher_suite,)+
 		}
 
 		impl ServerRegistration {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ServerRegistration::$cipher_suite => CipherSuite::$cipher_suite,)+
+					$($(#[$attr])?
+					ServerRegistration::$cipher_suite => CipherSuite::$cipher_suite,)+
 				}
 			}
 
@@ -270,7 +298,7 @@ macro_rules! cipher_suite {
 				request: RegistrationRequest,
 			) -> Result<(Self, RegistrationResponse)> {
 				match (server_setup, request) {
-					$((
+					$($(#[$attr])? (
 						ServerSetup::$cipher_suite(server_setup),
 						RegistrationRequest::$cipher_suite(request),
 					) => {
@@ -285,7 +313,6 @@ macro_rules! cipher_suite {
 							RegistrationResponse::$cipher_suite(response),
 						))
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -294,14 +321,13 @@ macro_rules! cipher_suite {
 			pub(crate) fn finish(self, finalization: RegistrationFinalization
 			) -> Result<ServerFile> {
 				match (self, finalization) {
-					$((
+					$($(#[$attr])? (
 						Self::$cipher_suite,
 						RegistrationFinalization::$cipher_suite(finalization),
 					) => {
 						let file = opaque_ke::ServerRegistration::finish(finalization);
 						Ok(ServerFile::$cipher_suite(file))
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -311,14 +337,14 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum ServerLogin {
-			$($cipher_suite(opaque_ke::ServerLogin<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::ServerLogin<$cipher_suite>),)+
 		}
 
 		impl ServerLogin {
 			/// Return corresponding [`CipherSuite`].
 			pub(crate) const fn cipher_suite(&self) -> CipherSuite {
 				match self {
-					$(ServerLogin::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
+					$($(#[$attr])? ServerLogin::$cipher_suite(_) => CipherSuite::$cipher_suite,)+
 				}
 			}
 
@@ -329,7 +355,7 @@ macro_rules! cipher_suite {
 				request: LoginRequest,
 			) -> Result<(Self, LoginResponse)> {
 				match (setup, request) {
-					$((
+					$($(#[$attr])? (
 						ServerSetup::$cipher_suite(server_setup),
 						LoginRequest::$cipher_suite(request),
 					) => {
@@ -360,7 +386,6 @@ macro_rules! cipher_suite {
 							LoginResponse::$cipher_suite(message),
 						))
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -368,7 +393,7 @@ macro_rules! cipher_suite {
 			/// [`opaque_ke::ClientLogin::finish()`] wrapper.
 			pub(crate) fn finish(self, finalization: LoginFinalization) -> Result<()> {
 				match (self, finalization) {
-					$((
+					$($(#[$attr])? (
 						Self::$cipher_suite(state),
 						LoginFinalization::$cipher_suite(finalization),
 					) => {
@@ -377,7 +402,6 @@ macro_rules! cipher_suite {
 
 						Ok(())
 					})+
-					#[allow(unreachable_patterns)]
 					_ => Err(Error::Config),
 				}
 			}
@@ -387,44 +411,51 @@ macro_rules! cipher_suite {
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 		pub(crate) enum RegistrationRequest {
-			$($cipher_suite(opaque_ke::RegistrationRequest<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::RegistrationRequest<$cipher_suite>),)+
 		}
 
 		/// [`opaque_ke::RegistrationResponse`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 		pub(crate) enum RegistrationResponse {
-			$($cipher_suite(opaque_ke::RegistrationResponse<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::RegistrationResponse<$cipher_suite>),)+
 		}
 
 		/// [`opaque_ke::RegistrationUpload`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum RegistrationFinalization {
-			$($cipher_suite(opaque_ke::RegistrationUpload<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::RegistrationUpload<$cipher_suite>),)+
 		}
 
 		/// [`opaque_ke::CredentialRequest`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 		pub(crate) enum LoginRequest {
-			$($cipher_suite(opaque_ke::CredentialRequest<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::CredentialRequest<$cipher_suite>),)+
 		}
 
 		/// [`opaque_ke::CredentialResponse`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 		pub(crate) enum LoginResponse {
-			$($cipher_suite(opaque_ke::CredentialResponse<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::CredentialResponse<$cipher_suite>),)+
 		}
 
 		/// [`opaque_ke::CredentialFinalization`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 		pub(crate) enum LoginFinalization {
-			$($cipher_suite(opaque_ke::CredentialFinalization<$cipher_suite>),)+
+			$($(#[$attr])? $cipher_suite(opaque_ke::CredentialFinalization<$cipher_suite>),)+
 		}
 	};
 }
 
-cipher_suite!(Curve25519Sha512Argon2id, Curve25519Sha512Argon2d);
+cipher_suite!(
+	Curve25519Sha512Argon2id,
+	Curve25519Sha512Argon2d,
+	#[cfg(feature = "sha3")]
+	Curve25519Sha3_512Argon2id,
+	#[cfg(feature = "sha3")]
+	Curve25519Sha3_512Argon2d,
+);
