@@ -35,7 +35,7 @@ pub struct LoginRequest(pub(crate) cipher_suite::LoginRequest);
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct LoginResponse(pub(crate) cipher_suite::LoginResponse);
 
-/// Send this back to the client to finish the login process. See
+/// Send this back to the server to finish the login process. See
 /// [`ClientLogin::finish()`](crate::ClientLogin::finish).
 #[must_use = "Does nothing if not sent to the server"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
