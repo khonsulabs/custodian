@@ -2,12 +2,12 @@
 <html lang="en-us">
     <head><meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Grcov report - impls.rs </title>
+        <title>Grcov report - argon2d.rs </title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"></head>
     <body>
         <div class="container">
     <nav class="breadcrumb is-right" aria-label="breadcrumbs">
-        <ul><li><a href="../../../index.html">top_level</a></li><li><a href="./index.html">password&#x2F;src&#x2F;cipher_suite</a></li><li class="is-active"><a href="#">impls.rs</a></li>
+        <ul><li><a href="../../../index.html">top_level</a></li><li><a href="./index.html">password&#x2F;src&#x2F;cipher_suite</a></li><li class="is-active"><a href="#">argon2d.rs</a></li>
         </ul>
     </nav>
     <nav class="level">
@@ -23,7 +23,7 @@
         <div>
             <p class="heading">Functions</p>
             <p class="title has-text-danger">
-                <abbr title="2 / 8">25 %</abbr></p>
+                <abbr title="3 / 12">25 %</abbr></p>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;! [`CipherSuite`](opaque_ke::ciphersuite::CipherSuite) trait associated type</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;! See [`Argon2d`].</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -60,7 +60,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;! implementations.</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -73,7 +73,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">use digest::Digest;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -86,7 +86,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use digest::Digest;</pre>
+                <pre class="has-background-white py-0 px-2">use generic_array::{typenum::Unsigned, GenericArray};</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -99,7 +99,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use generic_array::{typenum::Unsigned, GenericArray};</pre>
+                <pre class="has-background-white py-0 px-2">use opaque_ke::{errors::InternalPakeError, hash::Hash, slow_hash::SlowHash};</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -112,7 +112,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use opaque_ke::{errors::InternalPakeError, hash::Hash, slow_hash::SlowHash};</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -125,7 +125,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Object implementing [`SlowHash`] for</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -138,7 +138,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Object implementing [`SlowHash`] with</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; [`Argon2d`](argon2::Algorithm::Argon2d).</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -151,7 +151,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; [`Argon2d`](argon2::Algorithm::Argon2d).</pre>
+                <pre class="has-background-white py-0 px-2">pub(crate) struct Argon2d;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -164,7 +164,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub(crate) struct Argon2d;</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -177,7 +177,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">impl&lt;D: Hash&gt; SlowHash&lt;D&gt; for Argon2d {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -186,11 +186,11 @@
                 <a href="#12">12</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                8
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl&lt;D: Hash&gt; SlowHash&lt;D&gt; for Argon2d {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	fn hash(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -200,10 +200,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn hash(</pre>
+                <pre class="has-background-success-light py-0 px-2">		input: GenericArray&lt;u8, &lt;D as Digest&gt;::OutputSize&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -213,10 +213,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		input: GenericArray&lt;u8, &lt;D as Digest&gt;::OutputSize&gt;,</pre>
+                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Vec&lt;u8&gt;, InternalPakeError&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -226,10 +226,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Vec&lt;u8&gt;, InternalPakeError&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">		let params = argon2::Argon2::default();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -239,10 +239,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let params = argon2::Argon2::default();</pre>
+                <pre class="has-background-success-light py-0 px-2">		let mut output = vec![0; &lt;D as Digest&gt;::OutputSize::to_usize()];</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -252,10 +252,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let mut output = vec![0; &lt;D as Digest&gt;::OutputSize::to_usize()];</pre>
+                <pre class="has-background-success-light py-0 px-2">		params</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -265,10 +265,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		params</pre>
+                <pre class="has-background-success-light py-0 px-2">			.hash_password_into(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -278,10 +278,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.hash_password_into(</pre>
+                <pre class="has-background-success-light py-0 px-2">				argon2::Algorithm::Argon2d,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -291,10 +291,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				argon2::Algorithm::Argon2d,</pre>
+                <pre class="has-background-success-light py-0 px-2">				&amp;input,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -304,10 +304,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				&amp;input,</pre>
+                <pre class="has-background-success-light py-0 px-2">				&amp;[0; argon2::MIN_SALT_LENGTH],</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -317,10 +317,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				&amp;[0; argon2::MIN_SALT_LENGTH],</pre>
+                <pre class="has-background-success-light py-0 px-2">				&amp;[],</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -330,10 +330,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				&amp;[],</pre>
+                <pre class="has-background-success-light py-0 px-2">				&amp;mut output,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -343,10 +343,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				&amp;mut output,</pre>
+                <pre class="has-background-success-light py-0 px-2">			)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -356,10 +356,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			)</pre>
+                <pre class="has-background-success-light py-0 px-2">			.map_err(|_| InternalPakeError::SlowHashError)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -369,10 +369,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			.map_err(|_| InternalPakeError::SlowHashError)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok(output)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -382,20 +382,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok(output)</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="28">
-                <a href="#28">28</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                6
+                8
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	}</pre>
@@ -403,8 +390,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="29">
-                <a href="#29">29</a>
+                id="28">
+                <a href="#28">28</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -416,7 +403,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-07-05 10:51</p>
+                <p class="heading">Date: 2021-07-05 12:19</p>
             </div>
         </footer>
     </body>
