@@ -24,14 +24,20 @@ impl Config {
 		Self(match (hash, slow_hash) {
 			(Sha512, Argon2id) => Curve25519Sha512Argon2id,
 			(Sha512, Argon2d) => Curve25519Sha512Argon2d,
+			#[cfg(feature = "pbkdf2")]
+			(Sha512, Pbkdf2) => Curve25519Sha512Pbkdf2,
 			#[cfg(feature = "sha3")]
 			(Sha3_512, Argon2id) => Curve25519Sha3_512Argon2id,
 			#[cfg(feature = "sha3")]
 			(Sha3_512, Argon2d) => Curve25519Sha3_512Argon2d,
+			#[cfg(all(feature = "pbkdf2", feature = "sha3"))]
+			(Sha3_512, Pbkdf2) => Curve25519Sha3_512Pbkdf2,
 			#[cfg(feature = "blake3")]
 			(Blake3, Argon2id) => Curve25519Blake3Argon2id,
 			#[cfg(feature = "blake3")]
 			(Blake3, Argon2d) => Curve25519Blake3Argon2d,
+			#[cfg(all(feature = "pbkdf2", feature = "blake3"))]
+			(Blake3, Pbkdf2) => Curve25519Blake3Pbkdf2,
 		})
 	}
 
@@ -41,12 +47,19 @@ impl Config {
 		#[allow(clippy::enum_glob_use)]
 		use CipherSuite::*;
 
+		#[allow(clippy::match_same_arms)]
 		match self.0 {
 			Curve25519Sha512Argon2id | Curve25519Sha512Argon2d => Hash::Sha512,
+			#[cfg(feature = "pbkdf2")]
+			Curve25519Sha512Pbkdf2 => Hash::Sha512,
 			#[cfg(feature = "sha3")]
 			Curve25519Sha3_512Argon2id | Curve25519Sha3_512Argon2d => Hash::Sha3_512,
+			#[cfg(all(feature = "pbkdf2", feature = "sha3"))]
+			Curve25519Sha3_512Pbkdf2 => Hash::Sha3_512,
 			#[cfg(feature = "blake3")]
 			Curve25519Blake3Argon2id | Curve25519Blake3Argon2d => Hash::Blake3,
+			#[cfg(all(feature = "pbkdf2", feature = "blake3"))]
+			Curve25519Blake3Pbkdf2 => Hash::Blake3,
 		}
 	}
 
@@ -60,14 +73,20 @@ impl Config {
 		match self.0 {
 			Curve25519Sha512Argon2id => SlowHash::Argon2id,
 			Curve25519Sha512Argon2d => SlowHash::Argon2d,
+			#[cfg(feature = "pbkdf2")]
+			Curve25519Sha512Pbkdf2 => SlowHash::Pbkdf2,
 			#[cfg(feature = "sha3")]
 			Curve25519Sha3_512Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "sha3")]
 			Curve25519Sha3_512Argon2d => SlowHash::Argon2d,
+			#[cfg(all(feature = "pbkdf2", feature = "sha3"))]
+			Curve25519Sha3_512Pbkdf2 => SlowHash::Pbkdf2,
 			#[cfg(feature = "blake3")]
 			Curve25519Blake3Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "blake3")]
 			Curve25519Blake3Argon2d => SlowHash::Argon2d,
+			#[cfg(all(feature = "pbkdf2", feature = "blake3"))]
+			Curve25519Blake3Pbkdf2 => SlowHash::Pbkdf2,
 		}
 	}
 }
@@ -101,6 +120,9 @@ pub enum SlowHash {
 	Argon2id,
 	/// Argon2d.
 	Argon2d,
+	/// PBKDF2.
+	#[cfg(feature = "pbkdf2")]
+	Pbkdf2,
 }
 
 impl Default for SlowHash {

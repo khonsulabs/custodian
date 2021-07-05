@@ -10,6 +10,8 @@
 mod argon2d;
 #[cfg(feature = "blake3")]
 mod blake3;
+#[cfg(feature = "blake3")]
+mod pbkdf2;
 
 use argon2::Argon2;
 use curve25519_dalek::ristretto::RistrettoPoint;
@@ -27,6 +29,8 @@ use sha3::Sha3_512;
 use self::argon2d::Argon2d;
 #[cfg(feature = "blake3")]
 use self::blake3::Blake3;
+#[cfg(feature = "pbkdf2")]
+use self::pbkdf2::Pbkdf2;
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
@@ -37,18 +41,27 @@ pub(crate) enum CipherSuite {
 	Curve25519Sha512Argon2id,
 	/// Curve25519 + Sha512 + Argon2d
 	Curve25519Sha512Argon2d,
-	#[cfg(feature = "sha3")]
+	/// Curve25519 + Sha512 + PBKDF2
+	#[cfg(feature = "pbkdf2")]
+	Curve25519Sha512Pbkdf2,
 	/// Curve25519 + Sha3-512 + Argon2id
-	Curve25519Sha3_512Argon2id,
 	#[cfg(feature = "sha3")]
+	Curve25519Sha3_512Argon2id,
 	/// Curve25519 + Sha3-512 + Argon2d
+	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2d,
-	#[cfg(feature = "blake3")]
+	/// Curve25519 + Sha3-512 + PBKDF2
+	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+	Curve25519Sha3_512Pbkdf2,
 	/// Curve25519 + BLAKE3 + Argon2id
-	Curve25519Blake3Argon2id,
 	#[cfg(feature = "blake3")]
+	Curve25519Blake3Argon2id,
 	/// Curve25519 + BLAKE3 + Argon2d
+	#[cfg(feature = "blake3")]
 	Curve25519Blake3Argon2d,
+	/// Curve25519 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+	Curve25519Blake3Pbkdf2,
 }
 
 #[allow(clippy::missing_docs_in_private_items)]
@@ -71,6 +84,19 @@ impl ciphersuite::CipherSuite for Curve25519Sha512Argon2d {
 	type Hash = Sha512;
 	type KeyExchange = TripleDH;
 	type SlowHash = Argon2d;
+}
+
+#[cfg(feature = "pbkdf2")]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Sha512Pbkdf2;
+
+#[cfg(feature = "pbkdf2")]
+impl ciphersuite::CipherSuite for Curve25519Sha512Pbkdf2 {
+	type Group = RistrettoPoint;
+	type Hash = Sha512;
+	type KeyExchange = TripleDH;
+	type SlowHash = Pbkdf2;
 }
 
 #[cfg(feature = "sha3")]
@@ -99,6 +125,19 @@ impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2d {
 	type SlowHash = Argon2d;
 }
 
+#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Sha3_512Pbkdf2;
+
+#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+impl ciphersuite::CipherSuite for Curve25519Sha3_512Pbkdf2 {
+	type Group = RistrettoPoint;
+	type Hash = Sha3_512;
+	type KeyExchange = TripleDH;
+	type SlowHash = Pbkdf2;
+}
+
 #[cfg(feature = "blake3")]
 #[allow(clippy::missing_docs_in_private_items)]
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
@@ -123,6 +162,19 @@ impl ciphersuite::CipherSuite for Curve25519Blake3Argon2d {
 	type Hash = Blake3;
 	type KeyExchange = TripleDH;
 	type SlowHash = Argon2d;
+}
+
+#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub(crate) struct Curve25519Blake3Pbkdf2;
+
+#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+impl ciphersuite::CipherSuite for Curve25519Blake3Pbkdf2 {
+	type Group = RistrettoPoint;
+	type Hash = Blake3;
+	type KeyExchange = TripleDH;
+	type SlowHash = Pbkdf2;
 }
 
 macro_rules! cipher_suite {
@@ -480,12 +532,18 @@ macro_rules! cipher_suite {
 cipher_suite!(
 	Curve25519Sha512Argon2id,
 	Curve25519Sha512Argon2d,
+	#[cfg(feature = "pbkdf2")]
+	Curve25519Sha512Pbkdf2,
 	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2id,
 	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2d,
+	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+	Curve25519Sha3_512Pbkdf2,
 	#[cfg(feature = "blake3")]
 	Curve25519Blake3Argon2id,
 	#[cfg(feature = "blake3")]
 	Curve25519Blake3Argon2d,
+	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+	Curve25519Blake3Pbkdf2,
 );

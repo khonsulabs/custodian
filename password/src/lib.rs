@@ -319,14 +319,20 @@ fn cipher_suites() -> anyhow::Result<()> {
 
 	cipher_suite(Hash::Sha512, SlowHash::Argon2id)?;
 	cipher_suite(Hash::Sha512, SlowHash::Argon2d)?;
+	#[cfg(feature = "pbkdf2")]
+	cipher_suite(Hash::Sha512, SlowHash::Pbkdf2)?;
 	#[cfg(feature = "sha3")]
 	cipher_suite(Hash::Sha3_512, SlowHash::Argon2id)?;
 	#[cfg(feature = "sha3")]
 	cipher_suite(Hash::Sha3_512, SlowHash::Argon2d)?;
+	#[cfg(all(feature = "pbkdf2", feature = "sha3"))]
+	cipher_suite(Hash::Sha3_512, SlowHash::Pbkdf2)?;
 	#[cfg(feature = "blake3")]
 	cipher_suite(Hash::Blake3, SlowHash::Argon2id)?;
 	#[cfg(feature = "blake3")]
 	cipher_suite(Hash::Blake3, SlowHash::Argon2d)?;
+	#[cfg(all(feature = "pbkdf2", feature = "blake3"))]
+	cipher_suite(Hash::Blake3, SlowHash::Pbkdf2)?;
 
 	Ok(())
 }
