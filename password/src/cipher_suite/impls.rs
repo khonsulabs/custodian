@@ -1,4 +1,4 @@
-//! [`CipherSuite`](ciphersuite::CipherSuite) trait associated type
+//! [`CipherSuite`](opaque_ke::ciphersuite::CipherSuite) trait associated type
 //! implementations.
 
 use digest::Digest;
