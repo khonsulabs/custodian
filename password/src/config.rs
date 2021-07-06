@@ -22,22 +22,22 @@ impl Config {
 		use self::{CipherSuite::*, Group::*, Hash::*, SlowHash::*};
 
 		Self(match (group, hash, slow_hash) {
-			(Ristretto255, Sha2, Argon2id) => Curve25519Sha512Argon2id,
-			(Ristretto255, Sha2, Argon2d) => Curve25519Sha512Argon2d,
+			(Ristretto255, Sha2, Argon2id) => Ristretto255Sha512Argon2id,
+			(Ristretto255, Sha2, Argon2d) => Ristretto255Sha512Argon2d,
 			#[cfg(feature = "pbkdf2")]
-			(Ristretto255, Sha2, Pbkdf2) => Curve25519Sha512Pbkdf2,
+			(Ristretto255, Sha2, Pbkdf2) => Ristretto255Sha512Pbkdf2,
 			#[cfg(feature = "sha3")]
-			(Ristretto255, Sha3, Argon2id) => Curve25519Sha3_512Argon2id,
+			(Ristretto255, Sha3, Argon2id) => Ristretto255Sha3_512Argon2id,
 			#[cfg(feature = "sha3")]
-			(Ristretto255, Sha3, Argon2d) => Curve25519Sha3_512Argon2d,
+			(Ristretto255, Sha3, Argon2d) => Ristretto255Sha3_512Argon2d,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			(Ristretto255, Sha3, Pbkdf2) => Curve25519Sha3_512Pbkdf2,
+			(Ristretto255, Sha3, Pbkdf2) => Ristretto255Sha3_512Pbkdf2,
 			#[cfg(feature = "blake3")]
-			(Ristretto255, Blake3, Argon2id) => Curve25519Blake3Argon2id,
+			(Ristretto255, Blake3, Argon2id) => Ristretto255Blake3Argon2id,
 			#[cfg(feature = "blake3")]
-			(Ristretto255, Blake3, Argon2d) => Curve25519Blake3Argon2d,
+			(Ristretto255, Blake3, Argon2d) => Ristretto255Blake3Argon2d,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			(Ristretto255, Blake3, Pbkdf2) => Curve25519Blake3Pbkdf2,
+			(Ristretto255, Blake3, Pbkdf2) => Ristretto255Blake3Pbkdf2,
 			#[cfg(feature = "p256")]
 			(P256, Sha2, Argon2id) => P256Sha256Argon2id,
 			#[cfg(feature = "p256")]
@@ -67,17 +67,17 @@ impl Config {
 
 		#[allow(clippy::match_same_arms)]
 		match self.0 {
-			Curve25519Sha512Argon2id | Curve25519Sha512Argon2d => Group::Ristretto255,
+			Ristretto255Sha512Argon2id | Ristretto255Sha512Argon2d => Group::Ristretto255,
 			#[cfg(feature = "pbkdf2")]
-			Curve25519Sha512Pbkdf2 => Group::Ristretto255,
+			Ristretto255Sha512Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "sha3")]
-			Curve25519Sha3_512Argon2id | Curve25519Sha3_512Argon2d => Group::Ristretto255,
+			Ristretto255Sha3_512Argon2id | Ristretto255Sha3_512Argon2d => Group::Ristretto255,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Curve25519Sha3_512Pbkdf2 => Group::Ristretto255,
+			Ristretto255Sha3_512Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "blake3")]
-			Curve25519Blake3Argon2id | Curve25519Blake3Argon2d => Group::Ristretto255,
+			Ristretto255Blake3Argon2id | Ristretto255Blake3Argon2d => Group::Ristretto255,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Curve25519Blake3Pbkdf2 => Group::Ristretto255,
+			Ristretto255Blake3Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "p256")]
 			P256Sha256Argon2id | P256Sha256Argon2d => Group::P256,
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
@@ -101,17 +101,17 @@ impl Config {
 
 		#[allow(clippy::match_same_arms)]
 		match self.0 {
-			Curve25519Sha512Argon2id | Curve25519Sha512Argon2d => Hash::Sha2,
+			Ristretto255Sha512Argon2id | Ristretto255Sha512Argon2d => Hash::Sha2,
 			#[cfg(feature = "pbkdf2")]
-			Curve25519Sha512Pbkdf2 => Hash::Sha2,
+			Ristretto255Sha512Pbkdf2 => Hash::Sha2,
 			#[cfg(feature = "sha3")]
-			Curve25519Sha3_512Argon2id | Curve25519Sha3_512Argon2d => Hash::Sha3,
+			Ristretto255Sha3_512Argon2id | Ristretto255Sha3_512Argon2d => Hash::Sha3,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Curve25519Sha3_512Pbkdf2 => Hash::Sha3,
+			Ristretto255Sha3_512Pbkdf2 => Hash::Sha3,
 			#[cfg(feature = "blake3")]
-			Curve25519Blake3Argon2id | Curve25519Blake3Argon2d => Hash::Blake3,
+			Ristretto255Blake3Argon2id | Ristretto255Blake3Argon2d => Hash::Blake3,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Curve25519Blake3Pbkdf2 => Hash::Blake3,
+			Ristretto255Blake3Pbkdf2 => Hash::Blake3,
 			#[cfg(feature = "p256")]
 			P256Sha256Argon2id | P256Sha256Argon2d => Hash::Sha2,
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
@@ -135,22 +135,22 @@ impl Config {
 
 		#[allow(clippy::match_same_arms)]
 		match self.0 {
-			Curve25519Sha512Argon2id => SlowHash::Argon2id,
-			Curve25519Sha512Argon2d => SlowHash::Argon2d,
+			Ristretto255Sha512Argon2id => SlowHash::Argon2id,
+			Ristretto255Sha512Argon2d => SlowHash::Argon2d,
 			#[cfg(feature = "pbkdf2")]
-			Curve25519Sha512Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Sha512Pbkdf2 => SlowHash::Pbkdf2,
 			#[cfg(feature = "sha3")]
-			Curve25519Sha3_512Argon2id => SlowHash::Argon2id,
+			Ristretto255Sha3_512Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "sha3")]
-			Curve25519Sha3_512Argon2d => SlowHash::Argon2d,
+			Ristretto255Sha3_512Argon2d => SlowHash::Argon2d,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Curve25519Sha3_512Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Sha3_512Pbkdf2 => SlowHash::Pbkdf2,
 			#[cfg(feature = "blake3")]
-			Curve25519Blake3Argon2id => SlowHash::Argon2id,
+			Ristretto255Blake3Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "blake3")]
-			Curve25519Blake3Argon2d => SlowHash::Argon2d,
+			Ristretto255Blake3Argon2d => SlowHash::Argon2d,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Curve25519Blake3Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Blake3Pbkdf2 => SlowHash::Pbkdf2,
 			#[cfg(feature = "p256")]
 			P256Sha256Argon2id => SlowHash::Argon2id,
 			#[cfg(feature = "p256")]

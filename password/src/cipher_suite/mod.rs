@@ -51,31 +51,31 @@ use crate::{Error, Result};
 /// user-facing generics.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub(crate) enum CipherSuite {
-	/// Curve25519 + SHA512 + Argon2id
-	Curve25519Sha512Argon2id,
-	/// Curve25519 + SHA512 + Argon2d
-	Curve25519Sha512Argon2d,
-	/// Curve25519 + SHA512 + PBKDF2
+	/// Ristretto255 + SHA512 + Argon2id
+	Ristretto255Sha512Argon2id,
+	/// Ristretto255 + SHA512 + Argon2d
+	Ristretto255Sha512Argon2d,
+	/// Ristretto255 + SHA512 + PBKDF2
 	#[cfg(feature = "pbkdf2")]
-	Curve25519Sha512Pbkdf2,
-	/// Curve25519 + SHA3-512 + Argon2id
+	Ristretto255Sha512Pbkdf2,
+	/// Ristretto255 + SHA3-512 + Argon2id
 	#[cfg(feature = "sha3")]
-	Curve25519Sha3_512Argon2id,
-	/// Curve25519 + SHA3-512 + Argon2d
+	Ristretto255Sha3_512Argon2id,
+	/// Ristretto255 + SHA3-512 + Argon2d
 	#[cfg(feature = "sha3")]
-	Curve25519Sha3_512Argon2d,
-	/// Curve25519 + SHA3-512 + PBKDF2
+	Ristretto255Sha3_512Argon2d,
+	/// Ristretto255 + SHA3-512 + PBKDF2
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	Curve25519Sha3_512Pbkdf2,
-	/// Curve25519 + BLAKE3 + Argon2id
+	Ristretto255Sha3_512Pbkdf2,
+	/// Ristretto255 + BLAKE3 + Argon2id
 	#[cfg(feature = "blake3")]
-	Curve25519Blake3Argon2id,
-	/// Curve25519 + BLAKE3 + Argon2d
+	Ristretto255Blake3Argon2id,
+	/// Ristretto255 + BLAKE3 + Argon2d
 	#[cfg(feature = "blake3")]
-	Curve25519Blake3Argon2d,
-	/// Curve25519 + BLAKE3 + PBKDF2
+	Ristretto255Blake3Argon2d,
+	/// Ristretto255 + BLAKE3 + PBKDF2
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	Curve25519Blake3Pbkdf2,
+	Ristretto255Blake3Pbkdf2,
 	/// P256 + SHA256 + Argon2id
 	#[cfg(feature = "p256")]
 	P256Sha256Argon2id,
@@ -496,22 +496,22 @@ macro_rules! cipher_suite {
 }
 
 cipher_suite!(
-	[Curve25519Sha512Argon2id, RistrettoPoint, Sha512, Argon2<'static>],
-	[Curve25519Sha512Argon2d, RistrettoPoint, Sha512, Argon2d],
+	[Ristretto255Sha512Argon2id, RistrettoPoint, Sha512, Argon2<'static>],
+	[Ristretto255Sha512Argon2d, RistrettoPoint, Sha512, Argon2d],
 	#[cfg(feature = "pbkdf2")]
-	[Curve25519Sha512Pbkdf2, RistrettoPoint, Sha512, Pbkdf2],
+	[Ristretto255Sha512Pbkdf2, RistrettoPoint, Sha512, Pbkdf2],
 	#[cfg(feature = "sha3")]
-	[Curve25519Sha3_512Argon2id, RistrettoPoint, Sha3_512, Argon2<'static>],
+	[Ristretto255Sha3_512Argon2id, RistrettoPoint, Sha3_512, Argon2<'static>],
 	#[cfg(feature = "sha3")]
-	[Curve25519Sha3_512Argon2d, RistrettoPoint, Sha3_512, Argon2d],
+	[Ristretto255Sha3_512Argon2d, RistrettoPoint, Sha3_512, Argon2d],
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	[Curve25519Sha3_512Pbkdf2, RistrettoPoint, Sha3_512, Pbkdf2],
+	[Ristretto255Sha3_512Pbkdf2, RistrettoPoint, Sha3_512, Pbkdf2],
 	#[cfg(feature = "blake3")]
-	[Curve25519Blake3Argon2id, RistrettoPoint, Blake3, Argon2<'static>],
+	[Ristretto255Blake3Argon2id, RistrettoPoint, Blake3, Argon2<'static>],
 	#[cfg(feature = "blake3")]
-	[Curve25519Blake3Argon2d, RistrettoPoint, Blake3, Argon2d],
+	[Ristretto255Blake3Argon2d, RistrettoPoint, Blake3, Argon2d],
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	[Curve25519Blake3Pbkdf2, RistrettoPoint, Blake3, Pbkdf2],
+	[Ristretto255Blake3Pbkdf2, RistrettoPoint, Blake3, Pbkdf2],
 	#[cfg(feature = "p256")]
 	[P256Sha256Argon2id, P256, Sha256, Argon2<'static>],
 	#[cfg(feature = "p256")]
