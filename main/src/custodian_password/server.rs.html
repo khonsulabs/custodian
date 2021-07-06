@@ -182,12 +182,6 @@
 <span id="182">182</span>
 <span id="183">183</span>
 <span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
 </pre><pre class="rust">
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_name_repetitions</span>)]</span>
 
@@ -244,7 +238,7 @@
 	<span class="doccomment">/// Registration process sate.</span>
 	<span class="ident">state</span>: <span class="ident">cipher_suite::ServerRegistration</span>,
 	<span class="doccomment">/// Public key of the corresponding [`ServerConfig`].</span>
-	<span class="ident">public_key</span>: [<span class="ident">u8</span>; <span class="number">32</span>],
+	<span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ServerRegistration</span> {
@@ -257,10 +251,7 @@
 	<span class="doccomment">/// Returns the [`PublicKey`] associated with this [`ServerRegistration`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PublicKey</span> {
-		<span class="ident">PublicKey</span> {
-			<span class="ident">config</span>: <span class="self">self</span>.<span class="ident">config</span>(),
-			<span class="ident">key</span>: <span class="self">self</span>.<span class="ident">public_key</span>,
-		}
+		<span class="self">self</span>.<span class="ident">public_key</span>
 	}
 
 	<span class="doccomment">/// Starts the registration process. The returned [`RegistrationResponse`]</span>
@@ -280,7 +271,7 @@
 		<span class="prelude-val">Ok</span>((
 			<span class="self">Self</span> {
 				<span class="ident">state</span>,
-				<span class="ident">public_key</span>: <span class="ident">PublicKey::from_opaque</span>(<span class="ident">config</span>.<span class="number">0</span>.<span class="ident">public_key</span>()),
+				<span class="ident">public_key</span>: <span class="ident">config</span>.<span class="ident">public_key</span>(),
 			},
 			<span class="ident">RegistrationResponse</span>(<span class="ident">response</span>),
 		))
@@ -310,7 +301,7 @@
 	<span class="doccomment">/// Password envelope.</span>
 	<span class="ident">file</span>: <span class="ident">cipher_suite::ServerFile</span>,
 	<span class="doccomment">/// Public key of the corresponding [`ServerConfig`].</span>
-	<span class="ident">public_key</span>: [<span class="ident">u8</span>; <span class="number">32</span>],
+	<span class="ident">public_key</span>: <span class="ident">PublicKey</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ServerFile</span> {
@@ -323,10 +314,7 @@
 	<span class="doccomment">/// Returns the [`PublicKey`] associated with this [`ServerFile`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PublicKey</span> {
-		<span class="ident">PublicKey</span> {
-			<span class="ident">config</span>: <span class="self">self</span>.<span class="ident">config</span>(),
-			<span class="ident">key</span>: <span class="self">self</span>.<span class="ident">public_key</span>,
-		}
+		<span class="self">self</span>.<span class="ident">public_key</span>
 	}
 }
 
@@ -364,7 +352,7 @@
 	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">cipher_suite::ServerLogin::login</span>(
 			<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="number">0</span>,
-			<span class="ident">file</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">file</span><span class="op">|</span> (<span class="ident">file</span>.<span class="ident">file</span>, <span class="ident">file</span>.<span class="ident">public_key</span>)),
+			<span class="ident">file</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">file</span><span class="op">|</span> (<span class="ident">file</span>.<span class="ident">file</span>, <span class="ident">file</span>.<span class="ident">public_key</span>.<span class="ident">key</span>)),
 			<span class="ident">request</span>.<span class="number">0</span>,
 		)<span class="question-mark">?</span>;
 
