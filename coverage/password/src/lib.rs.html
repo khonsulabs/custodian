@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-success">
-                <abbr title="301 / 301">100 %</abbr></p>
+                <abbr title="311 / 311">100 %</abbr></p>
         </div>
     </div>
 
@@ -1165,7 +1165,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	config::{Config, Hash, SlowHash},</pre>
+                <pre class="has-background-white py-0 px-2">	config::{Config, Group, Hash, SlowHash},</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3853,10 +3853,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn cipher_suite(hash: Hash, slow_hash: SlowHash) -&gt; anyhow::Result&lt;()&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">	fn cipher_suite(group: Group, hash: Hash, slow_hash: SlowHash) -&gt; anyhow::Result&lt;()&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3866,10 +3866,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let config = Config::new(hash, slow_hash);</pre>
+                <pre class="has-background-success-light py-0 px-2">		let config = Config::new(group, hash, slow_hash);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3879,7 +3879,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2"></pre>
@@ -3892,10 +3892,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		assert_eq!(config.hash(), hash);</pre>
+                <pre class="has-background-success-light py-0 px-2">		assert_eq!(config.group(), group);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3905,10 +3905,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		assert_eq!(config.slow_hash(), slow_hash);</pre>
+                <pre class="has-background-success-light py-0 px-2">		assert_eq!(config.hash(), hash);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3917,11 +3917,11 @@
                 <a href="#299">299</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		assert_eq!(config.slow_hash(), slow_hash);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3930,11 +3930,11 @@
                 <a href="#300">300</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let server_config = ServerConfig::new(config);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3944,10 +3944,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let server_config = ServerConfig::new(config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3956,11 +3956,11 @@
                 <a href="#302">302</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3969,11 +3969,11 @@
                 <a href="#303">303</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3983,10 +3983,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (server, response) = ServerRegistration::register(&amp;server_config, request)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -3996,10 +3996,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (client_file, finalization, export_key) = client.finish(response)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (server, response) = ServerRegistration::register(&amp;server_config, request)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4009,10 +4009,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let server_file = server.finish(finalization)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (client_file, finalization, export_key) = client.finish(response)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4021,11 +4021,11 @@
                 <a href="#307">307</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		let server_file = server.finish(finalization)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4034,11 +4034,11 @@
                 <a href="#308">308</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (client, request) =</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4048,10 +4048,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			ClientLogin::login(&amp;client_config, Some(client_file.clone()), PASSWORD)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (client, request) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4061,10 +4061,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (server, response) = ServerLogin::login(&amp;server_config, Some(server_file), request)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">			ClientLogin::login(&amp;client_config, Some(client_file.clone()), PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4074,10 +4074,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		let (new_client_file, finalization, new_export_key) = client.finish(response)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (server, response) = ServerLogin::login(&amp;server_config, Some(server_file), request)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4087,10 +4087,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		server.finish(finalization)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		let (new_client_file, finalization, new_export_key) = client.finish(response)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4099,11 +4099,11 @@
                 <a href="#313">313</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		server.finish(finalization)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4112,11 +4112,11 @@
                 <a href="#314">314</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		assert_eq!(client_file, new_client_file);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4126,10 +4126,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		assert_eq!(export_key, new_export_key);</pre>
+                <pre class="has-background-success-light py-0 px-2">		assert_eq!(client_file, new_client_file);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4138,11 +4138,11 @@
                 <a href="#316">316</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		assert_eq!(export_key, new_export_key);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4151,11 +4151,11 @@
                 <a href="#317">317</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok(())</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4165,10 +4165,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                9
+                18
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4177,11 +4177,11 @@
                 <a href="#319">319</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                18
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4190,11 +4190,11 @@
                 <a href="#320">320</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha512, SlowHash::Argon2id)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4207,13 +4207,26 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha512, SlowHash::Argon2d)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Argon2id)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="322">
                 <a href="#322">322</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Argon2d)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="323">
+                <a href="#323">323</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -4225,28 +4238,15 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="323">
-                <a href="#323">323</a>
+                id="324">
+                <a href="#324">324</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha512, SlowHash::Pbkdf2)?;</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="324">
-                <a href="#324">324</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
-            </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;sha3&quot;)]</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4255,17 +4255,30 @@
                 <a href="#325">325</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha3_512, SlowHash::Argon2id)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;sha3&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="326">
                 <a href="#326">326</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Argon2id)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="327">
+                <a href="#327">327</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -4277,28 +4290,15 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="327">
-                <a href="#327">327</a>
+                id="328">
+                <a href="#328">328</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha3_512, SlowHash::Argon2d)?;</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="328">
-                <a href="#328">328</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
-            </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;pbkdf2&quot;, feature = &quot;sha3&quot;))]</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Argon2d)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4307,11 +4307,11 @@
                 <a href="#329">329</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Sha3_512, SlowHash::Pbkdf2)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;sha3&quot;, feature = &quot;pbkdf2&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4320,11 +4320,11 @@
                 <a href="#330">330</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;blake3&quot;)]</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4333,17 +4333,30 @@
                 <a href="#331">331</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Blake3, SlowHash::Argon2id)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;blake3&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="332">
                 <a href="#332">332</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Argon2id)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="333">
+                <a href="#333">333</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -4355,28 +4368,15 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="333">
-                <a href="#333">333</a>
+                id="334">
+                <a href="#334">334</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Blake3, SlowHash::Argon2d)?;</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="334">
-                <a href="#334">334</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
-            </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;pbkdf2&quot;, feature = &quot;blake3&quot;))]</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Argon2d)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4385,11 +4385,11 @@
                 <a href="#335">335</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Hash::Blake3, SlowHash::Pbkdf2)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;blake3&quot;, feature = &quot;pbkdf2&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4398,11 +4398,11 @@
                 <a href="#336">336</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4411,11 +4411,11 @@
                 <a href="#337">337</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;p256&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4428,7 +4428,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">}</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Argon2id)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4441,7 +4441,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;p256&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4454,7 +4454,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Argon2d)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4463,11 +4463,11 @@
                 <a href="#341">341</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">fn wrong_config() -&gt; anyhow::Result&lt;()&gt; {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;pbkdf2&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4480,7 +4480,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	&#x2F;&#x2F; Configuration</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4489,11 +4489,11 @@
                 <a href="#343">343</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	const PASSWORD: &amp;[u8] = b&quot;password&quot;;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;sha3&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4506,7 +4506,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Argon2id)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4515,11 +4515,11 @@
                 <a href="#345">345</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let config = Config::new(Hash::default(), SlowHash::Argon2id);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;sha3&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4532,7 +4532,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let wrong_config = Config::new(Hash::default(), SlowHash::Argon2d);</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Argon2d)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4541,11 +4541,11 @@
                 <a href="#347">347</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let server_config = ServerConfig::new(config);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;sha3&quot;, feature = &quot;pbkdf2&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4558,7 +4558,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let wrong_server_config = ServerConfig::new(wrong_config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4567,11 +4567,11 @@
                 <a href="#349">349</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;blake3&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4584,7 +4584,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let wrong_client_config =</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Argon2id)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4593,11 +4593,11 @@
                 <a href="#351">351</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientConfig::new(wrong_config, Some(wrong_server_config.public_key()))?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;blake3&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4606,11 +4606,11 @@
                 <a href="#352">352</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Argon2d)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4619,11 +4619,11 @@
                 <a href="#353">353</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	#[cfg(all(feature = &quot;p256&quot;, feature = &quot;blake3&quot;, feature = &quot;pbkdf2&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4636,7 +4636,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientConfig::new(config, Some(wrong_server_config.public_key())),</pre>
+                <pre class="has-background-success-light py-0 px-2">	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Pbkdf2)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4645,11 +4645,11 @@
                 <a href="#355">355</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4662,7 +4662,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4671,11 +4671,11 @@
                 <a href="#357">357</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4688,7 +4688,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F; Registration</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4701,7 +4701,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4714,7 +4714,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerRegistration::register(&amp;server_config, request.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">fn wrong_config() -&gt; anyhow::Result&lt;()&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4727,7 +4727,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client_file, finalization, _) = client.clone().finish(response.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	&#x2F;&#x2F; Configuration</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4740,7 +4740,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let server_file = server.clone().finish(finalization.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	const PASSWORD: &amp;[u8] = b&quot;password&quot;;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4749,11 +4749,11 @@
                 <a href="#363">363</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4766,7 +4766,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (wrong_client, wrong_request) =</pre>
+                <pre class="has-background-success-light py-0 px-2">	let config = Config::new(Group::default(), Hash::default(), SlowHash::Argon2id);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4779,7 +4779,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientRegistration::register(&amp;wrong_client_config, PASSWORD)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let wrong_config = Config::new(Group::default(), Hash::default(), SlowHash::Argon2d);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4792,7 +4792,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (wrong_server, wrong_response) =</pre>
+                <pre class="has-background-success-light py-0 px-2">	let server_config = ServerConfig::new(config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4805,7 +4805,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;wrong_server_config, wrong_request.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let wrong_server_config = ServerConfig::new(wrong_config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4818,7 +4818,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (wrong_client_file, wrong_finalization, _) =</pre>
+                <pre class="has-background-success-light py-0 px-2">	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4831,7 +4831,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		wrong_client.clone().finish(wrong_response.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let wrong_client_config =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4844,7 +4844,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let wrong_server_file = wrong_server.clone().finish(wrong_finalization.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientConfig::new(wrong_config, Some(wrong_server_config.public_key()))?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4883,7 +4883,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;wrong_server_config, request),</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientConfig::new(config, Some(wrong_server_config.public_key())),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4918,11 +4918,11 @@
                 <a href="#376">376</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4931,11 +4931,11 @@
                 <a href="#377">377</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;server_config, wrong_request),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F; Registration</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4948,7 +4948,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4961,7 +4961,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerRegistration::register(&amp;server_config, request.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4970,11 +4970,11 @@
                 <a href="#380">380</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (client_file, finalization, _) = client.clone().finish(response.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4987,7 +4987,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_client.finish(response), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">	let server_file = server.clone().finish(finalization.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4996,11 +4996,11 @@
                 <a href="#382">382</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.finish(wrong_response), Err(Error::Config));</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5009,11 +5009,11 @@
                 <a href="#383">383</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (wrong_client, wrong_request) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5026,7 +5026,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientRegistration::register(&amp;wrong_client_config, PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5039,7 +5039,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (wrong_server, wrong_response) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5048,11 +5048,11 @@
                 <a href="#386">386</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;wrong_server_config, wrong_request.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5061,11 +5061,11 @@
                 <a href="#387">387</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F; Login</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (wrong_client_file, wrong_finalization, _) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5078,7 +5078,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client, request) =</pre>
+                <pre class="has-background-success-light py-0 px-2">		wrong_client.clone().finish(wrong_response.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5091,7 +5091,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;client_config, Some(client_file.clone()), PASSWORD)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let wrong_server_file = wrong_server.clone().finish(wrong_finalization.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5100,11 +5100,11 @@
                 <a href="#390">390</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (server, response) =</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5117,7 +5117,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(server_file.clone()), request.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5130,7 +5130,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (_, finalization, _) = client.clone().finish(response.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;wrong_server_config, request),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5143,7 +5143,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	server.clone().finish(finalization.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5152,11 +5152,11 @@
                 <a href="#394">394</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5169,7 +5169,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (wrong_client, wrong_request) = ClientLogin::login(</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5182,7 +5182,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		&amp;wrong_client_config,</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerRegistration::register(&amp;server_config, wrong_request),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5195,7 +5195,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Some(wrong_client_file.clone()),</pre>
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5208,7 +5208,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		PASSWORD,</pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5217,11 +5217,11 @@
                 <a href="#399">399</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5234,7 +5234,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (wrong_server, wrong_response) = ServerLogin::login(</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_client.finish(response), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5247,7 +5247,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		&amp;wrong_server_config,</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.finish(wrong_response), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5256,11 +5256,11 @@
                 <a href="#402">402</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Some(wrong_server_file.clone()),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5273,7 +5273,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		wrong_request.clone(),</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5286,7 +5286,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5295,11 +5295,11 @@
                 <a href="#405">405</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (_, wrong_finalization, _) = wrong_client.clone().finish(wrong_response.clone())?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5308,11 +5308,11 @@
                 <a href="#406">406</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	wrong_server.clone().finish(wrong_finalization.clone())?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F; Login</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5321,11 +5321,11 @@
                 <a href="#407">407</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (client, request) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5338,7 +5338,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;client_config, Some(client_file.clone()), PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5351,7 +5351,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;wrong_client_config, Some(client_file), PASSWORD),</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (server, response) =</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5364,7 +5364,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(server_file.clone()), request.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5377,7 +5377,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (_, finalization, _) = client.clone().finish(response.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5390,7 +5390,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+                <pre class="has-background-success-light py-0 px-2">	server.clone().finish(finalization.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5399,11 +5399,11 @@
                 <a href="#413">413</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;client_config, Some(wrong_client_file), PASSWORD),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5416,7 +5416,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (wrong_client, wrong_request) = ClientLogin::login(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5429,7 +5429,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">		&amp;wrong_client_config,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5438,11 +5438,11 @@
                 <a href="#416">416</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		Some(wrong_client_file.clone()),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5455,7 +5455,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+                <pre class="has-background-success-light py-0 px-2">		PASSWORD,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5468,7 +5468,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(</pre>
+                <pre class="has-background-success-light py-0 px-2">	)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5481,7 +5481,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			&amp;wrong_server_config,</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (wrong_server, wrong_response) = ServerLogin::login(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5494,7 +5494,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			Some(server_file.clone()),</pre>
+                <pre class="has-background-success-light py-0 px-2">		&amp;wrong_server_config,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5507,7 +5507,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			request.clone()</pre>
+                <pre class="has-background-success-light py-0 px-2">		Some(wrong_server_file.clone()),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5520,7 +5520,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		),</pre>
+                <pre class="has-background-success-light py-0 px-2">		wrong_request.clone(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5533,7 +5533,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">	)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5546,7 +5546,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (_, wrong_finalization, _) = wrong_client.clone().finish(wrong_response.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5559,7 +5559,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+                <pre class="has-background-success-light py-0 px-2">	wrong_server.clone().finish(wrong_finalization.clone())?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5568,11 +5568,11 @@
                 <a href="#426">426</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(wrong_server_file), request),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5585,7 +5585,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5598,7 +5598,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;wrong_client_config, Some(client_file), PASSWORD),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5611,7 +5611,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5624,7 +5624,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(server_file), wrong_request),</pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5637,7 +5637,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5650,7 +5650,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	);</pre>
+                <pre class="has-background-success-light py-0 px-2">		ClientLogin::login(&amp;client_config, Some(wrong_client_file), PASSWORD),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5659,11 +5659,11 @@
                 <a href="#433">433</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5676,7 +5676,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_client.finish(response), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5685,11 +5685,11 @@
                 <a href="#435">435</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.finish(wrong_response), Err(Error::Config));</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5698,11 +5698,11 @@
                 <a href="#436">436</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5715,7 +5715,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5728,7 +5728,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));</pre>
+                <pre class="has-background-success-light py-0 px-2">			&amp;wrong_server_config,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5737,11 +5737,11 @@
                 <a href="#439">439</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			Some(server_file.clone()),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5754,7 +5754,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
+                <pre class="has-background-success-light py-0 px-2">			request.clone()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5767,7 +5767,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">}</pre>
+                <pre class="has-background-success-light py-0 px-2">		),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5776,11 +5776,11 @@
                 <a href="#442">442</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5793,7 +5793,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5806,7 +5806,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">fn getters() -&gt; anyhow::Result&lt;()&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5819,7 +5819,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	&#x2F;&#x2F; Configuration</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(wrong_server_file), request),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5832,7 +5832,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	const PASSWORD: &amp;[u8] = b&quot;password&quot;;</pre>
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5845,7 +5845,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5858,7 +5858,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let config = Config::default();</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5871,7 +5871,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let server_config = ServerConfig::new(config);</pre>
+                <pre class="has-background-success-light py-0 px-2">		ServerLogin::login(&amp;server_config, Some(server_file), wrong_request),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5884,7 +5884,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
+                <pre class="has-background-success-light py-0 px-2">		Err(Error::Config)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5897,7 +5897,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let public_key = server_config.public_key();</pre>
+                <pre class="has-background-success-light py-0 px-2">	);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5906,11 +5906,11 @@
                 <a href="#452">452</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5923,7 +5923,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_config.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_client.finish(response), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5936,7 +5936,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_config.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.finish(wrong_response), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5945,11 +5945,11 @@
                 <a href="#455">455</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_config.public_key(), Some(server_config.public_key()));</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5962,7 +5962,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(public_key.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(wrong_server.finish(finalization), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5971,11 +5971,11 @@
                 <a href="#457">457</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5984,11 +5984,11 @@
                 <a href="#458">458</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5997,11 +5997,11 @@
                 <a href="#459">459</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6014,7 +6014,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6023,11 +6023,11 @@
                 <a href="#461">461</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.public_key(), Some(public_key));</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6036,11 +6036,11 @@
                 <a href="#462">462</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6053,7 +6053,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerRegistration::register(&amp;server_config, request)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">fn getters() -&gt; anyhow::Result&lt;()&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6062,11 +6062,11 @@
                 <a href="#464">464</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	&#x2F;&#x2F; Configuration</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6079,7 +6079,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	const PASSWORD: &amp;[u8] = b&quot;password&quot;;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6092,7 +6092,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.public_key(), public_key);</pre>
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6101,11 +6101,11 @@
                 <a href="#467">467</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let config = Config::default();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6118,7 +6118,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client_file, finalization, _) = client.finish(response)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let server_config = ServerConfig::new(config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6127,11 +6127,11 @@
                 <a href="#469">469</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6144,7 +6144,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_file.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	let public_key = server_config.public_key();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6157,7 +6157,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_file.public_key(), public_key);</pre>
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6166,11 +6166,11 @@
                 <a href="#472">472</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_config.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6183,7 +6183,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let server_file = server.finish(finalization)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_config.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6192,11 +6192,11 @@
                 <a href="#474">474</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_config.public_key(), Some(server_config.public_key()));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6209,7 +6209,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_file.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(public_key.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6218,11 +6218,11 @@
                 <a href="#476">476</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_file.public_key(), public_key);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6231,11 +6231,11 @@
                 <a href="#477">477</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientRegistration::register(&amp;client_config, PASSWORD)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6244,11 +6244,11 @@
                 <a href="#478">478</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientLogin::login(&amp;client_config, Some(client_file), PASSWORD)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6257,11 +6257,11 @@
                 <a href="#479">479</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6274,7 +6274,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.public_key(), Some(public_key));</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6283,11 +6283,11 @@
                 <a href="#481">481</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.public_key(), Some(public_key));</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6296,11 +6296,11 @@
                 <a href="#482">482</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerRegistration::register(&amp;server_config, request)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6309,11 +6309,11 @@
                 <a href="#483">483</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerLogin::login(&amp;server_config, Some(server_file), request)?;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6322,11 +6322,11 @@
                 <a href="#484">484</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6339,7 +6339,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.public_key(), public_key);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6365,7 +6365,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	let (new_client_file, finalization, _) = client.finish(response)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let (client_file, finalization, _) = client.finish(response)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6391,7 +6391,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(new_client_file.config(), config);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_file.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6404,7 +6404,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(new_client_file.public_key(), public_key);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client_file.public_key(), public_key);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6430,7 +6430,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	server.finish(finalization)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">	let server_file = server.finish(finalization)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6456,7 +6456,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_file.config(), config);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6469,12 +6469,259 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server_file.public_key(), public_key);</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="496">
+                <a href="#496">496</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="497">
+                <a href="#497">497</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (client, request) = ClientLogin::login(&amp;client_config, Some(client_file), PASSWORD)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="498">
+                <a href="#498">498</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="499">
+                <a href="#499">499</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.config(), config);</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="500">
+                <a href="#500">500</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(client.public_key(), Some(public_key));</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="501">
+                <a href="#501">501</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="502">
+                <a href="#502">502</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (server, response) = ServerLogin::login(&amp;server_config, Some(server_file), request)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="503">
+                <a href="#503">503</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="504">
+                <a href="#504">504</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(server.config(), config);</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="505">
+                <a href="#505">505</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="506">
+                <a href="#506">506</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	let (new_client_file, finalization, _) = client.finish(response)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="507">
+                <a href="#507">507</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="508">
+                <a href="#508">508</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(new_client_file.config(), config);</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="509">
+                <a href="#509">509</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(new_client_file.public_key(), public_key);</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="510">
+                <a href="#510">510</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="511">
+                <a href="#511">511</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	server.finish(finalization)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="512">
+                <a href="#512">512</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="513">
+                <a href="#513">513</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	Ok(())</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="514">
+                <a href="#514">514</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-07-05 18:31</p>
+                <p class="heading">Date: 2021-07-06 10:43</p>
             </div>
         </footer>
     </body>
