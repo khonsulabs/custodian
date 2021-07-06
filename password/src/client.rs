@@ -17,7 +17,7 @@ pub struct ClientConfig {
 	/// Common config.
 	config: Config,
 	/// Server key pair.
-	public_key: Option<[u8; 32]>,
+	public_key: Option<PublicKey>,
 }
 
 impl ClientConfig {
@@ -31,15 +31,11 @@ impl ClientConfig {
 	/// [`Error::Config`] if [`PublicKey`] was not created with the same
 	/// [`Config`].
 	pub fn new(config: Config, public_key: Option<PublicKey>) -> Result<Self> {
-		let public_key = if let Some(public_key) = public_key {
+		if let Some(public_key) = public_key {
 			if public_key.config != config {
 				return Err(Error::Config);
 			}
-
-			Some(public_key.key)
-		} else {
-			None
-		};
+		}
 
 		Ok(Self { config, public_key })
 	}
@@ -53,15 +49,7 @@ impl ClientConfig {
 	/// Returns the [`PublicKey`] associated with this [`ClientConfig`].
 	#[must_use]
 	pub const fn public_key(&self) -> Option<PublicKey> {
-		#[allow(clippy::option_if_let_else)]
-		if let Some(key) = self.public_key {
-			Some(PublicKey {
-				config: self.config,
-				key,
-			})
-		} else {
-			None
-		}
+		self.public_key
 	}
 }
 
@@ -72,7 +60,7 @@ pub struct ClientRegistration {
 	/// Client registration state.
 	state: cipher_suite::ClientRegistration,
 	/// Server public key.
-	public_key: Option<[u8; 32]>,
+	public_key: Option<PublicKey>,
 }
 
 impl ClientRegistration {
@@ -85,15 +73,7 @@ impl ClientRegistration {
 	/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].
 	#[must_use]
 	pub const fn public_key(&self) -> Option<PublicKey> {
-		#[allow(clippy::option_if_let_else)]
-		if let Some(key) = self.public_key {
-			Some(PublicKey {
-				config: Config(self.state.cipher_suite()),
-				key,
-			})
-		} else {
-			None
-		}
+		self.public_key
 	}
 
 	/// Starts the registration process. The returned [`RegistrationRequest`]
@@ -140,22 +120,22 @@ impl ClientRegistration {
 		response: RegistrationResponse,
 	) -> Result<(ClientFile, RegistrationFinalization, ExportKey)> {
 		let config = self.config();
-		let (finalization, public_key, export_key) = self.state.finish(response.0)?;
+		let (finalization, new_public_key, export_key) = self.state.finish(response.0)?;
 
-		let public_key = if let Some(key) = self.public_key {
-			if !PublicKey::is_opaque(key, &public_key) {
+		let public_key = if let Some(public_key) = self.public_key {
+			if public_key.key != new_public_key {
 				return Err(Error::InvalidServer);
 			}
 
-			PublicKey { config, key }
+			public_key
 		} else {
-			PublicKey::new(config, &public_key)
+			PublicKey::new(config, new_public_key)
 		};
 
 		Ok((
 			ClientFile(public_key),
 			RegistrationFinalization(finalization),
-			ExportKey(export_key),
+			ExportKey::new(config, export_key),
 		))
 	}
 }
@@ -186,7 +166,7 @@ pub struct ClientLogin {
 	/// Client login state.
 	state: cipher_suite::ClientLogin,
 	/// Server public key.
-	public_key: Option<[u8; 32]>,
+	public_key: Option<PublicKey>,
 }
 
 impl ClientLogin {
@@ -199,15 +179,7 @@ impl ClientLogin {
 	/// Returns the servers [`ClientLogin`] associated with this [`ClientFile`].
 	#[must_use]
 	pub const fn public_key(&self) -> Option<PublicKey> {
-		#[allow(clippy::option_if_let_else)]
-		if let Some(key) = self.public_key {
-			Some(PublicKey {
-				config: Config(self.state.cipher_suite()),
-				key,
-			})
-		} else {
-			None
-		}
+		self.public_key
 	}
 
 	/// Starts the login process. The returned [`LoginRequest`] has to be send
@@ -235,12 +207,12 @@ impl ClientLogin {
 			}
 
 			if let Some(public_key) = config.public_key {
-				if public_key != file.0.key {
+				if public_key != file.0 {
 					return Err(Error::PublicKey);
 				}
 			}
 
-			Some(file.0.key)
+			Some(file.0)
 		} else {
 			config.public_key
 		};
@@ -272,27 +244,27 @@ impl ClientLogin {
 		response: LoginResponse,
 	) -> Result<(ClientFile, LoginFinalization, ExportKey)> {
 		let config = Config(self.state.cipher_suite());
-		let (finalization, public_key, export_key) = match self.state.finish(response.0) {
+		let (finalization, new_public_key, export_key) = match self.state.finish(response.0) {
 			Ok(result) => result,
 			Err(Error::Opaque(ProtocolError::VerificationError(PakeError::InvalidLoginError))) =>
 				return Err(Error::Credentials),
 			Err(error) => return Err(error),
 		};
 
-		let public_key = if let Some(key) = self.public_key {
-			if !PublicKey::is_opaque(key, &public_key) {
+		let public_key = if let Some(public_key) = self.public_key {
+			if public_key.key != new_public_key {
 				return Err(Error::InvalidServer);
 			}
 
-			PublicKey { config, key }
+			public_key
 		} else {
-			PublicKey::new(config, &public_key)
+			PublicKey::new(config, new_public_key)
 		};
 
 		Ok((
 			ClientFile(public_key),
 			LoginFinalization(finalization),
-			ExportKey(export_key),
+			ExportKey::new(config, export_key),
 		))
 	}
 }

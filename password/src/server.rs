@@ -53,7 +53,7 @@ pub struct ServerRegistration {
 	/// Registration process sate.
 	state: cipher_suite::ServerRegistration,
 	/// Public key of the corresponding [`ServerConfig`].
-	public_key: [u8; 32],
+	public_key: PublicKey,
 }
 
 impl ServerRegistration {
@@ -66,10 +66,7 @@ impl ServerRegistration {
 	/// Returns the [`PublicKey`] associated with this [`ServerRegistration`].
 	#[must_use]
 	pub const fn public_key(&self) -> PublicKey {
-		PublicKey {
-			config: self.config(),
-			key: self.public_key,
-		}
+		self.public_key
 	}
 
 	/// Starts the registration process. The returned [`RegistrationResponse`]
@@ -89,7 +86,7 @@ impl ServerRegistration {
 		Ok((
 			Self {
 				state,
-				public_key: PublicKey::from_opaque(config.0.public_key()),
+				public_key: config.public_key(),
 			},
 			RegistrationResponse(response),
 		))
@@ -119,7 +116,7 @@ pub struct ServerFile {
 	/// Password envelope.
 	file: cipher_suite::ServerFile,
 	/// Public key of the corresponding [`ServerConfig`].
-	public_key: [u8; 32],
+	public_key: PublicKey,
 }
 
 impl ServerFile {
@@ -132,10 +129,7 @@ impl ServerFile {
 	/// Returns the [`PublicKey`] associated with this [`ServerFile`].
 	#[must_use]
 	pub const fn public_key(&self) -> PublicKey {
-		PublicKey {
-			config: self.config(),
-			key: self.public_key,
-		}
+		self.public_key
 	}
 }
 
@@ -173,7 +167,7 @@ impl ServerLogin {
 	) -> Result<(Self, LoginResponse)> {
 		let (state, response) = cipher_suite::ServerLogin::login(
 			&config.0,
-			file.map(|file| (file.file, file.public_key)),
+			file.map(|file| (file.file, file.public_key.key)),
 			request.0,
 		)?;
 

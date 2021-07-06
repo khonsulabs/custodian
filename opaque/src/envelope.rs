@@ -32,14 +32,14 @@ const NONCE_LEN: usize = 32;
 fn build_inner_envelope_internal<CS: CipherSuite>(
     random_pwd: &[u8],
     nonce: &[u8],
-) -> Result<PublicKey, InternalPakeError> {
+) -> Result<PublicKey<CS::Group>, InternalPakeError> {
     let h = Hkdf::<CS::Hash>::new(None, random_pwd);
-    let mut keypair_seed = vec![0u8; <PrivateKey as SizedBytes>::Len::to_usize()];
+    let mut keypair_seed = vec![0u8; <PrivateKey<CS::Group> as SizedBytes>::Len::to_usize()];
     h.expand(&[nonce, STR_PRIVATE_KEY].concat(), &mut keypair_seed)
         .map_err(|_| InternalPakeError::HkdfError)?;
     let client_static_keypair =
-        KeyPair::<CS::Group>::from_private_key_slice(CS::Group::scalar_as_bytes(
-            &CS::Group::hash_to_scalar::<CS::Hash>(&keypair_seed[..], STR_OPAQUE_HASH_TO_SCALAR)?,
+        KeyPair::<CS::Group>::from_private_key_slice(&CS::Group::scalar_as_bytes(
+            CS::Group::hash_to_scalar::<CS::Hash>(&keypair_seed[..], STR_OPAQUE_HASH_TO_SCALAR)?,
         ))?;
 
     Ok(client_static_keypair.public().clone())
@@ -50,12 +50,12 @@ fn recover_keys_internal<CS: CipherSuite>(
     nonce: &[u8],
 ) -> Result<KeyPair<CS::Group>, InternalPakeError> {
     let h = Hkdf::<CS::Hash>::new(None, random_pwd);
-    let mut keypair_seed = vec![0u8; <PrivateKey as SizedBytes>::Len::to_usize()];
+    let mut keypair_seed = vec![0u8; <PrivateKey<CS::Group> as SizedBytes>::Len::to_usize()];
     h.expand(&[nonce, STR_PRIVATE_KEY].concat(), &mut keypair_seed)
         .map_err(|_| InternalPakeError::HkdfError)?;
     let client_static_keypair =
-        KeyPair::<CS::Group>::from_private_key_slice(CS::Group::scalar_as_bytes(
-            &CS::Group::hash_to_scalar::<CS::Hash>(&keypair_seed[..], STR_OPAQUE_HASH_TO_SCALAR)?,
+        KeyPair::<CS::Group>::from_private_key_slice(&CS::Group::scalar_as_bytes(
+            CS::Group::hash_to_scalar::<CS::Hash>(&keypair_seed[..], STR_OPAQUE_HASH_TO_SCALAR)?,
         ))?;
 
     Ok(client_static_keypair)
@@ -185,7 +185,7 @@ impl<CS: CipherSuite> Envelope<CS> {
     ) -> Result<
         (
             Self,
-            PublicKey,
+            PublicKey<CS::Group>,
             GenericArray<u8, <CS::Hash as Digest>::OutputSize>,
         ),
         InternalPakeError,

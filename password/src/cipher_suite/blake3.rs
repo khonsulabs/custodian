@@ -1,7 +1,8 @@
 //! See [`Blake3`].
 
 use blake3::Hasher;
-use digest::{consts::U64, BlockInput, FixedOutput, Reset, Update};
+use digest::{BlockInput, FixedOutput, Reset, Update};
+use generic_array::typenum::U64;
 
 /// Object implementing [`Hash`](opaque_ke::hash::Hash) for BLAKE3. This
 /// encapsulates [`blake3::Hasher`] over a 64-bit output size.

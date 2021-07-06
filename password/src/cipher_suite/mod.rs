@@ -10,47 +10,61 @@
 mod argon2d;
 #[cfg(feature = "blake3")]
 mod blake3;
+#[cfg(feature = "p256")]
+mod p256;
 #[cfg(feature = "blake3")]
 mod pbkdf2;
+mod public_key;
 
 use argon2::Argon2;
 use curve25519_dalek::ristretto::RistrettoPoint;
+use digest::Digest;
+use generic_array::{
+	sequence::Concat,
+	typenum::{operator_aliases::Diff, U64},
+	GenericArray,
+};
 use opaque_ke::{
-	ciphersuite, key_exchange::tripledh::TripleDH, keypair::PublicKey, rand::rngs::OsRng,
-	ClientLoginFinishResult, ClientLoginStartResult, ClientRegistrationFinishResult,
-	ClientRegistrationStartResult, ServerLoginFinishResult, ServerLoginStartParameters,
-	ServerLoginStartResult,
+	ciphersuite, key_exchange::tripledh::TripleDH, rand::rngs::OsRng, ClientLoginFinishResult,
+	ClientLoginStartResult, ClientRegistrationFinishResult, ClientRegistrationStartResult,
+	ServerLoginFinishResult, ServerLoginStartParameters, ServerLoginStartResult,
 };
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "p256")]
+use sha2::Sha256;
 use sha2::Sha512;
+#[cfg(all(feature = "p256", feature = "sha3"))]
+use sha3::Sha3_256;
 #[cfg(feature = "sha3")]
 use sha3::Sha3_512;
 
-use self::argon2d::Argon2d;
 #[cfg(feature = "blake3")]
 use self::blake3::Blake3;
+#[cfg(feature = "p256")]
+use self::p256::P256;
 #[cfg(feature = "pbkdf2")]
 use self::pbkdf2::Pbkdf2;
+use self::{argon2d::Argon2d, public_key::PublicKeyExt};
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
 /// user-facing generics.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub(crate) enum CipherSuite {
-	/// Curve25519 + Sha512 + Argon2id
+	/// Curve25519 + SHA512 + Argon2id
 	Curve25519Sha512Argon2id,
-	/// Curve25519 + Sha512 + Argon2d
+	/// Curve25519 + SHA512 + Argon2d
 	Curve25519Sha512Argon2d,
-	/// Curve25519 + Sha512 + PBKDF2
+	/// Curve25519 + SHA512 + PBKDF2
 	#[cfg(feature = "pbkdf2")]
 	Curve25519Sha512Pbkdf2,
-	/// Curve25519 + Sha3-512 + Argon2id
+	/// Curve25519 + SHA3-512 + Argon2id
 	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2id,
-	/// Curve25519 + Sha3-512 + Argon2d
+	/// Curve25519 + SHA3-512 + Argon2d
 	#[cfg(feature = "sha3")]
 	Curve25519Sha3_512Argon2d,
-	/// Curve25519 + Sha3-512 + PBKDF2
+	/// Curve25519 + SHA3-512 + PBKDF2
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
 	Curve25519Sha3_512Pbkdf2,
 	/// Curve25519 + BLAKE3 + Argon2id
@@ -62,123 +76,58 @@ pub(crate) enum CipherSuite {
 	/// Curve25519 + BLAKE3 + PBKDF2
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
 	Curve25519Blake3Pbkdf2,
-}
-
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha512Argon2id;
-
-impl ciphersuite::CipherSuite for Curve25519Sha512Argon2id {
-	type Group = RistrettoPoint;
-	type Hash = Sha512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2<'static>;
-}
-
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha512Argon2d;
-
-impl ciphersuite::CipherSuite for Curve25519Sha512Argon2d {
-	type Group = RistrettoPoint;
-	type Hash = Sha512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2d;
-}
-
-#[cfg(feature = "pbkdf2")]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha512Pbkdf2;
-
-#[cfg(feature = "pbkdf2")]
-impl ciphersuite::CipherSuite for Curve25519Sha512Pbkdf2 {
-	type Group = RistrettoPoint;
-	type Hash = Sha512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Pbkdf2;
-}
-
-#[cfg(feature = "sha3")]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha3_512Argon2id;
-
-#[cfg(feature = "sha3")]
-impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2id {
-	type Group = RistrettoPoint;
-	type Hash = Sha3_512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2<'static>;
-}
-
-#[cfg(feature = "sha3")]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha3_512Argon2d;
-
-#[cfg(feature = "sha3")]
-impl ciphersuite::CipherSuite for Curve25519Sha3_512Argon2d {
-	type Group = RistrettoPoint;
-	type Hash = Sha3_512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2d;
-}
-
-#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Sha3_512Pbkdf2;
-
-#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-impl ciphersuite::CipherSuite for Curve25519Sha3_512Pbkdf2 {
-	type Group = RistrettoPoint;
-	type Hash = Sha3_512;
-	type KeyExchange = TripleDH;
-	type SlowHash = Pbkdf2;
-}
-
-#[cfg(feature = "blake3")]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Blake3Argon2id;
-
-#[cfg(feature = "blake3")]
-impl ciphersuite::CipherSuite for Curve25519Blake3Argon2id {
-	type Group = RistrettoPoint;
-	type Hash = Blake3;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2<'static>;
-}
-
-#[cfg(feature = "blake3")]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Blake3Argon2d;
-
-#[cfg(feature = "blake3")]
-impl ciphersuite::CipherSuite for Curve25519Blake3Argon2d {
-	type Group = RistrettoPoint;
-	type Hash = Blake3;
-	type KeyExchange = TripleDH;
-	type SlowHash = Argon2d;
-}
-
-#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub(crate) struct Curve25519Blake3Pbkdf2;
-
-#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-impl ciphersuite::CipherSuite for Curve25519Blake3Pbkdf2 {
-	type Group = RistrettoPoint;
-	type Hash = Blake3;
-	type KeyExchange = TripleDH;
-	type SlowHash = Pbkdf2;
+	/// P256 + SHA256 + Argon2id
+	#[cfg(feature = "p256")]
+	P256Sha256Argon2id,
+	/// P256 + SHA256 + Argon2d
+	#[cfg(feature = "p256")]
+	P256Sha256Argon2d,
+	/// P256 + SHA256 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	P256Sha256Pbkdf2,
+	/// P256 + SHA3-256 + Argon2id
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	P256Sha3_256Argon2id,
+	/// P256 + SHA3-256 + Argon2d
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	P256Sha3_256Argon2d,
+	/// P256 + SHA3-256 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	P256Sha3_256Pbkdf2,
+	/// P256 + BLAKE3 + Argon2id
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	P256Blake3Argon2id,
+	/// P256 + BLAKE3 + Argon2d
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	P256Blake3Argon2d,
+	/// P256 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	P256Blake3Pbkdf2,
 }
 
 macro_rules! cipher_suite {
-	($($(#[$attr:meta])? $cipher_suite:ident),+$(,)?) => {
+	(
+		$($(#[$attr:meta])? [
+			$cipher_suite:ident,
+			$group:ty,
+			$hash:ty,
+			$slow_hash:ty$(,)?
+		]),+$(,)?) => {
+		$(
+		$(#[$attr])?
+		#[allow(clippy::missing_docs_in_private_items)]
+		#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+		pub(crate) struct $cipher_suite;
+
+		$(#[$attr])?
+		impl ciphersuite::CipherSuite for $cipher_suite {
+			type Group = $group;
+			type Hash = $hash;
+			type KeyExchange = TripleDH;
+			type SlowHash = $slow_hash;
+		}
+		)+
+
 		/// [`opaque_ke::ClientRegistration`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
 		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
@@ -216,7 +165,7 @@ macro_rules! cipher_suite {
 			pub(crate) fn finish(
 				self,
 				response: RegistrationResponse,
-			) -> Result<(RegistrationFinalization, PublicKey, [u8; 64])> {
+			) -> Result<(RegistrationFinalization, [u8; 33], [u8; 64])> {
 				match (self, response) {
 					$($(#[$attr])? (
 						Self::$cipher_suite(state),
@@ -232,10 +181,19 @@ macro_rules! cipher_suite {
 							export_key,
 							server_s_pk,
 						} = result;
+
 						Ok((
 							RegistrationFinalization::$cipher_suite(message),
-							server_s_pk,
-							export_key.into(),
+							server_s_pk.to_array(),
+							export_key.concat(
+								GenericArray::<
+									u8,
+									Diff<
+										U64,
+										<<$cipher_suite as ciphersuite::CipherSuite>::Hash
+											 as Digest>::OutputSize>
+									>::default()
+							).into(),
 						))
 					})+
 					_ => Err(Error::Config),
@@ -279,7 +237,7 @@ macro_rules! cipher_suite {
 			pub(crate) fn finish(
 				self,
 				response: LoginResponse,
-			) -> Result<(LoginFinalization, PublicKey, [u8; 64])> {
+			) -> Result<(LoginFinalization, [u8; 33], [u8; 64])> {
 				match (self, response) {
 					$($(#[$attr])? (
 						Self::$cipher_suite(state),
@@ -298,8 +256,16 @@ macro_rules! cipher_suite {
 						} = result;
 						Ok((
 							LoginFinalization::$cipher_suite(message),
-							server_s_pk,
-							export_key.into(),
+							server_s_pk.to_array(),
+							export_key.concat(
+								GenericArray::<
+									u8,
+									Diff<
+										U64,
+										<<$cipher_suite as ciphersuite::CipherSuite>::Hash
+											 as Digest>::OutputSize>
+									>::default()
+							).into(),
 						))
 					})+
 					_ => Err(Error::Config),
@@ -331,10 +297,10 @@ macro_rules! cipher_suite {
 			}
 
 			/// [`opaque_ke::ServerSetup::keypair()`] wrapper.
-			pub(crate) fn public_key(&self) -> &PublicKey {
+			pub(crate) fn public_key(&self) -> [u8; 33] {
 				match self {
 					$($(#[$attr])? ServerSetup::$cipher_suite(server_setup) =>
-						server_setup.keypair().public(),)+
+						server_setup.keypair().public().to_array(),)+
 				}
 			}
 		}
@@ -430,7 +396,7 @@ macro_rules! cipher_suite {
 			/// [`opaque_ke::ServerLogin::start()`] wrapper.
 			pub(crate) fn login(
 				setup: &ServerSetup,
-				file: Option<(ServerFile, [u8; 32])>,
+				file: Option<(ServerFile, [u8; 33])>,
 				request: LoginRequest,
 			) -> Result<(Self, LoginResponse)> {
 				match (setup, request) {
@@ -440,7 +406,7 @@ macro_rules! cipher_suite {
 					) => {
 						let file = match file {
 							Some((ServerFile::$cipher_suite(file), public_key)) => {
-								if ***setup.public_key() != public_key {
+								if !server_setup.keypair().public().is_array(public_key) {
 									return Err(Error::ServerConfig);
 								}
 
@@ -530,20 +496,38 @@ macro_rules! cipher_suite {
 }
 
 cipher_suite!(
-	Curve25519Sha512Argon2id,
-	Curve25519Sha512Argon2d,
+	[Curve25519Sha512Argon2id, RistrettoPoint, Sha512, Argon2<'static>],
+	[Curve25519Sha512Argon2d, RistrettoPoint, Sha512, Argon2d],
 	#[cfg(feature = "pbkdf2")]
-	Curve25519Sha512Pbkdf2,
+	[Curve25519Sha512Pbkdf2, RistrettoPoint, Sha512, Pbkdf2],
 	#[cfg(feature = "sha3")]
-	Curve25519Sha3_512Argon2id,
+	[Curve25519Sha3_512Argon2id, RistrettoPoint, Sha3_512, Argon2<'static>],
 	#[cfg(feature = "sha3")]
-	Curve25519Sha3_512Argon2d,
+	[Curve25519Sha3_512Argon2d, RistrettoPoint, Sha3_512, Argon2d],
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	Curve25519Sha3_512Pbkdf2,
+	[Curve25519Sha3_512Pbkdf2, RistrettoPoint, Sha3_512, Pbkdf2],
 	#[cfg(feature = "blake3")]
-	Curve25519Blake3Argon2id,
+	[Curve25519Blake3Argon2id, RistrettoPoint, Blake3, Argon2<'static>],
 	#[cfg(feature = "blake3")]
-	Curve25519Blake3Argon2d,
+	[Curve25519Blake3Argon2d, RistrettoPoint, Blake3, Argon2d],
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	Curve25519Blake3Pbkdf2,
+	[Curve25519Blake3Pbkdf2, RistrettoPoint, Blake3, Pbkdf2],
+	#[cfg(feature = "p256")]
+	[P256Sha256Argon2id, P256, Sha256, Argon2<'static>],
+	#[cfg(feature = "p256")]
+	[P256Sha256Argon2d, P256, Sha256, Argon2d],
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	[P256Sha256Pbkdf2, P256, Sha256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	[P256Sha3_256Argon2id, P256, Sha3_256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	[P256Sha3_256Argon2d, P256, Sha3_256, Argon2d],
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	[P256Sha3_256Pbkdf2, P256, Sha3_256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	[P256Blake3Argon2id, P256, ::blake3::Hasher, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	[P256Blake3Argon2d, P256, ::blake3::Hasher, Argon2d],
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	[P256Blake3Pbkdf2, P256, ::blake3::Hasher, Pbkdf2],
 );

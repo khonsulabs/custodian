@@ -28,9 +28,9 @@ use zeroize::Zeroize;
 /// subgroup is noted additively — as in the draft RFC — in this trait.
 pub trait Group: Copy + Sized + for<'a> Mul<&'a <Self as Group>::Scalar, Output = Self> {
     /// The type of base field scalars
-    type Scalar: Zeroize + Clone;
+    type Scalar: Zeroize + Copy;
     /// The byte length necessary to represent scalars
-    type ScalarLen: ArrayLength<u8>;
+    type ScalarLen: ArrayLength<u8> + 'static;
     /// Return a scalar from its fixed-length bytes representation
     fn from_scalar_slice(
         scalar_bits: &GenericArray<u8, Self::ScalarLen>,
@@ -38,12 +38,12 @@ pub trait Group: Copy + Sized + for<'a> Mul<&'a <Self as Group>::Scalar, Output 
     /// picks a scalar at random
     fn random_nonzero_scalar<R: RngCore + CryptoRng>(rng: &mut R) -> Self::Scalar;
     /// Serializes a scalar to bytes
-    fn scalar_as_bytes(scalar: &Self::Scalar) -> &GenericArray<u8, Self::ScalarLen>;
+    fn scalar_as_bytes(scalar: Self::Scalar) -> GenericArray<u8, Self::ScalarLen>;
     /// The multiplicative inverse of this scalar
     fn scalar_invert(scalar: &Self::Scalar) -> Self::Scalar;
 
     /// The byte length necessary to represent group elements
-    type ElemLen: ArrayLength<u8>;
+    type ElemLen: ArrayLength<u8> + 'static;
     /// Return an element from its fixed-length bytes representation
     fn from_element_slice(
         element_bits: &GenericArray<u8, Self::ElemLen>,
@@ -105,8 +105,8 @@ impl Group for RistrettoPoint {
             }
         }
     }
-    fn scalar_as_bytes(scalar: &Self::Scalar) -> &GenericArray<u8, Self::ScalarLen> {
-        GenericArray::from_slice(scalar.as_bytes())
+    fn scalar_as_bytes(scalar: Self::Scalar) -> GenericArray<u8, Self::ScalarLen> {
+        scalar.to_bytes().into()
     }
     fn scalar_invert(scalar: &Self::Scalar) -> Self::Scalar {
         scalar.invert()
