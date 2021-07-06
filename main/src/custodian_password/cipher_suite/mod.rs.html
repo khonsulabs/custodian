@@ -585,31 +585,31 @@
 <span class="doccomment">/// user-facing generics.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">CipherSuite</span> {
-	<span class="doccomment">/// Curve25519 + SHA512 + Argon2id</span>
-	<span class="ident">Curve25519Sha512Argon2id</span>,
-	<span class="doccomment">/// Curve25519 + SHA512 + Argon2d</span>
-	<span class="ident">Curve25519Sha512Argon2d</span>,
-	<span class="doccomment">/// Curve25519 + SHA512 + PBKDF2</span>
+	<span class="doccomment">/// Ristretto255 + SHA512 + Argon2id</span>
+	<span class="ident">Ristretto255Sha512Argon2id</span>,
+	<span class="doccomment">/// Ristretto255 + SHA512 + Argon2d</span>
+	<span class="ident">Ristretto255Sha512Argon2d</span>,
+	<span class="doccomment">/// Ristretto255 + SHA512 + PBKDF2</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-	<span class="ident">Curve25519Sha512Pbkdf2</span>,
-	<span class="doccomment">/// Curve25519 + SHA3-512 + Argon2id</span>
+	<span class="ident">Ristretto255Sha512Pbkdf2</span>,
+	<span class="doccomment">/// Ristretto255 + SHA3-512 + Argon2id</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	<span class="ident">Curve25519Sha3_512Argon2id</span>,
-	<span class="doccomment">/// Curve25519 + SHA3-512 + Argon2d</span>
+	<span class="ident">Ristretto255Sha3_512Argon2id</span>,
+	<span class="doccomment">/// Ristretto255 + SHA3-512 + Argon2d</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	<span class="ident">Curve25519Sha3_512Argon2d</span>,
-	<span class="doccomment">/// Curve25519 + SHA3-512 + PBKDF2</span>
+	<span class="ident">Ristretto255Sha3_512Argon2d</span>,
+	<span class="doccomment">/// Ristretto255 + SHA3-512 + PBKDF2</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	<span class="ident">Curve25519Sha3_512Pbkdf2</span>,
-	<span class="doccomment">/// Curve25519 + BLAKE3 + Argon2id</span>
+	<span class="ident">Ristretto255Sha3_512Pbkdf2</span>,
+	<span class="doccomment">/// Ristretto255 + BLAKE3 + Argon2id</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	<span class="ident">Curve25519Blake3Argon2id</span>,
-	<span class="doccomment">/// Curve25519 + BLAKE3 + Argon2d</span>
+	<span class="ident">Ristretto255Blake3Argon2id</span>,
+	<span class="doccomment">/// Ristretto255 + BLAKE3 + Argon2d</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	<span class="ident">Curve25519Blake3Argon2d</span>,
-	<span class="doccomment">/// Curve25519 + BLAKE3 + PBKDF2</span>
+	<span class="ident">Ristretto255Blake3Argon2d</span>,
+	<span class="doccomment">/// Ristretto255 + BLAKE3 + PBKDF2</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	<span class="ident">Curve25519Blake3Pbkdf2</span>,
+	<span class="ident">Ristretto255Blake3Pbkdf2</span>,
 	<span class="doccomment">/// P256 + SHA256 + Argon2id</span>
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
 	<span class="ident">P256Sha256Argon2id</span>,
@@ -1030,22 +1030,22 @@
 }
 
 <span class="macro">cipher_suite!</span>(
-	[<span class="ident">Curve25519Sha512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
-	[<span class="ident">Curve25519Sha512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Sha512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Sha512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-	[<span class="ident">Curve25519Sha512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Sha512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	[<span class="ident">Curve25519Sha3_512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Sha3_512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	[<span class="ident">Curve25519Sha3_512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Sha3_512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">Curve25519Sha3_512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Sha3_512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	[<span class="ident">Curve25519Blake3Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Blake3Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	[<span class="ident">Curve25519Blake3Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Blake3Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">Curve25519Blake3Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Blake3Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
 	[<span class="ident">P256Sha256Argon2id</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
