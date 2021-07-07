@@ -510,27 +510,6 @@
 <span id="510">510</span>
 <span id="511">511</span>
 <span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
 </pre><pre class="rust">
 <span class="doccomment">//! [`CipherSuite`](ciphersuite::CipherSuite) implementations and all</span>
 <span class="doccomment">//! corresponding types.</span>
@@ -544,6 +523,7 @@
 <span class="kw">mod</span> <span class="ident">argon2d</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">blake3</span>;
+<span class="kw">mod</span> <span class="ident">export_key</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">p256</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
@@ -552,12 +532,6 @@
 
 <span class="kw">use</span> <span class="ident">argon2::Argon2</span>;
 <span class="kw">use</span> <span class="ident">curve25519_dalek::ristretto::RistrettoPoint</span>;
-<span class="kw">use</span> <span class="ident">digest::Digest</span>;
-<span class="kw">use</span> <span class="ident">generic_array</span>::{
-	<span class="ident">sequence::Concat</span>,
-	<span class="ident">typenum</span>::{<span class="ident">operator_aliases::Diff</span>, <span class="ident">U64</span>},
-	<span class="ident">GenericArray</span>,
-};
 <span class="kw">use</span> <span class="ident">opaque_ke</span>::{
 	<span class="ident">ciphersuite</span>, <span class="ident">key_exchange::tripledh::TripleDH</span>, <span class="ident">rand::rngs::OsRng</span>, <span class="ident">ClientLoginFinishResult</span>,
 	<span class="ident">ClientLoginStartResult</span>, <span class="ident">ClientRegistrationFinishResult</span>, <span class="ident">ClientRegistrationStartResult</span>,
@@ -578,7 +552,7 @@
 <span class="kw">use</span> <span class="self">self</span><span class="ident">::p256::P256</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
 <span class="kw">use</span> <span class="self">self</span><span class="ident">::pbkdf2::Pbkdf2</span>;
-<span class="kw">use</span> <span class="self">self</span>::{<span class="ident">argon2d::Argon2d</span>, <span class="ident">public_key::PublicKeyExt</span>};
+<span class="kw">use</span> <span class="self">self</span>::{<span class="ident">argon2d::Argon2d</span>, <span class="ident">export_key::ExportKeyExt</span>, <span class="ident">public_key::PublicKeyExt</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Error</span>, <span class="prelude-ty">Result</span>};
 
 <span class="doccomment">/// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid</span>
@@ -718,16 +692,8 @@
 
 						<span class="prelude-val">Ok</span>((
 							<span class="ident">RegistrationFinalization</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">message</span>),
-							<span class="ident">server_s_pk</span>.<span class="ident">to_array</span>(),
-							<span class="ident">export_key</span>.<span class="ident">concat</span>(
-								<span class="ident">GenericArray</span>::<span class="op">&lt;</span>
-									<span class="ident">u8</span>,
-									<span class="ident">Diff</span><span class="op">&lt;</span>
-										<span class="ident">U64</span>,
-										<span class="op">&lt;</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="kw">as</span> <span class="ident">ciphersuite::CipherSuite</span><span class="op">&gt;</span><span class="ident">::Hash</span>
-											 <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize</span><span class="op">&gt;</span>
-									<span class="op">&gt;</span><span class="ident">::default</span>()
-							).<span class="ident">into</span>(),
+							<span class="ident">server_s_pk</span>.<span class="ident">into_array</span>(),
+							<span class="ident">export_key</span>.<span class="ident">into_array</span>(),
 						))
 					})<span class="op">+</span>
 					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
@@ -790,16 +756,8 @@
 						} <span class="op">=</span> <span class="ident">result</span>;
 						<span class="prelude-val">Ok</span>((
 							<span class="ident">LoginFinalization</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">message</span>),
-							<span class="ident">server_s_pk</span>.<span class="ident">to_array</span>(),
-							<span class="ident">export_key</span>.<span class="ident">concat</span>(
-								<span class="ident">GenericArray</span>::<span class="op">&lt;</span>
-									<span class="ident">u8</span>,
-									<span class="ident">Diff</span><span class="op">&lt;</span>
-										<span class="ident">U64</span>,
-										<span class="op">&lt;</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="kw">as</span> <span class="ident">ciphersuite::CipherSuite</span><span class="op">&gt;</span><span class="ident">::Hash</span>
-											 <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize</span><span class="op">&gt;</span>
-									<span class="op">&gt;</span><span class="ident">::default</span>()
-							).<span class="ident">into</span>(),
+							<span class="ident">server_s_pk</span>.<span class="ident">into_array</span>(),
+							<span class="ident">export_key</span>.<span class="ident">into_array</span>(),
 						))
 					})<span class="op">+</span>
 					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
