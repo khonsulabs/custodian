@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-success">
-                <abbr title="11 / 11">100 %</abbr></p>
+                <abbr title="12 / 12">100 %</abbr></p>
         </div>
     </div>
 
@@ -73,7 +73,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use opaque_ke::keypair::PublicKey;</pre>
+                <pre class="has-background-white py-0 px-2">use opaque_ke::{group::Group, keypair::PublicKey};</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -229,7 +229,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl&lt;G&gt; PublicKeyExt for PublicKey&lt;G&gt; {</pre>
+                <pre class="has-background-white py-0 px-2">impl&lt;G: Group&gt; PublicKeyExt for PublicKey&lt;G&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -372,7 +372,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		key.get(..self.len()).map_or(false, |key| key == ***self)</pre>
+                <pre class="has-background-success-light py-0 px-2">		key.get(..self.len())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -385,13 +385,26 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">			.map_or(false, |key| key == self.as_ref())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="28">
                 <a href="#28">28</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                27
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="29">
+                <a href="#29">29</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -403,7 +416,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-07-06 10:52</p>
+                <p class="heading">Date: 2021-07-07 12:04</p>
             </div>
         </footer>
     </body>
