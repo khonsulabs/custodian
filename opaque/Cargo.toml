@@ -38,7 +38,7 @@ zeroize = { version = "1.1.1", features = ["zeroize_derive"] }
 anyhow = "1.0.35"
 base64 = "0.13.0"
 bincode = "1"
-chacha20poly1305 = "0.7.1"
+chacha20poly1305 = "0.8"
 criterion = "0.3.3"
 hex = "0.4.2"
 lazy_static = "1.4.0"
