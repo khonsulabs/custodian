@@ -11,6 +11,7 @@ pub(crate) trait ExportKeyExt {
 	fn into_array(self) -> [u8; 64];
 }
 
+#[cfg(feature = "p256")]
 impl ExportKeyExt for GenericArray<u8, U32> {
 	fn into_array(self) -> [u8; 64] {
 		let mut key = [0; 64];

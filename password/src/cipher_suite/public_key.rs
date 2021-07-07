@@ -35,6 +35,7 @@ impl PublicKeyExt for PublicKey<RistrettoPoint> {
 	}
 }
 
+#[cfg(feature = "p256")]
 impl PublicKeyExt for PublicKey<P256> {
 	fn into_array(self) -> [u8; 33] {
 		(**self).into()
