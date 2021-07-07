@@ -2,7 +2,7 @@
 
 use opaque_ke::{group::Group, keypair::PublicKey};
 
-/// Utility traits to help convert and compare [`opaque_ke::keypair::PublicKey`]
+/// Utility trait to help convert and compare [`opaque_ke::keypair::PublicKey`]
 /// to `[u8; 33]`.
 pub(crate) trait PublicKeyExt {
 	/// Convert [`opaque_ke::keypair::PublicKey`] to `[u8; 33]`.
