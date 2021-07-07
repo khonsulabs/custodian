@@ -26,10 +26,11 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
+<span id="29">29</span>
 </pre><pre class="rust">
 <span class="doccomment">//! See [`PublicKeyExt`].</span>
 
-<span class="kw">use</span> <span class="ident">opaque_ke::keypair::PublicKey</span>;
+<span class="kw">use</span> <span class="ident">opaque_ke</span>::{<span class="ident">group::Group</span>, <span class="ident">keypair::PublicKey</span>};
 
 <span class="doccomment">/// Utility traits to help convert and compare [`opaque_ke::keypair::PublicKey`]</span>
 <span class="doccomment">/// to `[u8; 33]`.</span>
@@ -41,7 +42,7 @@
 	<span class="kw">fn</span> <span class="ident">is_array</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: [<span class="ident">u8</span>; <span class="number">33</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">G</span><span class="op">&gt;</span> <span class="ident">PublicKeyExt</span> <span class="kw">for</span> <span class="ident">PublicKey</span><span class="op">&lt;</span><span class="ident">G</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="ident">Group</span><span class="op">&gt;</span> <span class="ident">PublicKeyExt</span> <span class="kw">for</span> <span class="ident">PublicKey</span><span class="op">&lt;</span><span class="ident">G</span><span class="op">&gt;</span> {
 	<span class="kw">fn</span> <span class="ident">to_array</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">33</span>] {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">33</span>];
 		<span class="ident">key</span>.<span class="ident">get_mut</span>(..<span class="self">self</span>.<span class="ident">len</span>())
@@ -52,7 +53,8 @@
 	}
 
 	<span class="kw">fn</span> <span class="ident">is_array</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: [<span class="ident">u8</span>; <span class="number">33</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-		<span class="ident">key</span>.<span class="ident">get</span>(..<span class="self">self</span>.<span class="ident">len</span>()).<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="ident">key</span> <span class="op">=</span><span class="op">=</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>)
+		<span class="ident">key</span>.<span class="ident">get</span>(..<span class="self">self</span>.<span class="ident">len</span>())
+			.<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="ident">key</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">as_ref</span>())
 	}
 }
 </pre></div>
