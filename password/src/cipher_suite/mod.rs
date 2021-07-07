@@ -10,6 +10,7 @@
 mod argon2d;
 #[cfg(feature = "blake3")]
 mod blake3;
+mod export_key;
 #[cfg(feature = "p256")]
 mod p256;
 #[cfg(feature = "blake3")]
@@ -18,12 +19,6 @@ mod public_key;
 
 use argon2::Argon2;
 use curve25519_dalek::ristretto::RistrettoPoint;
-use digest::Digest;
-use generic_array::{
-	sequence::Concat,
-	typenum::{operator_aliases::Diff, U64},
-	GenericArray,
-};
 use opaque_ke::{
 	ciphersuite, key_exchange::tripledh::TripleDH, rand::rngs::OsRng, ClientLoginFinishResult,
 	ClientLoginStartResult, ClientRegistrationFinishResult, ClientRegistrationStartResult,
@@ -44,7 +39,7 @@ use self::blake3::Blake3;
 use self::p256::P256;
 #[cfg(feature = "pbkdf2")]
 use self::pbkdf2::Pbkdf2;
-use self::{argon2d::Argon2d, public_key::PublicKeyExt};
+use self::{argon2d::Argon2d, export_key::ExportKeyExt, public_key::PublicKeyExt};
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
@@ -184,16 +179,8 @@ macro_rules! cipher_suite {
 
 						Ok((
 							RegistrationFinalization::$cipher_suite(message),
-							server_s_pk.to_array(),
-							export_key.concat(
-								GenericArray::<
-									u8,
-									Diff<
-										U64,
-										<<$cipher_suite as ciphersuite::CipherSuite>::Hash
-											 as Digest>::OutputSize>
-									>::default()
-							).into(),
+							server_s_pk.into_array(),
+							export_key.into_array(),
 						))
 					})+
 					_ => Err(Error::Config),
@@ -256,16 +243,8 @@ macro_rules! cipher_suite {
 						} = result;
 						Ok((
 							LoginFinalization::$cipher_suite(message),
-							server_s_pk.to_array(),
-							export_key.concat(
-								GenericArray::<
-									u8,
-									Diff<
-										U64,
-										<<$cipher_suite as ciphersuite::CipherSuite>::Hash
-											 as Digest>::OutputSize>
-									>::default()
-							).into(),
+							server_s_pk.into_array(),
+							export_key.into_array(),
 						))
 					})+
 					_ => Err(Error::Config),
