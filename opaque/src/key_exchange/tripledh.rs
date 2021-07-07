@@ -25,6 +25,7 @@ use generic_bytes::SizedBytes;
 use hkdf::Hkdf;
 use hmac::{Hmac, Mac, NewMac};
 use rand::{CryptoRng, RngCore};
+use std::convert::TryFrom;
 use zeroize::Zeroize;
 
 const KEY_LEN: usize = 32;
@@ -208,29 +209,29 @@ impl<D: Hash, G: Group> KeyExchange<D, G> for TripleDH {
 
 /// The client state produced after the first key exchange message
 #[cfg_attr(feature = "serialize", derive(serde::Deserialize, serde::Serialize))]
-pub struct Ke1State<G> {
+pub struct Ke1State<G: Group> {
     client_e_sk: PrivateKey<G>,
     client_nonce: GenericArray<u8, NonceLen>,
 }
 
 impl_clone_for!(
-    struct Ke1State<G>,
+    struct Ke1State<G: Group>,
     [client_e_sk, client_nonce],
 );
 impl_debug_eq_hash_for!(
-    struct Ke1State<G>,
+    struct Ke1State<G: Group>,
     [client_e_sk, client_nonce],
 );
 
-// This can't be derived because of the use of a phantom parameter
-impl<G> Zeroize for Ke1State<G> {
+// This can't be derived because of the use of a generic parameter
+impl<G: Group> Zeroize for Ke1State<G> {
     fn zeroize(&mut self) {
         self.client_e_sk.zeroize();
         self.client_nonce.zeroize();
     }
 }
 
-impl<G> Drop for Ke1State<G> {
+impl<G: Group> Drop for Ke1State<G> {
     fn drop(&mut self) {
         self.zeroize();
     }
@@ -239,7 +240,7 @@ impl<G> Drop for Ke1State<G> {
 /// The first key exchange message
 #[derive(PartialEq, Eq, Debug, Hash, Clone)]
 #[cfg_attr(feature = "serialize", derive(serde::Deserialize, serde::Serialize))]
-pub struct Ke1Message<G> {
+pub struct Ke1Message<G: Group> {
     pub(crate) client_nonce: GenericArray<u8, NonceLen>,
     pub(crate) client_e_pk: PublicKey<G>,
 }
@@ -343,7 +344,7 @@ impl<HashLen: ArrayLength<u8>> ToBytesWithPointers for Ke2State<HashLen> {
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 #[cfg_attr(feature = "serialize", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "serialize", serde(bound = ""))]
-pub struct Ke2Message<G, HashLen: ArrayLength<u8>> {
+pub struct Ke2Message<G: Group, HashLen: ArrayLength<u8>> {
     server_nonce: GenericArray<u8, NonceLen>,
     server_e_pk: PublicKey<G>,
     mac: GenericArray<u8, HashLen>,
@@ -407,7 +408,7 @@ impl<G: Group, HashLen: ArrayLength<u8>> FromBytes for Ke2Message<G, HashLen> {
 
 #[allow(clippy::upper_case_acronyms)]
 // The triple of public and private components used in the 3DH computation
-struct TripleDHComponents<G> {
+struct TripleDHComponents<G: Group> {
     pk1: PublicKey<G>,
     sk1: PrivateKey<G>,
     pk2: PublicKey<G>,
@@ -514,7 +515,9 @@ fn hkdf_expand_label_extracted<D: Hash>(
     let mut okm = vec![0u8; length];
 
     let mut hkdf_label: Vec<u8> = Vec::new();
-    hkdf_label.extend_from_slice(&length.to_be_bytes()[std::mem::size_of::<usize>() - 2..]);
+
+    let length_u16: u16 = u16::try_from(length).map_err(|_| PakeError::SerializationError)?;
+    hkdf_label.extend_from_slice(&length_u16.to_be_bytes());
 
     let mut opaque_label: Vec<u8> = Vec::new();
     opaque_label.extend_from_slice(STR_OPAQUE);

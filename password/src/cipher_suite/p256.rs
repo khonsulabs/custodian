@@ -62,9 +62,7 @@ impl GroupWithMapToCurve for P256 {
 	fn map_to_curve<H: Hash>(msg: &[u8], dst: &[u8]) -> Result<Self, InternalPakeError> {
 		let uniform_bytes =
 			expand_message_xmd::<H>(msg, dst, <H as Digest>::OutputSize::to_usize())?;
-		Ok(<Self as Group>::hash_to_curve(
-			&GenericArray::clone_from_slice(&uniform_bytes[..]),
-		))
+		<Self as Group>::hash_to_curve(&GenericArray::clone_from_slice(&uniform_bytes[..]))
 	}
 
 	fn hash_to_scalar<H: Hash>(
@@ -115,16 +113,18 @@ impl Group for P256 {
 		self.0.to_bytes()
 	}
 
-	fn hash_to_curve(uniform_bytes: &GenericArray<u8, Self::UniformBytesLen>) -> Self {
-		Self(
+	fn hash_to_curve(
+		uniform_bytes: &GenericArray<u8, Self::UniformBytesLen>,
+	) -> Result<Self, InternalPakeError> {
+		Ok(Self(
 			ProjectivePoint::from_encoded_point(&EncodedPoint::from_secret_key(
 				&SecretKey::new(ScalarBytes::from_scalar(
 					&p256_::Scalar::from_bytes_reduced(uniform_bytes),
 				)),
 				true,
 			))
-			.expect("failed to generate group from bytes"),
-		)
+			.ok_or(InternalPakeError::PointError)?,
+		))
 	}
 
 	fn base_point() -> Self {

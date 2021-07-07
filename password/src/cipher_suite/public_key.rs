@@ -1,6 +1,6 @@
 //! See [`PublicKeyExt`].
 
-use opaque_ke::keypair::PublicKey;
+use opaque_ke::{group::Group, keypair::PublicKey};
 
 /// Utility traits to help convert and compare [`opaque_ke::keypair::PublicKey`]
 /// to `[u8; 33]`.
@@ -12,7 +12,7 @@ pub(crate) trait PublicKeyExt {
 	fn is_array(&self, key: [u8; 33]) -> bool;
 }
 
-impl<G> PublicKeyExt for PublicKey<G> {
+impl<G: Group> PublicKeyExt for PublicKey<G> {
 	fn to_array(&self) -> [u8; 33] {
 		let mut key = [0; 33];
 		key.get_mut(..self.len())
@@ -23,6 +23,7 @@ impl<G> PublicKeyExt for PublicKey<G> {
 	}
 
 	fn is_array(&self, key: [u8; 33]) -> bool {
-		key.get(..self.len()).map_or(false, |key| key == ***self)
+		key.get(..self.len())
+			.map_or(false, |key| key == self.as_ref())
 	}
 }
