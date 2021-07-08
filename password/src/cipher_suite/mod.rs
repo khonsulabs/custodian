@@ -13,7 +13,7 @@ mod blake3;
 mod export_key;
 #[cfg(feature = "p256")]
 mod p256;
-#[cfg(feature = "blake3")]
+#[cfg(feature = "pbkdf2")]
 mod pbkdf2;
 mod public_key;
 

@@ -3,8 +3,6 @@
 use curve25519_dalek::ristretto::RistrettoPoint;
 use opaque_ke::keypair::PublicKey;
 
-use super::p256::P256;
-
 /// Utility trait to help convert and compare [`opaque_ke::keypair::PublicKey`]
 /// to `[u8; 33]`.
 pub(crate) trait PublicKeyExt {
@@ -36,7 +34,7 @@ impl PublicKeyExt for PublicKey<RistrettoPoint> {
 }
 
 #[cfg(feature = "p256")]
-impl PublicKeyExt for PublicKey<P256> {
+impl PublicKeyExt for PublicKey<super::p256::P256> {
 	fn into_array(self) -> [u8; 33] {
 		(**self).into()
 	}
