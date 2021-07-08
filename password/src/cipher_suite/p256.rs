@@ -170,3 +170,20 @@ impl Serialize for Scalar {
 		self.0.to_bytes().serialize(serializer)
 	}
 }
+
+#[test]
+fn serialize() -> anyhow::Result<()> {
+	let old_data = P256::base_point();
+	let bytes = bincode::serialize(&old_data)?;
+	let new_data = bincode::deserialize(&bytes)?;
+
+	assert_eq!(old_data, new_data);
+
+	let old_data = P256::from_scalar_slice(&GenericArray::default())?;
+	let bytes = bincode::serialize(&old_data)?;
+	let new_data = bincode::deserialize(&bytes)?;
+
+	assert_eq!(old_data, new_data);
+
+	Ok(())
+}
