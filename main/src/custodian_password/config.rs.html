@@ -228,6 +228,8 @@
 <span id="228">228</span>
 <span id="229">229</span>
 <span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Password configuration.</span>
 
@@ -435,10 +437,12 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Hash</span> {
 	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
+		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
+		<span class="kw">return</span> <span class="self">Self</span><span class="ident">::Blake3</span>;
+		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>), <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
 		<span class="kw">return</span> <span class="self">Self</span><span class="ident">::Sha3</span>;
-		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-		<span class="self">Self</span><span class="ident">::Sha512</span>
+		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>), <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)))]</span>
+		<span class="kw">return</span> <span class="self">Self</span><span class="ident">::Sha2</span>;
 	}
 }
 
