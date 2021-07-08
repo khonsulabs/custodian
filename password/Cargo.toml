@@ -10,7 +10,7 @@ categories = ["authentication"]
 edition = "2018"
 
 [features]
-default = ["sha3"]
+default = ["blake3"]
 p256 = ["p256_"]
 pbkdf2 = ["hmac", "pbkdf2_", "zeroize"]
 

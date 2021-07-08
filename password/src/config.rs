@@ -204,12 +204,12 @@ pub enum Hash {
 
 impl Default for Hash {
 	fn default() -> Self {
-		#[cfg(feature = "sha3")]
-		return Self::Sha3;
-		#[cfg(all(feature = "blake3", not(feature = "sha3")))]
+		#[cfg(feature = "blake3")]
 		return Self::Blake3;
-		#[cfg(all(not(feature = "sha3"), not(feature = "blake3")))]
-		return Self::Sha512;
+		#[cfg(all(not(feature = "blake3"), feature = "sha3"))]
+		return Self::Sha3;
+		#[cfg(all(not(feature = "blake3"), not(feature = "sha3")))]
+		return Self::Sha2;
 	}
 }
 

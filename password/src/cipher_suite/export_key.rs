@@ -1,9 +1,6 @@
 //! See [`ExportKeyExt`].
 
-use generic_array::{
-	typenum::{U32, U64},
-	GenericArray,
-};
+use generic_array::{typenum::U64, GenericArray};
 
 /// Utility trait to help convert export key to `[u8; 64]`.
 pub(crate) trait ExportKeyExt {
@@ -12,7 +9,7 @@ pub(crate) trait ExportKeyExt {
 }
 
 #[cfg(feature = "p256")]
-impl ExportKeyExt for GenericArray<u8, U32> {
+impl ExportKeyExt for GenericArray<u8, generic_array::typenum::U32> {
 	fn into_array(self) -> [u8; 64] {
 		let mut key = [0; 64];
 		key[..32].copy_from_slice(&self);
