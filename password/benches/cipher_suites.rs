@@ -1,7 +1,7 @@
 use criterion::{criterion_group, criterion_main, Criterion};
 use custodian_password::{
-	ClientConfig, ClientLogin, ClientRegistration, Config, Group, Hash, Result, ServerConfig,
-	ServerLogin, ServerRegistration, Mhf,
+	ClientConfig, ClientLogin, ClientRegistration, Config, Group, Hash, Mhf, Result, ServerConfig,
+	ServerLogin, ServerRegistration,
 };
 
 fn cipher_suite(group: Group, hash: Hash, mhf_hash: Mhf) -> Result<()> {
@@ -47,8 +47,7 @@ fn cipher_suites(criterion: &mut Criterion) {
 	});
 	#[cfg(feature = "blake3")]
 	criterion.bench_function("Ristretto225 + BLAKE3 + Argon2id", |bencher| {
-		bencher
-			.iter(|| cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2id).unwrap())
+		bencher.iter(|| cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2id).unwrap())
 	});
 	#[cfg(feature = "blake3")]
 	criterion.bench_function("Ristretto225 + BLAKE3 + Argon2d", |bencher| {
