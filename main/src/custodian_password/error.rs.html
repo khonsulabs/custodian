@@ -35,10 +35,10 @@
 <span id="35">35</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_name_repetitions</span>)]</span>
 
-<span class="doccomment">//! See [`Error`](enum@Error). Also re-exports [`InternalPakeError`],</span>
-<span class="doccomment">//! [`PakeError`] and [`ProtocolError`].</span>
+<span class="doccomment">//! See [`Error`](enum@Error). Also re-exports [`InternalError`] and</span>
+<span class="doccomment">//! [`ProtocolError`].</span>
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">opaque_ke::errors</span>::{<span class="ident">InternalPakeError</span>, <span class="ident">PakeError</span>, <span class="ident">ProtocolError</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">opaque_ke::errors</span>::{<span class="ident">InternalError</span>, <span class="ident">ProtocolError</span>};
 <span class="kw">use</span> <span class="ident">thiserror::Error</span>;
 
 <span class="doccomment">/// [`Result`](std::result::Result) for this crate.</span>
@@ -48,7 +48,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
 	<span class="doccomment">/// Internal OPAQUE error.</span>
-	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Iternal Opaque error: {0}&quot;</span>)]</span>
+	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Internal Opaque error: {0}&quot;</span>)]</span>
 	<span class="ident">Opaque</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">ProtocolError</span>),
 	<span class="doccomment">/// Servers public key didn&#39;t match expected one.</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Servers identity unexpected&quot;</span>)]</span>

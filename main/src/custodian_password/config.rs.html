@@ -241,7 +241,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Config</span>(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">CipherSuite</span>);
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Config</span> {
-	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 		<span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Group::default</span>(), <span class="ident">Hash::default</span>(), <span class="ident">SlowHash::default</span>())
 	}
 }
@@ -249,158 +249,158 @@
 <span class="kw">impl</span> <span class="ident">Config</span> {
 	<span class="doccomment">/// Builds new [`Config`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">group</span>: <span class="ident">Group</span>, <span class="ident">hash</span>: <span class="ident">Hash</span>, <span class="ident">slow_hash</span>: <span class="ident">SlowHash</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">group</span>: <span class="ident">Group</span>, <span class="ident">hash</span>: <span class="ident">Hash</span>, <span class="ident">slow_hash</span>: <span class="ident">SlowHash</span>) -&gt; <span class="self">Self</span> {
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::enum_glob_use</span>)]</span>
 		<span class="kw">use</span> <span class="self">self</span>::{<span class="ident">CipherSuite</span>::<span class="kw-2">*</span>, <span class="ident">Group</span>::<span class="kw-2">*</span>, <span class="ident">Hash</span>::<span class="kw-2">*</span>, <span class="ident">SlowHash</span>::<span class="kw-2">*</span>};
 
 		<span class="self">Self</span>(<span class="kw">match</span> (<span class="ident">group</span>, <span class="ident">hash</span>, <span class="ident">slow_hash</span>) {
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha512Argon2id</span>,
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha512Argon2d</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">Ristretto255Sha512Argon2id</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">Ristretto255Sha512Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha512Pbkdf2</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha2</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">Ristretto255Sha512Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha3_512Argon2id</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">Ristretto255Sha3_512Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha3_512Argon2d</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">Ristretto255Sha3_512Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Sha3_512Pbkdf2</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Sha3</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">Ristretto255Sha3_512Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Blake3Argon2id</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">Ristretto255Blake3Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Blake3Argon2d</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">Ristretto255Blake3Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Ristretto255Blake3Pbkdf2</span>,
+			(<span class="ident">Ristretto255</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">Ristretto255Blake3Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha256Argon2id</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">P256Sha256Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha256Argon2d</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">P256Sha256Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha256Pbkdf2</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha2</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">P256Sha256Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha3_256Argon2id</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">P256Sha3_256Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha3_256Argon2d</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">P256Sha3_256Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Sha3_256Pbkdf2</span>,
+			(<span class="ident">P256</span>, <span class="ident">Sha3</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">P256Sha3_256Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Blake3Argon2id</span>,
+			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2id</span>) =&gt; <span class="ident">P256Blake3Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Blake3Argon2d</span>,
+			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>) =&gt; <span class="ident">P256Blake3Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">P256Blake3Pbkdf2</span>,
+			(<span class="ident">P256</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>) =&gt; <span class="ident">P256Blake3Pbkdf2</span>,
 		})
 	}
 
 	<span class="doccomment">/// Returns [`Group`] of this [`Config`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">group</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Group</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">group</span>(<span class="self">self</span>) -&gt; <span class="ident">Group</span> {
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::enum_glob_use</span>)]</span>
 		<span class="kw">use</span> <span class="ident">CipherSuite</span>::<span class="kw-2">*</span>;
 
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::match_same_arms</span>)]</span>
 		<span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-			<span class="ident">Ristretto255Sha512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Sha512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha512Argon2d</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Sha512Pbkdf2</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha3_512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha3_512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Sha3_512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha3_512Argon2d</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Blake3Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Blake3Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Blake3Argon2d</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::Ristretto255</span>,
+			<span class="ident">Ristretto255Blake3Pbkdf2</span> =&gt; <span class="ident">Group::Ristretto255</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			<span class="ident">P256Sha256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Sha256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha256Argon2d</span> =&gt; <span class="ident">Group::P256</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Sha256Pbkdf2</span> =&gt; <span class="ident">Group::P256</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha3_256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Sha3_256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha3_256Argon2d</span> =&gt; <span class="ident">Group::P256</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Sha3_256Pbkdf2</span> =&gt; <span class="ident">Group::P256</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			<span class="ident">P256Blake3Argon2id</span> <span class="op">|</span> <span class="ident">P256Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Blake3Argon2id</span> <span class="op">|</span> <span class="ident">P256Blake3Argon2d</span> =&gt; <span class="ident">Group::P256</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Group::P256</span>,
+			<span class="ident">P256Blake3Pbkdf2</span> =&gt; <span class="ident">Group::P256</span>,
 		}
 	}
 
 	<span class="doccomment">/// Returns [`Hash`](self::Hash) of this [`Config`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Hash</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="self">self</span>) -&gt; <span class="ident">Hash</span> {
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::enum_glob_use</span>)]</span>
 		<span class="kw">use</span> <span class="ident">CipherSuite</span>::<span class="kw-2">*</span>;
 
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::match_same_arms</span>)]</span>
 		<span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-			<span class="ident">Ristretto255Sha512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha2</span>,
+			<span class="ident">Ristretto255Sha512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha512Argon2d</span> =&gt; <span class="ident">Hash::Sha2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha2</span>,
+			<span class="ident">Ristretto255Sha512Pbkdf2</span> =&gt; <span class="ident">Hash::Sha2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha3_512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha3_512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha3</span>,
+			<span class="ident">Ristretto255Sha3_512Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Sha3_512Argon2d</span> =&gt; <span class="ident">Hash::Sha3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha3</span>,
+			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> =&gt; <span class="ident">Hash::Sha3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Blake3Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Blake3</span>,
+			<span class="ident">Ristretto255Blake3Argon2id</span> <span class="op">|</span> <span class="ident">Ristretto255Blake3Argon2d</span> =&gt; <span class="ident">Hash::Blake3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Blake3</span>,
+			<span class="ident">Ristretto255Blake3Pbkdf2</span> =&gt; <span class="ident">Hash::Blake3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			<span class="ident">P256Sha256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha2</span>,
+			<span class="ident">P256Sha256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha256Argon2d</span> =&gt; <span class="ident">Hash::Sha2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha2</span>,
+			<span class="ident">P256Sha256Pbkdf2</span> =&gt; <span class="ident">Hash::Sha2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha3_256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha3</span>,
+			<span class="ident">P256Sha3_256Argon2id</span> <span class="op">|</span> <span class="ident">P256Sha3_256Argon2d</span> =&gt; <span class="ident">Hash::Sha3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Sha3</span>,
+			<span class="ident">P256Sha3_256Pbkdf2</span> =&gt; <span class="ident">Hash::Sha3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			<span class="ident">P256Blake3Argon2id</span> <span class="op">|</span> <span class="ident">P256Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Blake3</span>,
+			<span class="ident">P256Blake3Argon2id</span> <span class="op">|</span> <span class="ident">P256Blake3Argon2d</span> =&gt; <span class="ident">Hash::Blake3</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Hash::Blake3</span>,
+			<span class="ident">P256Blake3Pbkdf2</span> =&gt; <span class="ident">Hash::Blake3</span>,
 		}
 	}
 
 	<span class="doccomment">/// Returns [`SlowHash`] of this [`Config`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">slow_hash</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SlowHash</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">slow_hash</span>(<span class="self">self</span>) -&gt; <span class="ident">SlowHash</span> {
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::enum_glob_use</span>)]</span>
 		<span class="kw">use</span> <span class="ident">CipherSuite</span>::<span class="kw-2">*</span>;
 
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::match_same_arms</span>)]</span>
 		<span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-			<span class="ident">Ristretto255Sha512Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
-			<span class="ident">Ristretto255Sha512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">Ristretto255Sha512Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">Ristretto255Sha512Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">Ristretto255Sha512Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha3_512Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">Ristretto255Sha3_512Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Sha3_512Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">Ristretto255Sha3_512Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">Ristretto255Sha3_512Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Blake3Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">Ristretto255Blake3Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-			<span class="ident">Ristretto255Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">Ristretto255Blake3Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">Ristretto255Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">Ristretto255Blake3Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			<span class="ident">P256Sha256Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">P256Sha256Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-			<span class="ident">P256Sha256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">P256Sha256Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">P256Sha256Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">P256Sha3_256Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">P256Sha3_256Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Sha3_256Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">P256Sha3_256Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			<span class="ident">P256Blake3Argon2id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2id</span>,
+			<span class="ident">P256Blake3Argon2id</span> =&gt; <span class="ident">SlowHash::Argon2id</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-			<span class="ident">P256Blake3Argon2d</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Argon2d</span>,
+			<span class="ident">P256Blake3Argon2d</span> =&gt; <span class="ident">SlowHash::Argon2d</span>,
 			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-			<span class="ident">P256Blake3Pbkdf2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SlowHash::Pbkdf2</span>,
+			<span class="ident">P256Blake3Pbkdf2</span> =&gt; <span class="ident">SlowHash::Pbkdf2</span>,
 		}
 	}
 }
@@ -416,7 +416,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Group</span> {
-	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 		<span class="ident"><span class="self">Self</span>::Ristretto255</span>
 	}
 }
@@ -435,7 +435,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Hash</span> {
-	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
 		<span class="kw">return</span> <span class="ident"><span class="self">Self</span>::Blake3</span>;
 		<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>), <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
@@ -458,7 +458,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">SlowHash</span> {
-	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 		<span class="ident"><span class="self">Self</span>::Argon2id</span>
 	}
 }

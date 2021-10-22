@@ -18,21 +18,25 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
 </pre><pre class="rust"><code><span class="doccomment">//! See [`Pbkdf2`].</span>
 
 <span class="kw">use</span> <span class="ident">digest::Digest</span>;
 <span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="ident">typenum::Unsigned</span>, <span class="ident">GenericArray</span>};
 <span class="kw">use</span> <span class="ident">hmac::Hmac</span>;
-<span class="kw">use</span> <span class="ident">opaque_ke</span>::{<span class="ident">errors::InternalPakeError</span>, <span class="ident">hash::Hash</span>, <span class="ident">slow_hash::SlowHash</span>};
+<span class="kw">use</span> <span class="ident">opaque_ke</span>::{<span class="ident">errors::InternalError</span>, <span class="ident">hash::Hash</span>, <span class="ident">slow_hash::SlowHash</span>};
 <span class="kw">use</span> <span class="ident">sha2::Sha256</span>;
 
 <span class="doccomment">/// Object implementing [`SlowHash`] for PBKDF2.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Pbkdf2</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Hash</span><span class="op">&gt;</span> <span class="ident">SlowHash</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Pbkdf2</span> {
 	<span class="kw">fn</span> <span class="ident">hash</span>(
+		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		<span class="ident">input</span>: <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize</span><span class="op">&gt;</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">InternalPakeError</span><span class="op">&gt;</span> {
+	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">InternalError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize::to_usize</span>()];
 		<span class="ident">pbkdf2_::pbkdf2</span>::<span class="op">&lt;</span><span class="ident">Hmac</span><span class="op">&lt;</span><span class="ident">Sha256</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;</span>[], <span class="number">10_000</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>);
 		<span class="prelude-val">Ok</span>(<span class="ident">output</span>)

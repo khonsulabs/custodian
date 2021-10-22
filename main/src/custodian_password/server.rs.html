@@ -202,7 +202,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServerConfig</span>(<span class="ident">cipher_suite::ServerSetup</span>);
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ServerConfig</span> {
-	<span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
 		<span class="self">Self</span>(<span class="ident">cipher_suite::ServerSetup::new</span>(<span class="ident">Config::default</span>().<span class="number">0</span>))
 	}
 }
@@ -212,19 +212,19 @@
 	<span class="doccomment">/// create and use [`ServerFile`]s, if it is lost, all corresponding</span>
 	<span class="doccomment">/// [`ServerFile`]s become unusable.</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">config</span>: <span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">config</span>: <span class="ident">Config</span>) -&gt; <span class="self">Self</span> {
 		<span class="self">Self</span>(<span class="ident">cipher_suite::ServerSetup::new</span>(<span class="ident">config</span>.<span class="number">0</span>))
 	}
 
 	<span class="doccomment">/// Returns the [`Config`] associated with this [`ServerConfig`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Config</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
 		<span class="ident">Config</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">cipher_suite</span>())
 	}
 
 	<span class="doccomment">/// Returns the [`PublicKey`] associated with this [`ServerConfig`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PublicKey</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PublicKey</span> {
 		<span class="ident">PublicKey::new</span>(<span class="self">self</span>.<span class="ident">config</span>(), <span class="self">self</span>.<span class="number">0</span>.<span class="ident">public_key</span>())
 	}
 }
@@ -243,13 +243,13 @@
 <span class="kw">impl</span> <span class="ident">ServerRegistration</span> {
 	<span class="doccomment">/// Returns the [`Config`] associated with this [`ServerRegistration`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Config</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
 		<span class="ident">Config</span>(<span class="self">self</span>.<span class="ident">state</span>.<span class="ident">cipher_suite</span>())
 	}
 
 	<span class="doccomment">/// Returns the [`PublicKey`] associated with this [`ServerRegistration`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PublicKey</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PublicKey</span> {
 		<span class="self">self</span>.<span class="ident">public_key</span>
 	}
 
@@ -264,7 +264,7 @@
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register</span>(
 		<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ServerConfig</span>,
 		<span class="ident">request</span>: <span class="ident">RegistrationRequest</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationResponse</span>)<span class="op">&gt;</span> {
+	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationResponse</span>)<span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">cipher_suite::ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="number">0</span>, <span class="ident">request</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
 
 		<span class="prelude-val">Ok</span>((
@@ -282,7 +282,7 @@
 	<span class="doccomment">/// # Errors</span>
 	<span class="doccomment">/// [`Error::Config`](crate::Error::Config) if [`ServerConfig`] and</span>
 	<span class="doccomment">/// [`RegistrationRequest`] were not created with the same [`Config`].</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">RegistrationFinalization</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">RegistrationFinalization</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
 
 		<span class="prelude-val">Ok</span>(<span class="ident">ServerFile</span> {
@@ -306,13 +306,13 @@
 <span class="kw">impl</span> <span class="ident">ServerFile</span> {
 	<span class="doccomment">/// Returns the [`Config`] associated with this [`ServerFile`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Config</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
 		<span class="ident">Config</span>(<span class="self">self</span>.<span class="ident">file</span>.<span class="ident">cipher_suite</span>())
 	}
 
 	<span class="doccomment">/// Returns the [`PublicKey`] associated with this [`ServerFile`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PublicKey</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PublicKey</span> {
 		<span class="self">self</span>.<span class="ident">public_key</span>
 	}
 }
@@ -325,7 +325,7 @@
 <span class="kw">impl</span> <span class="ident">ServerLogin</span> {
 	<span class="doccomment">/// Returns the [`Config`] associated with this [`ServerRegistration`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Config</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
 		<span class="ident">Config</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">cipher_suite</span>())
 	}
 
@@ -348,7 +348,7 @@
 		<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ServerConfig</span>,
 		<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span>,
 		<span class="ident">request</span>: <span class="ident">LoginRequest</span>,
-	) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
+	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">cipher_suite::ServerLogin::login</span>(
 			<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="number">0</span>,
 			<span class="ident">file</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">file</span><span class="op">|</span> (<span class="ident">file</span>.<span class="ident">file</span>, <span class="ident">file</span>.<span class="ident">public_key</span>.<span class="ident">key</span>)),
@@ -362,7 +362,7 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// # Errors</span>
 	<span class="doccomment">/// [`Error::Opaque`](crate::Error::Opaque) on internal OPAQUE error.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">LoginFinalization</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">LoginFinalization</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>.<span class="number">0</span>)
 	}
 }

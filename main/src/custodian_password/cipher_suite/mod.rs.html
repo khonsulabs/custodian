@@ -510,6 +510,8 @@
 <span id="510">510</span>
 <span id="511">511</span>
 <span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`CipherSuite`](ciphersuite::CipherSuite) implementations and all</span>
 <span class="doccomment">//! corresponding types.</span>
 <span class="doccomment">//!</span>
@@ -616,10 +618,11 @@
 	(
 		$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="question-mark">?</span> [
 			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>:<span class="ident">ident</span>,
+			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ake</span>:<span class="ident">ty</span>,
 			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">group</span>:<span class="ident">ty</span>,
 			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">hash</span>:<span class="ident">ty</span>,
 			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">slow_hash</span>:<span class="ident">ty</span>$(,)<span class="question-mark">?</span>
-		]),<span class="op">+</span>$(,)<span class="question-mark">?</span>) <span class="op">=</span><span class="op">&gt;</span> {
+		]),<span class="op">+</span>$(,)<span class="question-mark">?</span>) =&gt; {
 		$(
 		$(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span>
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_docs_in_private_items</span>)]</span>
@@ -628,7 +631,8 @@
 
 		$(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span>
 		<span class="kw">impl</span> <span class="ident">ciphersuite::CipherSuite</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> {
-			<span class="kw">type</span> <span class="ident">Group</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">group</span>;
+			<span class="kw">type</span> <span class="ident">OprfGroup</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">group</span>;
+			<span class="kw">type</span> <span class="ident">KeGroup</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ake</span>;
 			<span class="kw">type</span> <span class="ident">Hash</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">hash</span>;
 			<span class="kw">type</span> <span class="ident">KeyExchange</span> <span class="op">=</span> <span class="ident">TripleDH</span>;
 			<span class="kw">type</span> <span class="ident">SlowHash</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">slow_hash</span>;
@@ -644,9 +648,9 @@
 
 		<span class="kw">impl</span> <span class="ident">ClientRegistration</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ClientRegistration</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ClientRegistration</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) =&gt;
 						<span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
@@ -655,9 +659,9 @@
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">register</span>(
 				<span class="ident">cipher_suite</span>: <span class="ident">CipherSuite</span>,
 				<span class="ident">password</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationRequest</span>)<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationRequest</span>)<span class="op">&gt;</span> {
 				<span class="kw">match</span> <span class="ident">cipher_suite</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="op">=</span><span class="op">&gt;</span> {
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> =&gt; {
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">opaque_ke::ClientRegistration::start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OsRng</span>, <span class="ident">password</span>)<span class="question-mark">?</span>;
 						<span class="kw">let</span> <span class="ident">ClientRegistrationStartResult</span> { <span class="ident">state</span>, <span class="ident">message</span> } <span class="op">=</span> <span class="ident">result</span>;
 						<span class="prelude-val">Ok</span>((
@@ -672,16 +676,16 @@
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">finish</span>(
 				<span class="self">self</span>,
 				<span class="ident">response</span>: <span class="ident">RegistrationResponse</span>,
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">RegistrationFinalization</span>, [<span class="ident">u8</span>; <span class="number">33</span>], [<span class="ident">u8</span>; <span class="number">64</span>])<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">RegistrationFinalization</span>, [<span class="ident">u8</span>; <span class="number">33</span>], [<span class="ident">u8</span>; <span class="number">64</span>])<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">response</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">state</span>),
 						<span class="ident">RegistrationResponse</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">response</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">finish</span>(
 							<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OsRng</span>,
 							<span class="ident">response</span>,
-							<span class="ident">opaque_ke::ClientRegistrationFinishParameters::Default</span>,
+							<span class="ident">opaque_ke::ClientRegistrationFinishParameters::default</span>(),
 						)<span class="question-mark">?</span>;
 						<span class="kw">let</span> <span class="ident">ClientRegistrationFinishResult</span> {
 							<span class="ident">message</span>,
@@ -695,7 +699,7 @@
 							<span class="ident">export_key</span>.<span class="ident">into_array</span>(),
 						))
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 		}
@@ -709,9 +713,9 @@
 
 		<span class="kw">impl</span> <span class="ident">ClientLogin</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ClientLogin</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ClientLogin</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) =&gt; <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
 
@@ -719,9 +723,9 @@
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">login</span>(
 				<span class="ident">cipher_suite</span>: <span class="ident">CipherSuite</span>,
 				<span class="ident">password</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginRequest</span>)<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginRequest</span>)<span class="op">&gt;</span> {
 				<span class="kw">match</span> <span class="ident">cipher_suite</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="op">=</span><span class="op">&gt;</span> {
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> =&gt; {
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">opaque_ke::ClientLogin::start</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OsRng</span>, <span class="ident">password</span>)<span class="question-mark">?</span>;
 						<span class="kw">let</span> <span class="ident">ClientLoginStartResult</span> { <span class="ident">state</span>, <span class="ident">message</span> } <span class="op">=</span> <span class="ident">result</span>;
 						<span class="prelude-val">Ok</span>((
@@ -736,16 +740,16 @@
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">finish</span>(
 				<span class="self">self</span>,
 				<span class="ident">response</span>: <span class="ident">LoginResponse</span>,
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">LoginFinalization</span>, [<span class="ident">u8</span>; <span class="number">33</span>], [<span class="ident">u8</span>; <span class="number">64</span>])<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">LoginFinalization</span>, [<span class="ident">u8</span>; <span class="number">33</span>], [<span class="ident">u8</span>; <span class="number">64</span>])<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">response</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">state</span>),
 						<span class="ident">LoginResponse</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">response</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span>
 							<span class="ident">state</span>.<span class="ident">finish</span>(
 								<span class="ident">response</span>,
-								<span class="ident">opaque_ke::ClientLoginFinishParameters::Default</span>,
+								<span class="ident">opaque_ke::ClientLoginFinishParameters::default</span>(),
 							)<span class="question-mark">?</span>;
 						<span class="kw">let</span> <span class="ident">ClientLoginFinishResult</span> {
 							<span class="ident">message</span>,
@@ -759,7 +763,7 @@
 							<span class="ident">export_key</span>.<span class="ident">into_array</span>(),
 						))
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 		}
@@ -773,24 +777,24 @@
 
 		<span class="kw">impl</span> <span class="ident">ServerSetup</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) =&gt; <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
 
 			<span class="doccomment">/// [`opaque_ke::ServerSetup::new()`] wrapper.</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cipher_suite</span>: <span class="ident">CipherSuite</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cipher_suite</span>: <span class="ident">CipherSuite</span>) -&gt; <span class="self">Self</span> {
 				<span class="kw">match</span> <span class="ident">cipher_suite</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="op">=</span><span class="op">&gt;</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> =&gt;
 						<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">opaque_ke::ServerSetup::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OsRng</span>)),)<span class="op">+</span>
 				}
 			}
 
 			<span class="doccomment">/// [`opaque_ke::ServerSetup::keypair()`] wrapper.</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u8</span>; <span class="number">33</span>] {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; [<span class="ident">u8</span>; <span class="number">33</span>] {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">server_setup</span>) <span class="op">=</span><span class="op">&gt;</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">server_setup</span>) =&gt;
 						<span class="ident">server_setup</span>.<span class="ident">keypair</span>().<span class="ident">public</span>().<span class="ident">to_array</span>(),)<span class="op">+</span>
 				}
 			}
@@ -805,9 +809,9 @@
 
 		<span class="kw">impl</span> <span class="ident">ServerFile</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) =&gt; <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
 		}
@@ -821,10 +825,10 @@
 
 		<span class="kw">impl</span> <span class="ident">ServerRegistration</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span>
-					<span class="ident">ServerRegistration</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
+					<span class="ident">ServerRegistration</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span> =&gt; <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
 
@@ -832,12 +836,12 @@
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">register</span>(
 				<span class="ident">server_setup</span>: <span class="kw-2">&amp;</span><span class="ident">ServerSetup</span>,
 				<span class="ident">request</span>: <span class="ident">RegistrationRequest</span>,
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationResponse</span>)<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationResponse</span>)<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="ident">server_setup</span>, <span class="ident">request</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">server_setup</span>),
 						<span class="ident">RegistrationRequest</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">request</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span>
 							<span class="ident">opaque_ke::ServerRegistration::start</span>(
 								<span class="ident">server_setup</span>,
@@ -849,22 +853,22 @@
 							<span class="ident">RegistrationResponse</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">response</span>),
 						))
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 
 			<span class="doccomment">/// [`opaque_ke::ServerRegistration::finish()`] wrapper.</span>
 			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">RegistrationFinalization</span>
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">finalization</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,
 						<span class="ident">RegistrationFinalization</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">finalization</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">opaque_ke::ServerRegistration::finish</span>(<span class="ident">finalization</span>);
 						<span class="prelude-val">Ok</span>(<span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">file</span>))
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 		}
@@ -878,9 +882,9 @@
 
 		<span class="kw">impl</span> <span class="ident">ServerLogin</span> {
 			<span class="doccomment">/// Return corresponding [`CipherSuite`].</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CipherSuite</span> {
 				<span class="kw">match</span> <span class="self">self</span> {
-					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerLogin</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
+					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="ident">ServerLogin</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="kw">_</span>) =&gt; <span class="ident">CipherSuite</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>,)<span class="op">+</span>
 				}
 			}
 
@@ -889,22 +893,22 @@
 				<span class="ident">setup</span>: <span class="kw-2">&amp;</span><span class="ident">ServerSetup</span>,
 				<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">ServerFile</span>, [<span class="ident">u8</span>; <span class="number">33</span>])<span class="op">&gt;</span>,
 				<span class="ident">request</span>: <span class="ident">LoginRequest</span>,
-			) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
+			) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginResponse</span>)<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="ident">setup</span>, <span class="ident">request</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="ident">ServerSetup</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">server_setup</span>),
 						<span class="ident">LoginRequest</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">request</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">file</span> {
-							<span class="prelude-val">Some</span>((<span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">file</span>), <span class="ident">public_key</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+							<span class="prelude-val">Some</span>((<span class="ident">ServerFile</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">file</span>), <span class="ident">public_key</span>)) =&gt; {
 								<span class="kw">if</span> <span class="op">!</span><span class="ident">server_setup</span>.<span class="ident">keypair</span>().<span class="ident">public</span>().<span class="ident">is_array</span>(<span class="ident">public_key</span>) {
 									<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ServerConfig</span>);
 								}
 
 								<span class="prelude-val">Some</span>(<span class="ident">file</span>)
 							},
-							<span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
-							<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+							<span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+							<span class="prelude-val">None</span> =&gt; <span class="prelude-val">None</span>,
 						};
 
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">opaque_ke::ServerLogin::start</span>(
@@ -921,23 +925,23 @@
 							<span class="ident">LoginResponse</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">message</span>),
 						))
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 
 			<span class="doccomment">/// [`opaque_ke::ClientLogin::finish()`] wrapper.</span>
-			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">LoginFinalization</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+			<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>, <span class="ident">finalization</span>: <span class="ident">LoginFinalization</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">finalization</span>) {
 					$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> (
 						<span class="self">Self</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">state</span>),
 						<span class="ident">LoginFinalization</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">finalization</span>),
-					) <span class="op">=</span><span class="op">&gt;</span> {
+					) =&gt; {
 						<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 						<span class="kw">let</span> <span class="ident">ServerLoginFinishResult</span> { .. } <span class="op">=</span> <span class="ident">result</span>;
 
 						<span class="prelude-val">Ok</span>(())
 					})<span class="op">+</span>
-					<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>),
 				}
 			}
 		}
@@ -987,40 +991,40 @@
 }
 
 <span class="macro">cipher_suite!</span>(
-	[<span class="ident">Ristretto255Sha512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
-	[<span class="ident">Ristretto255Sha512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Sha512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Sha512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>)]</span>
-	[<span class="ident">Ristretto255Sha512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Sha512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha512</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	[<span class="ident">Ristretto255Sha3_512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Sha3_512Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
-	[<span class="ident">Ristretto255Sha3_512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Sha3_512Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">Ristretto255Sha3_512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Sha3_512Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Sha3_512</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	[<span class="ident">Ristretto255Blake3Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">Ristretto255Blake3Argon2id</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
-	[<span class="ident">Ristretto255Blake3Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">Ristretto255Blake3Argon2d</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">Ristretto255Blake3Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">Ristretto255Blake3Pbkdf2</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">RistrettoPoint</span>, <span class="ident">Blake3</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-	[<span class="ident">P256Sha256Argon2id</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">P256Sha256Argon2id</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
-	[<span class="ident">P256Sha256Argon2d</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">P256Sha256Argon2d</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">P256Sha256Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">P256Sha256Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha256</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-	[<span class="ident">P256Sha3_256Argon2id</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">P256Sha3_256Argon2id</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>))]</span>
-	[<span class="ident">P256Sha3_256Argon2d</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">P256Sha3_256Argon2d</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">P256Sha3_256Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">P256Sha3_256Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">Sha3_256</span>, <span class="ident">Pbkdf2</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-	[<span class="ident">P256Blake3Argon2id</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
+	[<span class="ident">P256Blake3Argon2id</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Argon2</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>))]</span>
-	[<span class="ident">P256Blake3Argon2d</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Argon2d</span>],
+	[<span class="ident">P256Blake3Argon2d</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Argon2d</span>],
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pbkdf2&quot;</span>))]</span>
-	[<span class="ident">P256Blake3Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Pbkdf2</span>],
+	[<span class="ident">P256Blake3Pbkdf2</span>, <span class="ident">P256</span>, <span class="ident">P256</span>, <span class="ident">::blake3::Hasher</span>, <span class="ident">Pbkdf2</span>],
 );
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="custodian_password" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>

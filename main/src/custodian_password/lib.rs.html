@@ -610,7 +610,7 @@
 };
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">basic</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">basic</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
@@ -637,7 +637,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">consistency</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">consistency</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
@@ -659,7 +659,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">not_validated</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">not_validated</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
@@ -686,7 +686,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_password</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_password</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 
@@ -703,7 +703,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">no_client</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">no_client</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 
@@ -715,7 +715,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_server_register</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_server_register</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span>
@@ -729,7 +729,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_server_login</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_server_login</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config_wrong</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
@@ -750,7 +750,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_server_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_server_config</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
@@ -771,7 +771,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_client_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_client_config</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 	<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::default</span>();
 	<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">Config::default</span>(), <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
@@ -802,10 +802,10 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">cipher_suites</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">cipher_suites</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 
-	<span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="ident">group</span>: <span class="ident">Group</span>, <span class="ident">hash</span>: <span class="ident">Hash</span>, <span class="ident">slow_hash</span>: <span class="ident">SlowHash</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="ident">group</span>: <span class="ident">Group</span>, <span class="ident">hash</span>: <span class="ident">Hash</span>, <span class="ident">slow_hash</span>: <span class="ident">SlowHash</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::new</span>(<span class="ident">group</span>, <span class="ident">hash</span>, <span class="ident">slow_hash</span>);
 
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">group</span>(), <span class="ident">group</span>);
@@ -871,7 +871,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">wrong_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wrong_config</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="comment">// Configuration</span>
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 
@@ -974,7 +974,7 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">getters</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">getters</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
 	<span class="comment">// Configuration</span>
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 
