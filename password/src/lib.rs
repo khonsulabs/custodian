@@ -103,7 +103,7 @@ fn basic() -> anyhow::Result<()> {
 	let client_config = ClientConfig::new(Config::default(), Some(server_config.public_key()))?;
 
 	// registration process
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 
@@ -112,7 +112,7 @@ fn basic() -> anyhow::Result<()> {
 	let server_file = server.finish(finalization)?;
 
 	// login process
-	let (client, request) = ClientLogin::login(&client_config, Some(client_file), PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 
@@ -129,12 +129,12 @@ fn consistency() -> anyhow::Result<()> {
 	let server_config = ServerConfig::default();
 	let client_config = ClientConfig::default();
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (client_file, finalization, export_key) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
-	let (client, request) = ClientLogin::login(&client_config, None, PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 	let (new_client_file, finalization, new_export_key) = client.finish(response)?;
 	server.finish(finalization)?;
@@ -153,7 +153,7 @@ fn not_validated() -> anyhow::Result<()> {
 
 	assert_eq!(client_config.public_key(), None);
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 
 	assert_eq!(client.public_key(), None);
 
@@ -161,7 +161,7 @@ fn not_validated() -> anyhow::Result<()> {
 	let (_, finalization, _) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
-	let (client, request) = ClientLogin::login(&client_config, None, PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 
 	assert_eq!(client.public_key(), None);
 
@@ -177,12 +177,12 @@ fn wrong_password() -> anyhow::Result<()> {
 	let client_config = ClientConfig::default();
 	let server_config = ServerConfig::default();
 
-	let (client, request) = ClientRegistration::register(&client_config, "right password")?;
+	let (client, request) = ClientRegistration::register(client_config, "right password")?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (_, finalization, _) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
-	let (client, request) = ClientLogin::login(&client_config, None, "wrong password")?;
+	let (client, request) = ClientLogin::login(client_config, None, "wrong password")?;
 	let (_, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 	assert_eq!(client.finish(response), Err(Error::Credentials));
 
@@ -194,7 +194,7 @@ fn no_client() -> anyhow::Result<()> {
 	let client_config = ClientConfig::default();
 	let server_config = ServerConfig::default();
 
-	let (client, request) = ClientLogin::login(&client_config, None, "password")?;
+	let (client, request) = ClientLogin::login(client_config, None, "password")?;
 	let (_, response) = ServerLogin::login(&server_config, None, request)?;
 	assert_eq!(client.finish(response), Err(Error::Credentials));
 
@@ -208,7 +208,7 @@ fn wrong_server_register() -> anyhow::Result<()> {
 	let client_config =
 		ClientConfig::new(Config::default(), Some(server_config_wrong.public_key()))?;
 
-	let (client, request) = ClientRegistration::register(&client_config, "password")?;
+	let (client, request) = ClientRegistration::register(client_config, "password")?;
 	let (_, response) = ServerRegistration::register(&server_config, request)?;
 	assert_eq!(client.finish(response), Err(Error::InvalidServer));
 
@@ -222,14 +222,14 @@ fn wrong_server_login() -> anyhow::Result<()> {
 	let server_config_wrong = ServerConfig::default();
 
 	let client_config = ClientConfig::new(Config::default(), None)?;
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (_, finalization, _) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
 	let client_config =
 		ClientConfig::new(Config::default(), Some(server_config_wrong.public_key()))?;
-	let (client, request) = ClientLogin::login(&client_config, None, PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 	let (_, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 	assert_eq!(client.finish(response), Err(Error::InvalidServer));
 
@@ -243,12 +243,12 @@ fn wrong_server_config() -> anyhow::Result<()> {
 	let server_config = ServerConfig::default();
 	let server_config_wrong = ServerConfig::default();
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (_, finalization, _) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
-	let (_, request) = ClientLogin::login(&client_config, None, PASSWORD)?;
+	let (_, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 	assert_eq!(
 		ServerLogin::login(&server_config_wrong, Some(server_file), request),
 		Err(Error::ServerConfig)
@@ -266,22 +266,22 @@ fn wrong_client_config() -> anyhow::Result<()> {
 	let client_config_wrong =
 		ClientConfig::new(Config::default(), Some(server_config_wrong.public_key()))?;
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (client_file, finalization, _) = client.finish(response)?;
 	let _server_file = server.finish(finalization)?;
 
-	let (client, request) = ClientRegistration::register(&client_config_wrong, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config_wrong, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config_wrong, request)?;
 	let (client_file_wrong, finalization, _) = client.finish(response)?;
 	let _server_file_wrong = server.finish(finalization)?;
 
 	assert_eq!(
-		ClientLogin::login(&client_config, Some(client_file_wrong), PASSWORD),
+		ClientLogin::login(client_config, Some(client_file_wrong), PASSWORD),
 		Err(Error::PublicKey)
 	);
 	assert_eq!(
-		ClientLogin::login(&client_config_wrong, Some(client_file), PASSWORD),
+		ClientLogin::login(client_config_wrong, Some(client_file), PASSWORD),
 		Err(Error::PublicKey)
 	);
 
@@ -302,13 +302,13 @@ fn cipher_suites() -> anyhow::Result<()> {
 		let server_config = ServerConfig::new(config);
 		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
 
-		let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+		let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 		let (server, response) = ServerRegistration::register(&server_config, request)?;
 		let (client_file, finalization, export_key) = client.finish(response)?;
 		let server_file = server.finish(finalization)?;
 
 		let (client, request) =
-			ClientLogin::login(&client_config, Some(client_file.clone()), PASSWORD)?;
+			ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 		let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 		let (new_client_file, finalization, new_export_key) = client.finish(response)?;
 		server.finish(finalization)?;
@@ -376,13 +376,13 @@ fn wrong_config() -> anyhow::Result<()> {
 	);
 
 	// Registration
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request.clone())?;
 	let (client_file, finalization, _) = client.clone().finish(response.clone())?;
 	let server_file = server.clone().finish(finalization.clone())?;
 
 	let (wrong_client, wrong_request) =
-		ClientRegistration::register(&wrong_client_config, PASSWORD)?;
+		ClientRegistration::register(wrong_client_config, PASSWORD)?;
 	let (wrong_server, wrong_response) =
 		ServerRegistration::register(&wrong_server_config, wrong_request.clone())?;
 	let (wrong_client_file, wrong_finalization, _) =
@@ -405,16 +405,15 @@ fn wrong_config() -> anyhow::Result<()> {
 	assert_eq!(server.finish(wrong_finalization), Err(Error::Config));
 
 	// Login
-	let (client, request) =
-		ClientLogin::login(&client_config, Some(client_file.clone()), PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 	let (server, response) =
 		ServerLogin::login(&server_config, Some(server_file.clone()), request.clone())?;
 	let (_, finalization, _) = client.clone().finish(response.clone())?;
 	server.clone().finish(finalization.clone())?;
 
 	let (wrong_client, wrong_request) = ClientLogin::login(
-		&wrong_client_config,
-		Some(wrong_client_file.clone()),
+		wrong_client_config,
+		Some(wrong_client_file),
 		PASSWORD,
 	)?;
 	let (wrong_server, wrong_response) = ServerLogin::login(
@@ -426,11 +425,11 @@ fn wrong_config() -> anyhow::Result<()> {
 	wrong_server.clone().finish(wrong_finalization.clone())?;
 
 	assert_eq!(
-		ClientLogin::login(&wrong_client_config, Some(client_file), PASSWORD),
+		ClientLogin::login(wrong_client_config, Some(client_file), PASSWORD),
 		Err(Error::Config)
 	);
 	assert_eq!(
-		ClientLogin::login(&client_config, Some(wrong_client_file), PASSWORD),
+		ClientLogin::login(client_config, Some(wrong_client_file), PASSWORD),
 		Err(Error::Config)
 	);
 
@@ -475,7 +474,7 @@ fn getters() -> anyhow::Result<()> {
 	assert_eq!(client_config.public_key(), Some(server_config.public_key()));
 	assert_eq!(public_key.config(), config);
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 
 	assert_eq!(client.config(), config);
 	assert_eq!(client.public_key(), Some(public_key));
@@ -495,7 +494,7 @@ fn getters() -> anyhow::Result<()> {
 	assert_eq!(server_file.config(), config);
 	assert_eq!(server_file.public_key(), public_key);
 
-	let (client, request) = ClientLogin::login(&client_config, Some(client_file), PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 
 	assert_eq!(client.config(), config);
 	assert_eq!(client.public_key(), Some(public_key));

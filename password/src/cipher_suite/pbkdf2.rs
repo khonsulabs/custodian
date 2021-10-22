@@ -22,7 +22,7 @@ impl Default for Hash {
 
 /// Object implementing [`SlowHash`] for [PBKDF2](pbkdf2_).
 pub(crate) struct Pbkdf2 {
-	/// [`Hash`] to use with [`Pbkdf2`].
+	/// [`enum@Hash`] to use with [`Pbkdf2`].
 	hash: Hash,
 	/// "rounds" parameter for [`Pbkdf2`].
 	rounds: u32,

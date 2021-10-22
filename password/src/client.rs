@@ -11,8 +11,7 @@ use crate::{
 };
 
 /// Client configuration.
-#[allow(missing_copy_implementations)]
-#[derive(Clone, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientConfig {
 	/// Common config.
 	config: Config,
@@ -83,7 +82,7 @@ impl ClientRegistration {
 	/// # Errors
 	/// [`Error::Opaque`] on internal OPAQUE error.
 	pub fn register<P: AsRef<[u8]>>(
-		config: &ClientConfig,
+		config: ClientConfig,
 		password: P,
 	) -> Result<(Self, RegistrationRequest)> {
 		let (state, message) =
@@ -141,8 +140,7 @@ impl ClientRegistration {
 }
 
 /// Use this to enable server validation during login.
-#[allow(missing_copy_implementations)]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct ClientFile(PublicKey);
 
 impl ClientFile {
@@ -195,9 +193,8 @@ impl ClientLogin {
 	/// - [`Error::PublicKey`] if [`PublicKey`] in [`ClientConfig`] and
 	///   [`ClientFile`] don't match
 	/// - [`Error::Opaque`] on internal OPAQUE error
-	#[allow(clippy::needless_pass_by_value)]
 	pub fn login<P: AsRef<[u8]>>(
-		config: &ClientConfig,
+		config: ClientConfig,
 		file: Option<ClientFile>,
 		password: P,
 	) -> Result<(Self, LoginRequest)> {

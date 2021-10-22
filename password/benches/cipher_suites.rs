@@ -11,12 +11,12 @@ fn cipher_suite(group: Group, hash: Hash, mhf_hash: Mhf) -> Result<()> {
 	let server_config = ServerConfig::new(config);
 	let client_config = ClientConfig::new(config, None)?;
 
-	let (client, request) = ClientRegistration::register(&client_config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (client_file, finalization, _) = client.finish(response)?;
 	let server_file = server.finish(finalization)?;
 
-	let (client, request) = ClientLogin::login(&client_config, Some(client_file), PASSWORD)?;
+	let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 	let (_, finalization, _) = client.finish(response)?;
 	server.finish(finalization)

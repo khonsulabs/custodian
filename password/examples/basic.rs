@@ -49,7 +49,7 @@ fn main() -> Result<()> {
 	let server_config = ServerConfig::default();
 	let client_config = ClientConfig::new(Config::default(), Some(server_config.public_key()))?;
 
-	let client = thread::spawn(|| client(client_network, client_config));
+	let client = thread::spawn(move || client(client_network, client_config));
 	let server = thread::spawn(|| server(server_network, server_config));
 
 	client.join().expect("client panicked")?;
@@ -62,7 +62,7 @@ fn client(network: Network, config: ClientConfig) -> Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
 	// Registration
-	let (client, request) = ClientRegistration::register(&config, PASSWORD)?;
+	let (client, request) = ClientRegistration::register(config, PASSWORD)?;
 	network.send(&request)?;
 
 	let response = network.receive()?;
@@ -71,7 +71,7 @@ fn client(network: Network, config: ClientConfig) -> Result<()> {
 	network.send(&response)?;
 
 	// Login
-	let (client, request) = ClientLogin::login(&config, Some(file), PASSWORD)?;
+	let (client, request) = ClientLogin::login(config, Some(file), PASSWORD)?;
 	network.send(&request)?;
 
 	let response = network.receive()?;
