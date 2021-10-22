@@ -95,7 +95,7 @@ impl Config {
 
 	/// Returns [`Hash`](self::Hash) of this [`Config`].
 	#[must_use]
-	pub const fn hash(self) -> Hash {
+	pub const fn crypto_hash(self) -> Hash {
 		#[allow(clippy::enum_glob_use)]
 		use CipherSuite::*;
 

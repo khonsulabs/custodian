@@ -38,6 +38,7 @@
 	clippy::pattern_type_mismatch,
 	clippy::redundant_pub_crate,
 	clippy::shadow_reuse,
+	clippy::shadow_unrelated,
 	clippy::tabs_in_doc_comments,
 	clippy::unreachable,
 	clippy::wildcard_enum_match_arm,
@@ -295,7 +296,7 @@ fn cipher_suites() -> anyhow::Result<()> {
 		let config = Config::new(group, hash, slow_hash);
 
 		assert_eq!(config.group(), group);
-		assert_eq!(config.hash(), hash);
+		assert_eq!(config.crypto_hash(), hash);
 		assert_eq!(config.slow_hash(), slow_hash);
 
 		let server_config = ServerConfig::new(config);

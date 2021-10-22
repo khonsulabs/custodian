@@ -25,7 +25,8 @@ impl<D: Hash> SlowHash<D> for Argon2d {
 		input: GenericArray<u8, <D as Digest>::OutputSize>,
 	) -> Result<Vec<u8>, InternalError> {
 		let mut output = vec![0; <D as Digest>::OutputSize::to_usize()];
-		self.0.hash_password_into(&input, &[0; argon2::MIN_SALT_LEN], &mut output)
+		self.0
+			.hash_password_into(&input, &[0; argon2::MIN_SALT_LEN], &mut output)
 			.map_err(|_| InternalError::SlowHashError)?;
 		Ok(output)
 	}

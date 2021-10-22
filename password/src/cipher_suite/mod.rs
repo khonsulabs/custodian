@@ -100,6 +100,7 @@ pub(crate) enum CipherSuite {
 	P256Blake3Pbkdf2,
 }
 
+/// Generate many [`CipherSuite`](ciphersuite::CipherSuite)s.
 macro_rules! cipher_suite {
 	(
 		$($(#[$attr:meta])? [
