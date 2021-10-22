@@ -30,6 +30,7 @@
 <span id="30">30</span>
 <span id="31">31</span>
 <span id="32">32</span>
+<span id="33">33</span>
 </pre><pre class="rust"><code><span class="doccomment">//! See [`Argon2d`].</span>
 
 <span class="kw">use</span> <span class="ident">argon2</span>::{<span class="ident">Algorithm</span>, <span class="ident">Argon2</span>, <span class="ident">Params</span>, <span class="ident">Version</span>};
@@ -57,7 +58,8 @@
 		<span class="ident">input</span>: <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize</span><span class="op">&gt;</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">InternalError</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0</span>; <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Digest</span><span class="op">&gt;</span><span class="ident">::OutputSize::to_usize</span>()];
-		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">hash_password_into</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;</span>[<span class="number">0</span>; <span class="ident">argon2::MIN_SALT_LEN</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>)
+		<span class="self">self</span>.<span class="number">0</span>
+			.<span class="ident">hash_password_into</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;</span>[<span class="number">0</span>; <span class="ident">argon2::MIN_SALT_LEN</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>)
 			.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">InternalError::SlowHashError</span>)<span class="question-mark">?</span>;
 		<span class="prelude-val">Ok</span>(<span class="ident">output</span>)
 	}

@@ -512,6 +512,7 @@
 <span id="512">512</span>
 <span id="513">513</span>
 <span id="514">514</span>
+<span id="515">515</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(
 	<span class="ident">clippy::cargo</span>,
@@ -552,6 +553,7 @@
 	<span class="ident">clippy::pattern_type_mismatch</span>,
 	<span class="ident">clippy::redundant_pub_crate</span>,
 	<span class="ident">clippy::shadow_reuse</span>,
+	<span class="ident">clippy::shadow_unrelated</span>,
 	<span class="ident">clippy::tabs_in_doc_comments</span>,
 	<span class="ident">clippy::unreachable</span>,
 	<span class="ident">clippy::wildcard_enum_match_arm</span>,
@@ -809,7 +811,7 @@
 		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::new</span>(<span class="ident">group</span>, <span class="ident">hash</span>, <span class="ident">slow_hash</span>);
 
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">group</span>(), <span class="ident">group</span>);
-		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">hash</span>(), <span class="ident">hash</span>);
+		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">crypto_hash</span>(), <span class="ident">hash</span>);
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">slow_hash</span>(), <span class="ident">slow_hash</span>);
 
 		<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);

@@ -512,6 +512,7 @@
 <span id="512">512</span>
 <span id="513">513</span>
 <span id="514">514</span>
+<span id="515">515</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`CipherSuite`](ciphersuite::CipherSuite) implementations and all</span>
 <span class="doccomment">//! corresponding types.</span>
 <span class="doccomment">//!</span>
@@ -614,6 +615,7 @@
 	<span class="ident">P256Blake3Pbkdf2</span>,
 }
 
+<span class="doccomment">/// Generate many [`CipherSuite`](ciphersuite::CipherSuite)s.</span>
 <span class="macro">macro_rules!</span> <span class="ident">cipher_suite</span> {
 	(
 		$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="question-mark">?</span> [
