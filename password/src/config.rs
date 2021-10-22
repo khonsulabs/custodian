@@ -10,18 +10,18 @@ pub struct Config(pub(crate) CipherSuite);
 
 impl Default for Config {
 	fn default() -> Self {
-		Self::new(Group::default(), Hash::default(), SlowHash::default())
+		Self::new(Group::default(), Hash::default(), Mhf::default())
 	}
 }
 
 impl Config {
 	/// Builds new [`Config`].
 	#[must_use]
-	pub const fn new(group: Group, hash: Hash, slow_hash: SlowHash) -> Self {
+	pub const fn new(group: Group, hash: Hash, mhf: Mhf) -> Self {
 		#[allow(clippy::enum_glob_use)]
-		use self::{CipherSuite::*, Group::*, Hash::*, SlowHash::*};
+		use self::{CipherSuite::*, Group::*, Hash::*, Mhf::*};
 
-		Self(match (group, hash, slow_hash) {
+		Self(match (group, hash, mhf) {
 			(Ristretto255, Sha2, Argon2id) => Ristretto255Sha512Argon2id,
 			(Ristretto255, Sha2, Argon2d) => Ristretto255Sha512Argon2d,
 			#[cfg(feature = "pbkdf2")]
@@ -127,48 +127,48 @@ impl Config {
 		}
 	}
 
-	/// Returns [`SlowHash`] of this [`Config`].
+	/// Returns [`Mhf`] of this [`Config`].
 	#[must_use]
-	pub const fn slow_hash(self) -> SlowHash {
+	pub const fn mhf(self) -> Mhf {
 		#[allow(clippy::enum_glob_use)]
 		use CipherSuite::*;
 
 		#[allow(clippy::match_same_arms)]
 		match self.0 {
-			Ristretto255Sha512Argon2id => SlowHash::Argon2id,
-			Ristretto255Sha512Argon2d => SlowHash::Argon2d,
+			Ristretto255Sha512Argon2id => Mhf::Argon2id,
+			Ristretto255Sha512Argon2d => Mhf::Argon2d,
 			#[cfg(feature = "pbkdf2")]
-			Ristretto255Sha512Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Sha512Pbkdf2 => Mhf::Pbkdf2,
 			#[cfg(feature = "sha3")]
-			Ristretto255Sha3_512Argon2id => SlowHash::Argon2id,
+			Ristretto255Sha3_512Argon2id => Mhf::Argon2id,
 			#[cfg(feature = "sha3")]
-			Ristretto255Sha3_512Argon2d => SlowHash::Argon2d,
+			Ristretto255Sha3_512Argon2d => Mhf::Argon2d,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Ristretto255Sha3_512Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Sha3_512Pbkdf2 => Mhf::Pbkdf2,
 			#[cfg(feature = "blake3")]
-			Ristretto255Blake3Argon2id => SlowHash::Argon2id,
+			Ristretto255Blake3Argon2id => Mhf::Argon2id,
 			#[cfg(feature = "blake3")]
-			Ristretto255Blake3Argon2d => SlowHash::Argon2d,
+			Ristretto255Blake3Argon2d => Mhf::Argon2d,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Ristretto255Blake3Pbkdf2 => SlowHash::Pbkdf2,
+			Ristretto255Blake3Pbkdf2 => Mhf::Pbkdf2,
 			#[cfg(feature = "p256")]
-			P256Sha256Argon2id => SlowHash::Argon2id,
+			P256Sha256Argon2id => Mhf::Argon2id,
 			#[cfg(feature = "p256")]
-			P256Sha256Argon2d => SlowHash::Argon2d,
+			P256Sha256Argon2d => Mhf::Argon2d,
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-			P256Sha256Pbkdf2 => SlowHash::Pbkdf2,
+			P256Sha256Pbkdf2 => Mhf::Pbkdf2,
 			#[cfg(all(feature = "p256", feature = "sha3"))]
-			P256Sha3_256Argon2id => SlowHash::Argon2id,
+			P256Sha3_256Argon2id => Mhf::Argon2id,
 			#[cfg(all(feature = "p256", feature = "sha3"))]
-			P256Sha3_256Argon2d => SlowHash::Argon2d,
+			P256Sha3_256Argon2d => Mhf::Argon2d,
 			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-			P256Sha3_256Pbkdf2 => SlowHash::Pbkdf2,
+			P256Sha3_256Pbkdf2 => Mhf::Pbkdf2,
 			#[cfg(all(feature = "p256", feature = "blake3"))]
-			P256Blake3Argon2id => SlowHash::Argon2id,
+			P256Blake3Argon2id => Mhf::Argon2id,
 			#[cfg(all(feature = "p256", feature = "blake3"))]
-			P256Blake3Argon2d => SlowHash::Argon2d,
+			P256Blake3Argon2d => Mhf::Argon2d,
 			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-			P256Blake3Pbkdf2 => SlowHash::Pbkdf2,
+			P256Blake3Pbkdf2 => Mhf::Pbkdf2,
 		}
 	}
 }
@@ -213,9 +213,9 @@ impl Default for Hash {
 	}
 }
 
-/// Slow hash algorithm for OPAQUE.
+/// Memory-hardening function for OPAQUE.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
-pub enum SlowHash {
+pub enum Mhf {
 	/// Argon2id.
 	Argon2id,
 	/// Argon2d.
@@ -225,7 +225,7 @@ pub enum SlowHash {
 	Pbkdf2,
 }
 
-impl Default for SlowHash {
+impl Default for Mhf {
 	fn default() -> Self {
 		Self::Argon2id
 	}

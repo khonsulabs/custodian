@@ -85,7 +85,7 @@ pub use serde;
 
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::{Config, Group, Hash, SlowHash},
+	config::{Config, Group, Hash, Mhf},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{
@@ -292,12 +292,12 @@ fn wrong_client_config() -> anyhow::Result<()> {
 fn cipher_suites() -> anyhow::Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
-	fn cipher_suite(group: Group, hash: Hash, slow_hash: SlowHash) -> anyhow::Result<()> {
-		let config = Config::new(group, hash, slow_hash);
+	fn cipher_suite(group: Group, hash: Hash, mhf: Mhf) -> anyhow::Result<()> {
+		let config = Config::new(group, hash, mhf);
 
 		assert_eq!(config.group(), group);
 		assert_eq!(config.crypto_hash(), hash);
-		assert_eq!(config.slow_hash(), slow_hash);
+		assert_eq!(config.mhf(), mhf);
 
 		let server_config = ServerConfig::new(config);
 		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
@@ -319,40 +319,40 @@ fn cipher_suites() -> anyhow::Result<()> {
 		Ok(())
 	}
 
-	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Argon2id)?;
-	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Argon2d)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Argon2d)?;
 	#[cfg(feature = "pbkdf2")]
-	cipher_suite(Group::Ristretto255, Hash::Sha2, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Pbkdf2)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Argon2id)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Argon2d)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Argon2d)?;
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Pbkdf2)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2id)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Argon2d)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2d)?;
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Pbkdf2)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Sha2, Mhf::Argon2id)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Sha2, Mhf::Argon2d)?;
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha2, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Sha2, Mhf::Pbkdf2)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Sha3, Mhf::Argon2id)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Sha3, Mhf::Argon2d)?;
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha3, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Sha3, Mhf::Pbkdf2)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Blake3, Mhf::Argon2id)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Blake3, Mhf::Argon2d)?;
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Blake3, SlowHash::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Blake3, Mhf::Pbkdf2)?;
 
 	Ok(())
 }
@@ -362,8 +362,8 @@ fn wrong_config() -> anyhow::Result<()> {
 	// Configuration
 	const PASSWORD: &[u8] = b"password";
 
-	let config = Config::new(Group::default(), Hash::default(), SlowHash::Argon2id);
-	let wrong_config = Config::new(Group::default(), Hash::default(), SlowHash::Argon2d);
+	let config = Config::new(Group::default(), Hash::default(), Mhf::Argon2id);
+	let wrong_config = Config::new(Group::default(), Hash::default(), Mhf::Argon2d);
 	let server_config = ServerConfig::new(config);
 	let wrong_server_config = ServerConfig::new(wrong_config);
 	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
