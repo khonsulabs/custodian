@@ -1,3 +1,7 @@
 [workspace]
-members = ["opaque", "password", "xtask"]
+members = ["password", "xtask"]
 resolver = "2"
+
+[profile.bench]
+codegen-units = 1
+lto = true

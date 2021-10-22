@@ -21,7 +21,7 @@ curve25519-dalek = "3"
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { package = "custodian-opaque", path = "../opaque", version = "2.0.0-pre.1", features = [
+opaque-ke = { git = "https://github.com/novifinancial/opaque-ke", features = [
 	"slow-hash",
 	"std"
 ] }
