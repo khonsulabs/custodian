@@ -2,7 +2,7 @@
 
 use blake3::Hasher;
 use digest::{BlockInput, FixedOutput, Reset, Update};
-use generic_array::typenum::U64;
+use generic_array::{GenericArray, typenum::U64};
 
 /// Object implementing [`Hash`](opaque_ke::hash::Hash) for BLAKE3. This
 /// encapsulates [`blake3::Hasher`] over a 64-bit output size.
@@ -22,11 +22,11 @@ impl BlockInput for Blake3 {
 impl FixedOutput for Blake3 {
 	type OutputSize = U64;
 
-	fn finalize_into(self, out: &mut generic_array::GenericArray<u8, Self::OutputSize>) {
+	fn finalize_into(self, out: &mut GenericArray<u8, Self::OutputSize>) {
 		self.0.finalize_xof().fill(out);
 	}
 
-	fn finalize_into_reset(&mut self, out: &mut generic_array::GenericArray<u8, Self::OutputSize>) {
+	fn finalize_into_reset(&mut self, out: &mut GenericArray<u8, Self::OutputSize>) {
 		self.0.finalize_xof().fill(out);
 		self.0.reset();
 	}

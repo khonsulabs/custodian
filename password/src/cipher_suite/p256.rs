@@ -4,12 +4,13 @@ use std::ops::Mul;
 
 use generic_array::GenericArray;
 use opaque_ke::{
-	errors::InternalError,
+	errors::{InternalError, ProtocolError},
 	group::Group,
+	hash::Hash,
 	rand::{CryptoRng, RngCore},
 };
 use p256_::ProjectivePoint;
-use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+use serde::{de::Error, Deserialize, Deserializer, Serialize, Serializer};
 use zeroize::Zeroize;
 
 /// Object implementing [`Group`] for P256. This encapsulates
@@ -22,8 +23,7 @@ impl<'de> Deserialize<'de> for P256 {
 	where
 		D: Deserializer<'de>,
 	{
-		Self::from_element_slice(&GenericArray::deserialize(deserializer)?)
-			.map_err(de::Error::custom)
+		Self::from_element_slice(&GenericArray::deserialize(deserializer)?).map_err(Error::custom)
 	}
 }
 
@@ -51,17 +51,11 @@ impl Group for P256 {
 
 	const SUITE_ID: usize = <ProjectivePoint as Group>::SUITE_ID;
 
-	fn map_to_curve<H: opaque_ke::hash::Hash>(
-		msg: &[u8],
-		dst: &[u8],
-	) -> Result<Self, opaque_ke::errors::ProtocolError> {
+	fn map_to_curve<H: Hash>(msg: &[u8], dst: &[u8]) -> Result<Self, ProtocolError> {
 		ProjectivePoint::map_to_curve::<H>(msg, dst).map(Self)
 	}
 
-	fn hash_to_scalar<H: opaque_ke::hash::Hash>(
-		input: &[u8],
-		dst: &[u8],
-	) -> Result<Self::Scalar, opaque_ke::errors::ProtocolError> {
+	fn hash_to_scalar<H: Hash>(input: &[u8], dst: &[u8]) -> Result<Self::Scalar, ProtocolError> {
 		ProjectivePoint::hash_to_scalar::<H>(input, dst).map(Scalar)
 	}
 
