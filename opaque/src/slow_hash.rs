@@ -5,27 +5,31 @@
 
 //! Trait specifying a slow hashing function
 
-use crate::{errors::InternalPakeError, hash::Hash};
+use crate::{errors::InternalError, hash::Hash};
+use alloc::vec::Vec;
 use digest::Digest;
 #[cfg(feature = "slow-hash")]
 use generic_array::typenum::Unsigned;
 use generic_array::GenericArray;
 
 /// Used for the slow hashing function in OPAQUE
-pub trait SlowHash<D: Hash> {
+pub trait SlowHash<D: Hash>: Default {
     /// Computes the slow hashing function
     fn hash(
+        &self,
         input: GenericArray<u8, <D as Digest>::OutputSize>,
-    ) -> Result<Vec<u8>, InternalPakeError>;
+    ) -> Result<Vec<u8>, InternalError>;
 }
 
 /// A no-op hash which simply returns its input
+#[derive(Default)]
 pub struct NoOpHash;
 
 impl<D: Hash> SlowHash<D> for NoOpHash {
     fn hash(
+        &self,
         input: GenericArray<u8, <D as Digest>::OutputSize>,
-    ) -> Result<Vec<u8>, InternalPakeError> {
+    ) -> Result<Vec<u8>, InternalError> {
         Ok(input.to_vec())
     }
 }
@@ -33,19 +37,12 @@ impl<D: Hash> SlowHash<D> for NoOpHash {
 #[cfg(feature = "slow-hash")]
 impl<D: Hash> SlowHash<D> for argon2::Argon2<'_> {
     fn hash(
+        &self,
         input: GenericArray<u8, <D as Digest>::OutputSize>,
-    ) -> Result<Vec<u8>, InternalPakeError> {
-        let params = argon2::Argon2::default();
-        let mut output = vec![0u8; <D as Digest>::OutputSize::to_usize()];
-        params
-            .hash_password_into(
-                argon2::Algorithm::Argon2id,
-                &input,
-                &[0; argon2::MIN_SALT_LENGTH],
-                &[],
-                &mut output,
-            )
-            .map_err(|_| InternalPakeError::SlowHashError)?;
+    ) -> Result<Vec<u8>, InternalError> {
+        let mut output = alloc::vec![0u8; <D as Digest>::OutputSize::USIZE];
+        self.hash_password_into(&input, &[0; argon2::MIN_SALT_LEN], &mut output)
+            .map_err(|_| InternalError::SlowHashError)?;
         Ok(output)
     }
 }

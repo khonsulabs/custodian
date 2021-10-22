@@ -1,9 +1,9 @@
 #![allow(clippy::module_name_repetitions)]
 
-//! See [`Error`](enum@Error). Also re-exports [`InternalPakeError`],
-//! [`PakeError`] and [`ProtocolError`].
+//! See [`Error`](enum@Error). Also re-exports [`InternalError`] and
+//! [`ProtocolError`].
 
-pub use opaque_ke::errors::{InternalPakeError, PakeError, ProtocolError};
+pub use opaque_ke::errors::{InternalError, ProtocolError};
 use thiserror::Error;
 
 /// [`Result`](std::result::Result) for this crate.
@@ -13,7 +13,7 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 #[derive(Clone, Debug, Error, Eq, Hash, PartialEq)]
 pub enum Error {
 	/// Internal OPAQUE error.
-	#[error("Iternal Opaque error: {0}")]
+	#[error("Internal Opaque error: {0}")]
 	Opaque(#[from] ProtocolError),
 	/// Servers public key didn't match expected one.
 	#[error("Servers identity unexpected")]

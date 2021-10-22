@@ -2,22 +2,13 @@
 
 use std::ops::Mul;
 
-use digest::Digest;
-use generic_array::{
-	typenum::{Unsigned, U32, U33},
-	GenericArray,
-};
+use generic_array::GenericArray;
 use opaque_ke::{
-	errors::InternalPakeError,
+	errors::InternalError,
 	group::Group,
-	hash::Hash,
-	map_to_curve::{expand_message_xmd, GroupWithMapToCurve},
 	rand::{CryptoRng, RngCore},
 };
-use p256_::{
-	elliptic_curve::{group::GroupEncoding, sec1::FromEncodedPoint, Field},
-	EncodedPoint, ProjectivePoint, ScalarBytes, SecretKey,
-};
+use p256_::ProjectivePoint;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use zeroize::Zeroize;
 
@@ -31,11 +22,8 @@ impl<'de> Deserialize<'de> for P256 {
 	where
 		D: Deserializer<'de>,
 	{
-		Option::from(ProjectivePoint::from_bytes(&GenericArray::deserialize(
-			deserializer,
-		)?))
-		.map(P256)
-		.ok_or_else(|| de::Error::custom("Invalid point"))
+		Self::from_element_slice(&GenericArray::deserialize(deserializer)?)
+			.map_err(de::Error::custom)
 	}
 }
 
@@ -44,7 +32,7 @@ impl Serialize for P256 {
 	where
 		S: Serializer,
 	{
-		self.0.to_bytes().serialize(serializer)
+		Group::to_arr(self).serialize(serializer)
 	}
 }
 
@@ -56,87 +44,69 @@ impl Mul<&Scalar> for P256 {
 	}
 }
 
-impl GroupWithMapToCurve for P256 {
-	const SUITE_ID: usize = 0x0003;
+impl Group for P256 {
+	type ElemLen = <ProjectivePoint as Group>::ElemLen;
+	type Scalar = Scalar;
+	type ScalarLen = <ProjectivePoint as Group>::ScalarLen;
 
-	fn map_to_curve<H: Hash>(msg: &[u8], dst: &[u8]) -> Result<Self, InternalPakeError> {
-		let uniform_bytes =
-			expand_message_xmd::<H>(msg, dst, <H as Digest>::OutputSize::to_usize())?;
-		<Self as Group>::hash_to_curve(&GenericArray::clone_from_slice(&uniform_bytes[..]))
+	const SUITE_ID: usize = <ProjectivePoint as Group>::SUITE_ID;
+
+	fn map_to_curve<H: opaque_ke::hash::Hash>(
+		msg: &[u8],
+		dst: &[u8],
+	) -> Result<Self, opaque_ke::errors::ProtocolError> {
+		ProjectivePoint::map_to_curve::<H>(msg, dst).map(Self)
 	}
 
-	fn hash_to_scalar<H: Hash>(
+	fn hash_to_scalar<H: opaque_ke::hash::Hash>(
 		input: &[u8],
 		dst: &[u8],
-	) -> Result<Self::Scalar, InternalPakeError> {
-		let uniform_bytes = expand_message_xmd::<H>(input, dst, 32)?;
-		let mut bits = [0; 32];
-		bits.copy_from_slice(&uniform_bytes[..]);
-
-		Ok(Scalar(p256_::Scalar::from_bytes_reduced(&bits.into())))
+	) -> Result<Self::Scalar, opaque_ke::errors::ProtocolError> {
+		ProjectivePoint::hash_to_scalar::<H>(input, dst).map(Scalar)
 	}
-}
-
-impl Group for P256 {
-	type ElemLen = U33;
-	type Scalar = Scalar;
-	type ScalarLen = U32;
-	type UniformBytesLen = U32;
 
 	fn from_scalar_slice(
 		scalar_bits: &GenericArray<u8, Self::ScalarLen>,
-	) -> Result<Self::Scalar, InternalPakeError> {
-		Ok(Scalar(p256_::Scalar::from_bytes_reduced(scalar_bits)))
+	) -> Result<Self::Scalar, InternalError> {
+		ProjectivePoint::from_scalar_slice(scalar_bits).map(Scalar)
 	}
 
 	fn random_nonzero_scalar<R: RngCore + CryptoRng>(rng: &mut R) -> Self::Scalar {
-		Scalar(p256_::Scalar::random(rng))
+		Scalar(ProjectivePoint::random_nonzero_scalar(rng))
 	}
 
 	fn scalar_as_bytes(scalar: Self::Scalar) -> GenericArray<u8, Self::ScalarLen> {
-		scalar.0.into()
+		ProjectivePoint::scalar_as_bytes(scalar.0)
 	}
 
 	fn scalar_invert(scalar: &Self::Scalar) -> Self::Scalar {
-		Scalar(scalar.0.invert().unwrap_or(p256_::Scalar::zero()))
+		Scalar(ProjectivePoint::scalar_invert(&scalar.0))
 	}
 
 	fn from_element_slice(
 		element_bits: &GenericArray<u8, Self::ElemLen>,
-	) -> Result<Self, InternalPakeError> {
-		Option::from(ProjectivePoint::from_bytes(element_bits))
-			.map(P256)
-			.ok_or(InternalPakeError::PointError)
+	) -> Result<Self, InternalError> {
+		ProjectivePoint::from_element_slice(element_bits).map(Self)
 	}
 
 	fn to_arr(&self) -> GenericArray<u8, Self::ElemLen> {
-		self.0.to_bytes()
-	}
-
-	fn hash_to_curve(
-		uniform_bytes: &GenericArray<u8, Self::UniformBytesLen>,
-	) -> Result<Self, InternalPakeError> {
-		Ok(Self(
-			ProjectivePoint::from_encoded_point(&EncodedPoint::from_secret_key(
-				&SecretKey::new(ScalarBytes::from_scalar(
-					&p256_::Scalar::from_bytes_reduced(uniform_bytes),
-				)),
-				true,
-			))
-			.ok_or(InternalPakeError::PointError)?,
-		))
-	}
-
-	fn base_point() -> Self {
-		Self(ProjectivePoint::generator())
-	}
-
-	fn mult_by_slice(&self, scalar: &GenericArray<u8, Self::ScalarLen>) -> Self {
-		Self(self.0 * p256_::Scalar::from_bytes_reduced(scalar))
+		self.0.to_arr()
 	}
 
 	fn is_identity(&self) -> bool {
-		self.0 == ProjectivePoint::identity()
+		self.0.is_identity()
+	}
+
+	fn ct_equal(&self, other: &Self) -> bool {
+		self.0.ct_equal(&other.0)
+	}
+
+	fn base_point() -> Self {
+		Self(ProjectivePoint::base_point())
+	}
+
+	fn mult_by_slice(&self, scalar: &GenericArray<u8, Self::ScalarLen>) -> Self {
+		Self(self.0.mult_by_slice(scalar))
 	}
 }
 
@@ -169,21 +139,4 @@ impl Serialize for Scalar {
 	{
 		self.0.to_bytes().serialize(serializer)
 	}
-}
-
-#[test]
-fn serialize() -> anyhow::Result<()> {
-	let old_data = P256::base_point();
-	let bytes = bincode::serialize(&old_data)?;
-	let new_data = bincode::deserialize(&bytes)?;
-
-	assert_eq!(old_data, new_data);
-
-	let old_data = P256::from_scalar_slice(&GenericArray::default())?;
-	let bytes = bincode::serialize(&old_data)?;
-	let new_data = bincode::deserialize(&bytes)?;
-
-	assert_eq!(old_data, new_data);
-
-	Ok(())
 }

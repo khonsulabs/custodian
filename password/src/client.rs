@@ -2,7 +2,7 @@
 
 //! OPAQUE client side handling.
 
-use opaque_ke::errors::{PakeError, ProtocolError};
+use opaque_ke::errors::ProtocolError;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -246,8 +246,7 @@ impl ClientLogin {
 		let config = Config(self.state.cipher_suite());
 		let (finalization, new_public_key, export_key) = match self.state.finish(response.0) {
 			Ok(result) => result,
-			Err(Error::Opaque(ProtocolError::VerificationError(PakeError::InvalidLoginError))) =>
-				return Err(Error::Credentials),
+			Err(Error::Opaque(ProtocolError::InvalidLoginError)) => return Err(Error::Credentials),
 			Err(error) => return Err(error),
 		};
 

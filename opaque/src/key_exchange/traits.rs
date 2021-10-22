@@ -5,13 +5,36 @@
 
 use crate::{
     ciphersuite::CipherSuite,
-    errors::{PakeError, ProtocolError},
+    errors::ProtocolError,
     group::Group,
     hash::Hash,
-    keypair::{PrivateKey, PublicKey},
+    keypair::{PrivateKey, PublicKey, SecretKey},
 };
+use alloc::vec::Vec;
 use rand::{CryptoRng, RngCore};
 use zeroize::Zeroize;
+
+#[cfg(not(test))]
+pub type GenerateKe2Result<K, D, G> = (
+    <K as KeyExchange<D, G>>::KE2State,
+    <K as KeyExchange<D, G>>::KE2Message,
+);
+#[cfg(test)]
+pub type GenerateKe2Result<K, D, G> = (
+    <K as KeyExchange<D, G>>::KE2State,
+    <K as KeyExchange<D, G>>::KE2Message,
+    Vec<u8>,
+    generic_array::GenericArray<u8, <D as digest::Digest>::OutputSize>,
+);
+#[cfg(not(test))]
+pub type GenerateKe3Result<K, D, G> = (Vec<u8>, <K as KeyExchange<D, G>>::KE3Message);
+#[cfg(test)]
+pub type GenerateKe3Result<K, D, G> = (
+    Vec<u8>,
+    <K as KeyExchange<D, G>>::KE3Message,
+    Vec<u8>,
+    generic_array::GenericArray<u8, <D as digest::Digest>::OutputSize>,
+);
 
 pub trait KeyExchange<D: Hash, G: Group> {
     type KE1State: FromBytes + ToBytesWithPointers + Zeroize + Clone;
@@ -25,17 +48,17 @@ pub trait KeyExchange<D: Hash, G: Group> {
     ) -> Result<(Self::KE1State, Self::KE1Message), ProtocolError>;
 
     #[allow(clippy::too_many_arguments, clippy::type_complexity)]
-    fn generate_ke2<R: RngCore + CryptoRng>(
+    fn generate_ke2<R: RngCore + CryptoRng, S: SecretKey<G>>(
         rng: &mut R,
         l1_bytes: Vec<u8>,
         l2_bytes: Vec<u8>,
         ke1_message: Self::KE1Message,
         client_s_pk: PublicKey<G>,
-        server_s_sk: PrivateKey<G>,
+        server_s_sk: S,
         id_u: Vec<u8>,
         id_s: Vec<u8>,
         context: Vec<u8>,
-    ) -> Result<(Self::KE2State, Self::KE2Message), ProtocolError>;
+    ) -> Result<GenerateKe2Result<Self, D, G>, ProtocolError<S::Error>>;
 
     #[allow(clippy::too_many_arguments, clippy::type_complexity)]
     fn generate_ke3(
@@ -48,7 +71,7 @@ pub trait KeyExchange<D: Hash, G: Group> {
         id_u: Vec<u8>,
         id_s: Vec<u8>,
         context: Vec<u8>,
-    ) -> Result<(Vec<u8>, Self::KE3Message), ProtocolError>;
+    ) -> Result<GenerateKe3Result<Self, D, G>, ProtocolError>;
 
     #[allow(clippy::type_complexity)]
     fn finish_ke(
@@ -60,7 +83,7 @@ pub trait KeyExchange<D: Hash, G: Group> {
 }
 
 pub trait FromBytes: Sized {
-    fn from_bytes<CS: CipherSuite>(input: &[u8]) -> Result<Self, PakeError>;
+    fn from_bytes<CS: CipherSuite>(input: &[u8]) -> Result<Self, ProtocolError>;
 }
 
 pub trait ToBytes {

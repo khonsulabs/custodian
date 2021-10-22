@@ -104,6 +104,7 @@ macro_rules! cipher_suite {
 	(
 		$($(#[$attr:meta])? [
 			$cipher_suite:ident,
+			$ake:ty,
 			$group:ty,
 			$hash:ty,
 			$slow_hash:ty$(,)?
@@ -116,7 +117,8 @@ macro_rules! cipher_suite {
 
 		$(#[$attr])?
 		impl ciphersuite::CipherSuite for $cipher_suite {
-			type Group = $group;
+			type OprfGroup = $group;
+			type KeGroup = $ake;
 			type Hash = $hash;
 			type KeyExchange = TripleDH;
 			type SlowHash = $slow_hash;
@@ -169,7 +171,7 @@ macro_rules! cipher_suite {
 						let result = state.finish(
 							&mut OsRng,
 							response,
-							opaque_ke::ClientRegistrationFinishParameters::Default,
+							opaque_ke::ClientRegistrationFinishParameters::default(),
 						)?;
 						let ClientRegistrationFinishResult {
 							message,
@@ -233,7 +235,7 @@ macro_rules! cipher_suite {
 						let result =
 							state.finish(
 								response,
-								opaque_ke::ClientLoginFinishParameters::Default,
+								opaque_ke::ClientLoginFinishParameters::default(),
 							)?;
 						let ClientLoginFinishResult {
 							message,
@@ -475,38 +477,38 @@ macro_rules! cipher_suite {
 }
 
 cipher_suite!(
-	[Ristretto255Sha512Argon2id, RistrettoPoint, Sha512, Argon2<'static>],
-	[Ristretto255Sha512Argon2d, RistrettoPoint, Sha512, Argon2d],
+	[Ristretto255Sha512Argon2id, RistrettoPoint, RistrettoPoint, Sha512, Argon2<'static>],
+	[Ristretto255Sha512Argon2d, RistrettoPoint, RistrettoPoint, Sha512, Argon2d],
 	#[cfg(feature = "pbkdf2")]
-	[Ristretto255Sha512Pbkdf2, RistrettoPoint, Sha512, Pbkdf2],
+	[Ristretto255Sha512Pbkdf2, RistrettoPoint, RistrettoPoint, Sha512, Pbkdf2],
 	#[cfg(feature = "sha3")]
-	[Ristretto255Sha3_512Argon2id, RistrettoPoint, Sha3_512, Argon2<'static>],
+	[Ristretto255Sha3_512Argon2id, RistrettoPoint, RistrettoPoint, Sha3_512, Argon2<'static>],
 	#[cfg(feature = "sha3")]
-	[Ristretto255Sha3_512Argon2d, RistrettoPoint, Sha3_512, Argon2d],
+	[Ristretto255Sha3_512Argon2d, RistrettoPoint, RistrettoPoint, Sha3_512, Argon2d],
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	[Ristretto255Sha3_512Pbkdf2, RistrettoPoint, Sha3_512, Pbkdf2],
+	[Ristretto255Sha3_512Pbkdf2, RistrettoPoint, RistrettoPoint, Sha3_512, Pbkdf2],
 	#[cfg(feature = "blake3")]
-	[Ristretto255Blake3Argon2id, RistrettoPoint, Blake3, Argon2<'static>],
+	[Ristretto255Blake3Argon2id, RistrettoPoint, RistrettoPoint, Blake3, Argon2<'static>],
 	#[cfg(feature = "blake3")]
-	[Ristretto255Blake3Argon2d, RistrettoPoint, Blake3, Argon2d],
+	[Ristretto255Blake3Argon2d, RistrettoPoint, RistrettoPoint, Blake3, Argon2d],
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	[Ristretto255Blake3Pbkdf2, RistrettoPoint, Blake3, Pbkdf2],
+	[Ristretto255Blake3Pbkdf2, RistrettoPoint, RistrettoPoint, Blake3, Pbkdf2],
 	#[cfg(feature = "p256")]
-	[P256Sha256Argon2id, P256, Sha256, Argon2<'static>],
+	[P256Sha256Argon2id, P256, P256, Sha256, Argon2<'static>],
 	#[cfg(feature = "p256")]
-	[P256Sha256Argon2d, P256, Sha256, Argon2d],
+	[P256Sha256Argon2d, P256, P256, Sha256, Argon2d],
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	[P256Sha256Pbkdf2, P256, Sha256, Pbkdf2],
+	[P256Sha256Pbkdf2, P256, P256, Sha256, Pbkdf2],
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	[P256Sha3_256Argon2id, P256, Sha3_256, Argon2<'static>],
+	[P256Sha3_256Argon2id, P256, P256, Sha3_256, Argon2<'static>],
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	[P256Sha3_256Argon2d, P256, Sha3_256, Argon2d],
+	[P256Sha3_256Argon2d, P256, P256, Sha3_256, Argon2d],
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	[P256Sha3_256Pbkdf2, P256, Sha3_256, Pbkdf2],
+	[P256Sha3_256Pbkdf2, P256, P256, Sha3_256, Pbkdf2],
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	[P256Blake3Argon2id, P256, ::blake3::Hasher, Argon2<'static>],
+	[P256Blake3Argon2id, P256, P256, ::blake3::Hasher, Argon2<'static>],
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	[P256Blake3Argon2d, P256, ::blake3::Hasher, Argon2d],
+	[P256Blake3Argon2d, P256, P256, ::blake3::Hasher, Argon2d],
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	[P256Blake3Pbkdf2, P256, ::blake3::Hasher, Pbkdf2],
+	[P256Blake3Pbkdf2, P256, P256, ::blake3::Hasher, Pbkdf2],
 );

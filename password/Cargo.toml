@@ -11,21 +11,22 @@ edition = "2018"
 
 [features]
 default = ["blake3"]
-p256 = ["p256_"]
+p256 = ["opaque-ke/p256", "p256_"]
 pbkdf2 = ["hmac", "pbkdf2_", "zeroize"]
 
 [dependencies]
-argon2 = "0.2"
-blake3 = { version = "0.3", optional = true }
+argon2 = "0.3"
+blake3 = { version = "1", features = ["traits-preview"], optional = true }
 curve25519-dalek = "3"
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { package = "custodian-opaque", path = "../opaque", version = "0.6.0-pre.1", features = [
-	"slow-hash"
+opaque-ke = { package = "custodian-opaque", path = "../opaque", version = "2.0.0-pre.1", features = [
+	"slow-hash",
+	"std"
 ] }
 p256_ = { package = "p256", version = "0.9", optional = true }
-pbkdf2_ = { package = "pbkdf2", version = "0.8", default-features = false, optional = true }
+pbkdf2_ = { package = "pbkdf2", version = "0.9", default-features = false, optional = true }
 sha2 = "0.9"
 sha3 = { version = "0.9", optional = true }
 serde = { version = "1", features = ["derive"] }
