@@ -1,11 +1,14 @@
 //! Password configuration.
 
 use serde::{Deserialize, Serialize};
+use zeroize::Zeroize;
 
 use crate::cipher_suite::CipherSuite;
 
 /// Common password configuration between server and client.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(
+	Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Zeroize,
+)]
 pub struct Config(pub(crate) CipherSuite);
 
 impl Default for Config {

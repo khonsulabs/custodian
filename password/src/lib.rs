@@ -307,8 +307,7 @@ fn cipher_suites() -> anyhow::Result<()> {
 		let (client_file, finalization, export_key) = client.finish(response)?;
 		let server_file = server.finish(finalization)?;
 
-		let (client, request) =
-			ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
+		let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 		let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 		let (new_client_file, finalization, new_export_key) = client.finish(response)?;
 		server.finish(finalization)?;
@@ -411,11 +410,8 @@ fn wrong_config() -> anyhow::Result<()> {
 	let (_, finalization, _) = client.clone().finish(response.clone())?;
 	server.clone().finish(finalization.clone())?;
 
-	let (wrong_client, wrong_request) = ClientLogin::login(
-		wrong_client_config,
-		Some(wrong_client_file),
-		PASSWORD,
-	)?;
+	let (wrong_client, wrong_request) =
+		ClientLogin::login(wrong_client_config, Some(wrong_client_file), PASSWORD)?;
 	let (wrong_server, wrong_response) = ServerLogin::login(
 		&wrong_server_config,
 		Some(wrong_server_file.clone()),

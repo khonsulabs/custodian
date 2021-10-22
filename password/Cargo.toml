@@ -12,10 +12,11 @@ edition = "2018"
 [features]
 default = ["blake3"]
 p256 = ["opaque-ke/p256", "p256_"]
-pbkdf2 = ["hmac", "pbkdf2_", "zeroize"]
+pbkdf2 = ["hmac", "pbkdf2_"]
 
 [dependencies]
 argon2 = "0.3"
+arrayvec = { version = "0.7", default-features = false, features = ["serde"] }
 blake3 = { version = "1", features = ["traits-preview"], optional = true }
 curve25519-dalek = "3"
 digest = "0.9"
@@ -32,7 +33,7 @@ sha3 = { version = "0.9", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde-big-array = { version = "0.3", features = ["const-generics"] }
 thiserror = "1"
-zeroize = { version = "1", optional = true }
+zeroize = "1"
 
 [dev-dependencies]
 anyhow = "1"

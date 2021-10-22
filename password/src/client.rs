@@ -134,7 +134,7 @@ impl ClientRegistration {
 		Ok((
 			ClientFile(public_key),
 			RegistrationFinalization(finalization),
-			ExportKey::new(config, export_key),
+			ExportKey::new(export_key),
 		))
 	}
 }
@@ -260,7 +260,7 @@ impl ClientLogin {
 		Ok((
 			ClientFile(public_key),
 			LoginFinalization(finalization),
-			ExportKey::new(config, export_key),
+			ExportKey::new(export_key),
 		))
 	}
 }

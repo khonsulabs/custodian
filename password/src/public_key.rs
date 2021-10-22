@@ -1,9 +1,10 @@
 //! See [`PublicKey`].
 
+use arrayvec::ArrayVec;
 use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
 
-use crate::Config;
+use crate::{Config, Group};
 
 /// Public key, used to verify the server by the client. See
 /// [`ClientRegistration::register()`](crate::ClientRegistration::register).
@@ -24,7 +25,20 @@ impl PublicKey {
 
 	/// Returns the [`Config`] associated with this [`PublicKey`].
 	#[must_use]
-	pub const fn config(&self) -> Config {
+	pub const fn config(self) -> Config {
 		self.config
+	}
+
+	/// Returns an [`ArrayVec`] of this key.
+	#[must_use]
+	pub fn as_bytes(&self) -> ArrayVec<u8, 33> {
+		let mut bytes = ArrayVec::from(self.key);
+
+		match self.config.group() {
+			Group::Ristretto255 => bytes.truncate(32),
+			Group::P256 => bytes.truncate(33),
+		}
+
+		bytes
 	}
 }

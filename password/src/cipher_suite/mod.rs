@@ -10,14 +10,16 @@
 mod argon2d;
 #[cfg(feature = "blake3")]
 mod blake3;
-mod export_key;
 #[cfg(feature = "p256")]
 mod p256;
 #[cfg(feature = "pbkdf2")]
 mod pbkdf2;
 mod public_key;
 
+use std::convert::TryInto;
+
 use argon2::Argon2;
+use arrayvec::ArrayVec;
 use curve25519_dalek::ristretto::RistrettoPoint;
 use opaque_ke::{
 	ciphersuite, key_exchange::tripledh::TripleDH, rand::rngs::OsRng, ClientLoginFinishResult,
@@ -32,6 +34,7 @@ use sha2::Sha512;
 use sha3::Sha3_256;
 #[cfg(feature = "sha3")]
 use sha3::Sha3_512;
+use zeroize::Zeroize;
 
 #[cfg(feature = "blake3")]
 use self::blake3::Blake3;
@@ -39,12 +42,14 @@ use self::blake3::Blake3;
 use self::p256::P256;
 #[cfg(feature = "pbkdf2")]
 use self::pbkdf2::Pbkdf2;
-use self::{argon2d::Argon2d, export_key::ExportKeyExt, public_key::PublicKeyExt};
+use self::{argon2d::Argon2d, public_key::PublicKeyExt};
 use crate::{Error, Result};
 
 /// Wrapper around multiple [`CipherSuite`](ciphersuite::CipherSuite)s to avoid
 /// user-facing generics.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(
+	Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Zeroize,
+)]
 pub(crate) enum CipherSuite {
 	/// Ristretto255 + SHA512 + Argon2id
 	Ristretto255Sha512Argon2id,
@@ -163,7 +168,7 @@ macro_rules! cipher_suite {
 			pub(crate) fn finish(
 				self,
 				response: RegistrationResponse,
-			) -> Result<(RegistrationFinalization, [u8; 33], [u8; 64])> {
+			) -> Result<(RegistrationFinalization, [u8; 33], ArrayVec<u8, 64>)> {
 				match (self, response) {
 					$($(#[$attr])? (
 						Self::$cipher_suite(state),
@@ -176,14 +181,20 @@ macro_rules! cipher_suite {
 						)?;
 						let ClientRegistrationFinishResult {
 							message,
-							export_key,
+							mut export_key,
 							server_s_pk,
 						} = result;
+
+						let new_export_key = export_key
+							.as_slice()
+							.try_into()
+							.expect("unexpected size");
+						export_key.zeroize();
 
 						Ok((
 							RegistrationFinalization::$cipher_suite(message),
 							server_s_pk.into_array(),
-							export_key.into_array(),
+							new_export_key,
 						))
 					})+
 					_ => Err(Error::Config),
@@ -227,7 +238,7 @@ macro_rules! cipher_suite {
 			pub(crate) fn finish(
 				self,
 				response: LoginResponse,
-			) -> Result<(LoginFinalization, [u8; 33], [u8; 64])> {
+			) -> Result<(LoginFinalization, [u8; 33], ArrayVec<u8, 64>)> {
 				match (self, response) {
 					$($(#[$attr])? (
 						Self::$cipher_suite(state),
@@ -240,14 +251,21 @@ macro_rules! cipher_suite {
 							)?;
 						let ClientLoginFinishResult {
 							message,
-							export_key,
+							mut export_key,
 							server_s_pk,
 							..
 						} = result;
+
+						let new_export_key = export_key
+							.as_slice()
+							.try_into()
+							.expect("unexpected size");
+						export_key.zeroize();
+
 						Ok((
 							LoginFinalization::$cipher_suite(message),
 							server_s_pk.into_array(),
-							export_key.into_array(),
+							new_export_key,
 						))
 					})+
 					_ => Err(Error::Config),
