@@ -467,6 +467,7 @@
 <span id="467">467</span>
 <span id="468">468</span>
 <span id="469">469</span>
+<span id="470">470</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`CipherSuite`](ciphersuite::CipherSuite) implementations and all</span>
 <span class="doccomment">//! corresponding types.</span>
 <span class="doccomment">//!</span>
@@ -503,6 +504,7 @@
 <span class="kw">use</span> <span class="ident">sha3::Sha3_256</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sha3&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">sha3::Sha3_512</span>;
+<span class="kw">use</span> <span class="ident">zeroize::Zeroize</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;blake3&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="self">self</span>::blake3::Blake3</span>;
