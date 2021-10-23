@@ -356,95 +356,50 @@ fn cipher_suites() -> anyhow::Result<()> {
 		None,
 		None,
 	)?);
+	#[cfg(feature = "pbkdf2")]
 	let pbkdf2sha256 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha256, None)?);
+	#[cfg(feature = "pbkdf2")]
 	let pbkdf2sha512 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha512, None)?);
 
-	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha2, argon2id)?;
-	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha2, argon2d)?;
-	#[cfg(feature = "pbkdf2")]
-	cipher_suite(
+	let akes = [
 		Ake::Ristretto255,
+		Ake::X25519,
+		#[cfg(feature = "p256")]
+		Ake::P256,
+	];
+
+	let groups = [
 		Group::Ristretto255,
+		#[cfg(feature = "p256")]
+		Group::P256,
+	];
+
+	let hashs = [
 		Hash::Sha2,
-		pbkdf2sha256,
-	)?;
-	#[cfg(feature = "pbkdf2")]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
-		Hash::Sha2,
-		pbkdf2sha512,
-	)?;
-	#[cfg(feature = "sha3")]
-	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha3, argon2id)?;
-	#[cfg(feature = "sha3")]
-	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha3, argon2d)?;
-	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
+		#[cfg(feature = "sha3")]
 		Hash::Sha3,
-		pbkdf2sha256,
-	)?;
-	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
-		Hash::Sha3,
-		pbkdf2sha512,
-	)?;
-	#[cfg(feature = "blake3")]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
+		#[cfg(feature = "blake3")]
 		Hash::Blake3,
+	];
+
+	let mhfs = [
 		argon2id,
-	)?;
-	#[cfg(feature = "blake3")]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
-		Hash::Blake3,
 		argon2d,
-	)?;
-	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
-		Hash::Blake3,
+		#[cfg(feature = "pbkdf2")]
 		pbkdf2sha256,
-	)?;
-	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(
-		Ake::Ristretto255,
-		Group::Ristretto255,
-		Hash::Blake3,
+		#[cfg(feature = "pbkdf2")]
 		pbkdf2sha512,
-	)?;
-	#[cfg(feature = "p256")]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, argon2id)?;
-	#[cfg(feature = "p256")]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, argon2d)?;
-	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, pbkdf2sha256)?;
-	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, pbkdf2sha512)?;
-	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, argon2id)?;
-	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, argon2d)?;
-	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, pbkdf2sha256)?;
-	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, pbkdf2sha512)?;
-	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, argon2id)?;
-	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, argon2d)?;
-	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, pbkdf2sha256)?;
-	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, pbkdf2sha512)?;
+	];
+
+	for ake in akes {
+		for group in groups {
+			for hash in hashs {
+				for mhf in mhfs {
+					cipher_suite(ake, group, hash, mhf)?;
+				}
+			}
+		}
+	}
 
 	Ok(())
 }

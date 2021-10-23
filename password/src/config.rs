@@ -1,6 +1,9 @@
 //! Password configuration.
 
-use std::num::NonZeroU32;
+use std::{
+	fmt::{self, Debug, Formatter},
+	num::NonZeroU32,
+};
 
 use argon2::{Algorithm, Argon2, Params, Version};
 use deranged::U32;
@@ -363,7 +366,7 @@ impl Default for Group {
 }
 
 /// Hash algorithm for OPAQUE.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum Hash {
 	/// SHA-2, size depends on selected [`Group`].
 	Sha2,
@@ -373,6 +376,16 @@ pub enum Hash {
 	/// BLAKE3.
 	#[cfg(feature = "blake3")]
 	Blake3,
+}
+
+impl Debug for Hash {
+	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::Sha2 => write!(f, "SHA-2"),
+			Self::Sha3 => write!(f, "SHA-3"),
+			Self::Blake3 => write!(f, "BLAKE3"),
+		}
+	}
 }
 
 impl Default for Hash {
@@ -387,13 +400,36 @@ impl Default for Hash {
 }
 
 /// Memory-hardening function for OPAQUE.
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum Mhf {
 	/// Argon2.
 	Argon2(Argon2Params),
 	/// PBKDF2.
 	#[cfg(feature = "pbkdf2")]
 	Pbkdf2(Pbkdf2Params),
+}
+
+impl Debug for Mhf {
+	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::Argon2(Argon2Params {
+				algorithm: Argon2Algorithm::Argon2id,
+				..
+			}) => write!(f, "Argon2id"),
+			Self::Argon2(Argon2Params {
+				algorithm: Argon2Algorithm::Argon2d,
+				..
+			}) => write!(f, "Argon2d"),
+			Self::Pbkdf2(Pbkdf2Params {
+				hash: Pbkdf2Hash::Sha256,
+				..
+			}) => write!(f, "PBKDF2-SHA256"),
+			Self::Pbkdf2(Pbkdf2Params {
+				hash: Pbkdf2Hash::Sha512,
+				..
+			}) => write!(f, "PBKDF2-SHA512"),
+		}
+	}
 }
 
 impl Default for Mhf {
