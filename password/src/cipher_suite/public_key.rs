@@ -1,6 +1,6 @@
 //! See [`PublicKeyExt`].
 
-use curve25519_dalek::ristretto::RistrettoPoint;
+use curve25519_dalek::{montgomery::MontgomeryPoint, ristretto::RistrettoPoint};
 use opaque_ke::keypair::PublicKey;
 
 /// Utility trait to help convert and compare [`opaque_ke::keypair::PublicKey`]
@@ -17,6 +17,23 @@ pub(crate) trait PublicKeyExt {
 }
 
 impl PublicKeyExt for PublicKey<RistrettoPoint> {
+	fn into_array(self) -> [u8; 33] {
+		Self::to_array(&self)
+	}
+
+	fn to_array(&self) -> [u8; 33] {
+		let mut key = [0; 33];
+		key[..32].copy_from_slice(self);
+
+		key
+	}
+
+	fn is_array(&self, key: [u8; 33]) -> bool {
+		&key[..32] == self.as_slice()
+	}
+}
+
+impl PublicKeyExt for PublicKey<MontgomeryPoint> {
 	fn into_array(self) -> [u8; 33] {
 		Self::to_array(&self)
 	}

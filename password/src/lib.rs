@@ -88,7 +88,9 @@ pub use serde;
 
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::{Argon2Algorithm, Argon2Params, Config, Group, Hash, Mhf, Pbkdf2Hash, Pbkdf2Params},
+	config::{
+		Ake, Argon2Algorithm, Argon2Params, Config, Group, Hash, Mhf, Pbkdf2Hash, Pbkdf2Params,
+	},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{
@@ -296,8 +298,8 @@ fn wrong_client_config() -> anyhow::Result<()> {
 fn cipher_suites() -> anyhow::Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
-	fn cipher_suite(group: Group, hash: Hash, mhf: Mhf) -> anyhow::Result<()> {
-		let config = Config::new(group, hash, mhf);
+	fn cipher_suite(ake: Ake, group: Group, hash: Hash, mhf: Mhf) -> anyhow::Result<()> {
+		let config = Config::new(ake, group, hash, mhf);
 
 		assert_eq!(config.group(), group);
 		assert_eq!(config.crypto_hash(), hash);
@@ -357,52 +359,92 @@ fn cipher_suites() -> anyhow::Result<()> {
 	let pbkdf2sha256 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha256, None)?);
 	let pbkdf2sha512 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha512, None)?);
 
-	cipher_suite(Group::Ristretto255, Hash::Sha2, argon2id)?;
-	cipher_suite(Group::Ristretto255, Hash::Sha2, argon2d)?;
+	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha2, argon2id)?;
+	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha2, argon2d)?;
 	#[cfg(feature = "pbkdf2")]
-	cipher_suite(Group::Ristretto255, Hash::Sha2, pbkdf2sha256)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Sha2,
+		pbkdf2sha256,
+	)?;
 	#[cfg(feature = "pbkdf2")]
-	cipher_suite(Group::Ristretto255, Hash::Sha2, pbkdf2sha512)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Sha2,
+		pbkdf2sha512,
+	)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, argon2id)?;
+	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha3, argon2id)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, argon2d)?;
+	cipher_suite(Ake::Ristretto255, Group::Ristretto255, Hash::Sha3, argon2d)?;
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, pbkdf2sha256)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Sha3,
+		pbkdf2sha256,
+	)?;
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, pbkdf2sha512)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Sha3,
+		pbkdf2sha512,
+	)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, argon2id)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Blake3,
+		argon2id,
+	)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, argon2d)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Blake3,
+		argon2d,
+	)?;
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, pbkdf2sha256)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Blake3,
+		pbkdf2sha256,
+	)?;
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, pbkdf2sha512)?;
+	cipher_suite(
+		Ake::Ristretto255,
+		Group::Ristretto255,
+		Hash::Blake3,
+		pbkdf2sha512,
+	)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, argon2id)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, argon2id)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, argon2d)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha2, pbkdf2sha256)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, pbkdf2sha256)?;
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha2, pbkdf2sha512)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha2, pbkdf2sha512)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, argon2id)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, argon2id)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, argon2d)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha3, pbkdf2sha256)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, pbkdf2sha256)?;
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha3, pbkdf2sha512)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Sha3, pbkdf2sha512)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, argon2id)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, argon2id)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, argon2d)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Blake3, pbkdf2sha256)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, pbkdf2sha256)?;
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Blake3, pbkdf2sha512)?;
+	cipher_suite(Ake::P256, Group::P256, Hash::Blake3, pbkdf2sha512)?;
 
 	Ok(())
 }
@@ -413,6 +455,7 @@ fn wrong_config() -> anyhow::Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
 	let config = Config::new(
+		Ake::default(),
 		Group::default(),
 		Hash::default(),
 		Mhf::Argon2(Argon2Params::new(
@@ -423,6 +466,7 @@ fn wrong_config() -> anyhow::Result<()> {
 		)?),
 	);
 	let wrong_config = Config::new(
+		Ake::default(),
 		Group::default(),
 		Hash::default(),
 		Mhf::Argon2(Argon2Params::new(
@@ -525,6 +569,7 @@ fn wrong_config() -> anyhow::Result<()> {
 }
 
 #[test]
+#[allow(clippy::cognitive_complexity)]
 fn getters() -> anyhow::Result<()> {
 	// Configuration
 	const PASSWORD: &[u8] = b"password";

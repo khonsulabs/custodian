@@ -19,7 +19,7 @@ use std::convert::TryInto;
 
 use argon2::Argon2;
 use arrayvec::ArrayVec;
-use curve25519_dalek::ristretto::RistrettoPoint;
+use curve25519_dalek::{montgomery::MontgomeryPoint, ristretto::RistrettoPoint};
 use opaque_ke::{
 	ciphersuite, key_exchange::tripledh::TripleDH, rand::rngs::OsRng, ClientLoginFinishParameters,
 	ClientLoginFinishResult, ClientLoginStartResult, ClientRegistrationFinishParameters,
@@ -49,41 +49,112 @@ use crate::{Error, Result};
 /// user-facing generics.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub(crate) enum CipherSuite {
-	/// Ristretto255 + SHA512 + Argon2
-	Ristretto255Sha512Argon2,
-	/// Ristretto255 + SHA512 + PBKDF2
+	/// Ristretto255 + SHA2 + Argon2
+	Ristretto255Sha2Argon2,
+	/// Ristretto255 + SHA2 + PBKDF2
 	#[cfg(feature = "pbkdf2")]
-	Ristretto255Sha512Pbkdf2,
-	/// Ristretto255 + SHA3-512 + Argon2
+	Ristretto255Sha2Pbkdf2,
+	/// Ristretto255 + SHA3 + Argon2
 	#[cfg(feature = "sha3")]
-	Ristretto255Sha3_512Argon2,
-	/// Ristretto255 + SHA3-512 + PBKDF2
+	Ristretto255Sha3Argon2,
+	/// Ristretto255 + SHA3 + PBKDF2
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	Ristretto255Sha3_512Pbkdf2,
+	Ristretto255Sha3Pbkdf2,
 	/// Ristretto255 + BLAKE3 + Argon2
 	#[cfg(feature = "blake3")]
 	Ristretto255Blake3Argon2,
 	/// Ristretto255 + BLAKE3 + PBKDF2
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
 	Ristretto255Blake3Pbkdf2,
-	/// P256 + SHA256 + Argon2
+	/// X25519 + Ristretto255 + SHA2 + Argon2
+	X25519Ristretto255Sha2Argon2,
+	/// X25519 + Ristretto255 + SHA2 + PBKDF2
+	#[cfg(feature = "pbkdf2")]
+	X25519Ristretto255Sha2Pbkdf2,
+	/// X25519 + Ristretto255 + SHA3 + Argon2
+	#[cfg(feature = "sha3")]
+	X25519Ristretto255Sha3Argon2,
+	/// X25519 + Ristretto255 + SHA3 + PBKDF2
+	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+	X25519Ristretto255Sha3Pbkdf2,
+	/// X25519 + Ristretto255 + BLAKE3 + Argon2
+	#[cfg(feature = "blake3")]
+	X25519Ristretto255Blake3Argon2,
+	/// X25519 + Ristretto255 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+	X25519Ristretto255Blake3Pbkdf2,
+	/// P256 + Ristretto255 + SHA2 + Argon2
 	#[cfg(feature = "p256")]
-	P256Sha256Argon2,
-	/// P256 + SHA256 + PBKDF2
+	P256Ristretto255Sha2Argon2,
+	/// P256 + Ristretto255 + SHA2 + PBKDF2
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	P256Sha256Pbkdf2,
-	/// P256 + SHA3-256 + Argon2
+	P256Ristretto255Sha2Pbkdf2,
+	/// P256 + Ristretto255 + SHA3 + Argon2
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	P256Sha3_256Argon2,
-	/// P256 + SHA3-256 + PBKDF2
+	P256Ristretto255Sha3Argon2,
+	/// P256 + Ristretto255 + SHA3 + PBKDF2
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	P256Sha3_256Pbkdf2,
+	P256Ristretto255Sha3Pbkdf2,
+	/// P256 + Ristretto255 + BLAKE3 + Argon2
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	P256Ristretto255Blake3Argon2,
+	/// P256 + Ristretto255 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	P256Ristretto255Blake3Pbkdf2,
+	/// P256 + SHA2 + Argon2
+	#[cfg(feature = "p256")]
+	P256Sha2Argon2,
+	/// P256 + SHA2 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	P256Sha2Pbkdf2,
+	/// P256 + SHA3 + Argon2
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	P256Sha3Argon2,
+	/// P256 + SHA3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	P256Sha3Pbkdf2,
 	/// P256 + BLAKE3 + Argon2
 	#[cfg(all(feature = "p256", feature = "blake3"))]
 	P256Blake3Argon2,
 	/// P256 + BLAKE3 + PBKDF2
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
 	P256Blake3Pbkdf2,
+	/// Ristretto255 + P256 + SHA2 + Argon2
+	#[cfg(feature = "p256")]
+	Ristretto255P256Sha2Argon2,
+	/// Ristretto255 + P256 + SHA2 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	Ristretto255P256Sha2Pbkdf2,
+	/// Ristretto255 + P256 + SHA3 + Argon2
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	Ristretto255P256Sha3Argon2,
+	/// Ristretto255 + P256 + SHA3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	Ristretto255P256Sha3Pbkdf2,
+	/// Ristretto255 + P256 + BLAKE3 + Argon2
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	Ristretto255P256Blake3Argon2,
+	/// Ristretto255 + P256 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	Ristretto255P256Blake3Pbkdf2,
+	/// X25519 + P256 + SHA2 + Argon2
+	#[cfg(feature = "p256")]
+	X25519P256Sha2Argon2,
+	/// X25519 + P256 + SHA2 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	X25519P256Sha2Pbkdf2,
+	/// X25519 + P256 + SHA3 + Argon2
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	X25519P256Sha3Argon2,
+	/// X25519 + P256 + SHA3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	X25519P256Sha3Pbkdf2,
+	/// X25519 + P256 + BLAKE3 + Argon2
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	X25519P256Blake3Argon2,
+	/// X25519 + P256 + BLAKE3 + PBKDF2
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	X25519P256Blake3Pbkdf2,
 }
 
 /// Pass down parameter to [`SlowHash`](opaque_ke::slow_hash::SlowHash).
@@ -444,27 +515,74 @@ macro_rules! cipher_suite {
 }
 
 cipher_suite!(
-	[Ristretto255Sha512Argon2, RistrettoPoint, RistrettoPoint, Sha512, Argon2<'static>],
+	[Ristretto255Sha2Argon2, RistrettoPoint, RistrettoPoint, Sha512, Argon2<'static>],
 	#[cfg(feature = "pbkdf2")]
-	[Ristretto255Sha512Pbkdf2, RistrettoPoint, RistrettoPoint, Sha512, Pbkdf2],
+	[Ristretto255Sha2Pbkdf2, RistrettoPoint, RistrettoPoint, Sha512, Pbkdf2],
 	#[cfg(feature = "sha3")]
-	[Ristretto255Sha3_512Argon2, RistrettoPoint, RistrettoPoint, Sha3_512, Argon2<'static>],
+	[Ristretto255Sha3Argon2, RistrettoPoint, RistrettoPoint, Sha3_512, Argon2<'static>],
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	[Ristretto255Sha3_512Pbkdf2, RistrettoPoint, RistrettoPoint, Sha3_512, Pbkdf2],
+	[Ristretto255Sha3Pbkdf2, RistrettoPoint, RistrettoPoint, Sha3_512, Pbkdf2],
 	#[cfg(feature = "blake3")]
 	[Ristretto255Blake3Argon2, RistrettoPoint, RistrettoPoint, Blake3, Argon2<'static>],
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
 	[Ristretto255Blake3Pbkdf2, RistrettoPoint, RistrettoPoint, Blake3, Pbkdf2],
+	[X25519Ristretto255Sha2Argon2, MontgomeryPoint, RistrettoPoint, Sha512, Argon2<'static>],
+	#[cfg(feature = "pbkdf2")]
+	[X25519Ristretto255Sha2Pbkdf2, MontgomeryPoint, RistrettoPoint, Sha512, Pbkdf2],
+	#[cfg(feature = "sha3")]
+	[X25519Ristretto255Sha3Argon2, MontgomeryPoint, RistrettoPoint, Sha3_512, Argon2<'static>],
+	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+	[X25519Ristretto255Sha3Pbkdf2, MontgomeryPoint, RistrettoPoint, Sha3_512, Pbkdf2],
+	#[cfg(feature = "blake3")]
+	[X25519Ristretto255Blake3Argon2, MontgomeryPoint, RistrettoPoint, Blake3, Argon2<'static>],
+	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+	[X25519Ristretto255Blake3Pbkdf2, MontgomeryPoint, RistrettoPoint, Blake3, Pbkdf2],
 	#[cfg(feature = "p256")]
-	[P256Sha256Argon2, P256, P256, Sha256, Argon2<'static>],
+	[P256Ristretto255Sha2Argon2, P256, RistrettoPoint, Sha512, Argon2<'static>],
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	[P256Sha256Pbkdf2, P256, P256, Sha256, Pbkdf2],
+	[P256Ristretto255Sha2Pbkdf2, P256, RistrettoPoint, Sha512, Pbkdf2],
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	[P256Sha3_256Argon2, P256, P256, Sha3_256, Argon2<'static>],
+	[P256Ristretto255Sha3Argon2, P256, RistrettoPoint, Sha3_512, Argon2<'static>],
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	[P256Sha3_256Pbkdf2, P256, P256, Sha3_256, Pbkdf2],
+	[P256Ristretto255Sha3Pbkdf2, P256, RistrettoPoint, Sha3_512, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	[P256Ristretto255Blake3Argon2, P256, RistrettoPoint, Blake3, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	[P256Ristretto255Blake3Pbkdf2, P256, RistrettoPoint, Blake3, Pbkdf2],
+	#[cfg(feature = "p256")]
+	[P256Sha2Argon2, P256, P256, Sha256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	[P256Sha2Pbkdf2, P256, P256, Sha256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	[P256Sha3Argon2, P256, P256, Sha3_256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	[P256Sha3Pbkdf2, P256, P256, Sha3_256, Pbkdf2],
 	#[cfg(all(feature = "p256", feature = "blake3"))]
 	[P256Blake3Argon2, P256, P256, ::blake3::Hasher, Argon2<'static>],
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
 	[P256Blake3Pbkdf2, P256, P256, ::blake3::Hasher, Pbkdf2],
+	#[cfg(feature = "p256")]
+	[Ristretto255P256Sha2Argon2, RistrettoPoint, P256, Sha256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	[Ristretto255P256Sha2Pbkdf2, RistrettoPoint, P256, Sha256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	[Ristretto255P256Sha3Argon2, RistrettoPoint, P256, Sha3_256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	[Ristretto255P256Sha3Pbkdf2, RistrettoPoint, P256, Sha3_256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	[Ristretto255P256Blake3Argon2, RistrettoPoint, P256, ::blake3::Hasher, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	[Ristretto255P256Blake3Pbkdf2, RistrettoPoint, P256, ::blake3::Hasher, Pbkdf2],
+	#[cfg(feature = "p256")]
+	[X25519P256Sha2Argon2, MontgomeryPoint, P256, Sha256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	[X25519P256Sha2Pbkdf2, MontgomeryPoint, P256, Sha256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "sha3"))]
+	[X25519P256Sha3Argon2, MontgomeryPoint, P256, Sha3_256, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	[X25519P256Sha3Pbkdf2, MontgomeryPoint, P256, Sha3_256, Pbkdf2],
+	#[cfg(all(feature = "p256", feature = "blake3"))]
+	[X25519P256Blake3Argon2, MontgomeryPoint, P256, ::blake3::Hasher, Argon2<'static>],
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	[X25519P256Blake3Pbkdf2, MontgomeryPoint, P256, ::blake3::Hasher, Pbkdf2],
 );

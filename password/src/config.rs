@@ -24,75 +24,200 @@ pub struct Config {
 
 impl Default for Config {
 	fn default() -> Self {
-		Self::new(Group::default(), Hash::default(), Mhf::default())
+		Self::new(
+			Ake::default(),
+			Group::default(),
+			Hash::default(),
+			Mhf::default(),
+		)
 	}
 }
 
 impl Config {
 	/// Builds new [`Config`].
+	#[allow(clippy::too_many_lines)]
 	#[must_use]
-	pub const fn new(group: Group, hash: Hash, mhf: Mhf) -> Self {
+	pub const fn new(ake: Ake, group: Group, hash: Hash, mhf: Mhf) -> Self {
 		#[allow(clippy::enum_glob_use)]
 		use self::{CipherSuite::*, Group::*, Hash::*, Mhf::*};
 
-		match (group, hash, mhf) {
-			(Ristretto255, Sha2, mhf @ Argon2(_)) => Self {
-				cipher_suite: Ristretto255Sha512Argon2,
+		match (ake, group, hash, mhf) {
+			(Ake::Ristretto255, Ristretto255, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: Ristretto255Sha2Argon2,
 				mhf,
 			},
 			#[cfg(feature = "pbkdf2")]
-			(Ristretto255, Sha2, mhf @ Pbkdf2(_)) => Self {
-				cipher_suite: Ristretto255Sha512Pbkdf2,
+			(Ake::Ristretto255, Ristretto255, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: Ristretto255Sha2Pbkdf2,
 				mhf,
 			},
 			#[cfg(feature = "sha3")]
-			(Ristretto255, Sha3, mhf @ Argon2(_)) => Self {
-				cipher_suite: Ristretto255Sha3_512Argon2,
+			(Ake::Ristretto255, Ristretto255, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: Ristretto255Sha3Argon2,
 				mhf,
 			},
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			(Ristretto255, Sha3, mhf @ Pbkdf2(_)) => Self {
-				cipher_suite: Ristretto255Sha3_512Pbkdf2,
+			(Ake::Ristretto255, Ristretto255, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: Ristretto255Sha3Pbkdf2,
 				mhf,
 			},
 			#[cfg(feature = "blake3")]
-			(Ristretto255, Blake3, mhf @ Argon2(_)) => Self {
+			(Ake::Ristretto255, Ristretto255, Blake3, mhf @ Argon2(_)) => Self {
 				cipher_suite: Ristretto255Blake3Argon2,
 				mhf,
 			},
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			(Ristretto255, Blake3, mhf @ Pbkdf2(_)) => Self {
+			(Ake::Ristretto255, Ristretto255, Blake3, mhf @ Pbkdf2(_)) => Self {
 				cipher_suite: Ristretto255Blake3Pbkdf2,
 				mhf,
 			},
+			(Ake::X25519, Ristretto255, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519Ristretto255Sha2Argon2,
+				mhf,
+			},
+			#[cfg(feature = "pbkdf2")]
+			(Ake::X25519, Ristretto255, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519Ristretto255Sha2Pbkdf2,
+				mhf,
+			},
+			#[cfg(feature = "sha3")]
+			(Ake::X25519, Ristretto255, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519Ristretto255Sha3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+			(Ake::X25519, Ristretto255, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519Ristretto255Sha3Pbkdf2,
+				mhf,
+			},
+			#[cfg(feature = "blake3")]
+			(Ake::X25519, Ristretto255, Blake3, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519Ristretto255Blake3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+			(Ake::X25519, Ristretto255, Blake3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519Ristretto255Blake3Pbkdf2,
+				mhf,
+			},
 			#[cfg(feature = "p256")]
-			(P256, Sha2, mhf @ Argon2(_)) => Self {
-				cipher_suite: P256Sha256Argon2,
+			(Ake::P256, Ristretto255, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: P256Ristretto255Sha2Argon2,
 				mhf,
 			},
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-			(P256, Sha2, mhf @ Pbkdf2(_)) => Self {
-				cipher_suite: P256Sha256Pbkdf2,
+			(Ake::P256, Ristretto255, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: P256Ristretto255Sha2Pbkdf2,
 				mhf,
 			},
 			#[cfg(all(feature = "p256", feature = "sha3"))]
-			(P256, Sha3, mhf @ Argon2(_)) => Self {
-				cipher_suite: P256Sha3_256Argon2,
+			(Ake::P256, Ristretto255, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: P256Ristretto255Sha3Argon2,
 				mhf,
 			},
 			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-			(P256, Sha3, mhf @ Pbkdf2(_)) => Self {
-				cipher_suite: P256Sha3_256Pbkdf2,
+			(Ake::P256, Ristretto255, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: P256Ristretto255Sha3Pbkdf2,
 				mhf,
 			},
 			#[cfg(all(feature = "p256", feature = "blake3"))]
-			(P256, Blake3, mhf @ Argon2(_)) => Self {
+			(Ake::P256, Ristretto255, Blake3, mhf @ Argon2(_)) => Self {
+				cipher_suite: P256Ristretto255Blake3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			(Ake::P256, Ristretto255, Blake3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: P256Ristretto255Blake3Pbkdf2,
+				mhf,
+			},
+			#[cfg(feature = "p256")]
+			(Ake::P256, P256, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: P256Sha2Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			(Ake::P256, P256, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: P256Sha2Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			(Ake::P256, P256, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: P256Sha3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			(Ake::P256, P256, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: P256Sha3Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			(Ake::P256, P256, Blake3, mhf @ Argon2(_)) => Self {
 				cipher_suite: P256Blake3Argon2,
 				mhf,
 			},
 			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-			(P256, Blake3, mhf @ Pbkdf2(_)) => Self {
+			(Ake::P256, P256, Blake3, mhf @ Pbkdf2(_)) => Self {
 				cipher_suite: P256Blake3Pbkdf2,
+				mhf,
+			},
+			#[cfg(feature = "p256")]
+			(Ake::Ristretto255, P256, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: Ristretto255P256Sha2Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			(Ake::Ristretto255, P256, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: Ristretto255P256Sha2Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			(Ake::Ristretto255, P256, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: Ristretto255P256Sha3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			(Ake::Ristretto255, P256, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: Ristretto255P256Sha3Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			(Ake::Ristretto255, P256, Blake3, mhf @ Argon2(_)) => Self {
+				cipher_suite: Ristretto255P256Blake3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			(Ake::Ristretto255, P256, Blake3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: Ristretto255P256Blake3Pbkdf2,
+				mhf,
+			},
+			#[cfg(feature = "p256")]
+			(Ake::X25519, P256, Sha2, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519P256Sha2Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			(Ake::X25519, P256, Sha2, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519P256Sha2Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			(Ake::X25519, P256, Sha3, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519P256Sha3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			(Ake::X25519, P256, Sha3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519P256Sha3Pbkdf2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			(Ake::X25519, P256, Blake3, mhf @ Argon2(_)) => Self {
+				cipher_suite: X25519P256Blake3Argon2,
+				mhf,
+			},
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			(Ake::X25519, P256, Blake3, mhf @ Pbkdf2(_)) => Self {
+				cipher_suite: X25519P256Blake3Pbkdf2,
 				mhf,
 			},
 		}
@@ -106,29 +231,41 @@ impl Config {
 
 		#[allow(clippy::match_same_arms)]
 		match self.cipher_suite {
-			Ristretto255Sha512Argon2 => Group::Ristretto255,
+			Ristretto255Sha2Argon2 | X25519Ristretto255Sha2Argon2 => Group::Ristretto255,
 			#[cfg(feature = "pbkdf2")]
-			Ristretto255Sha512Pbkdf2 => Group::Ristretto255,
+			Ristretto255Sha2Pbkdf2 | X25519Ristretto255Sha2Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "sha3")]
-			Ristretto255Sha3_512Argon2 => Group::Ristretto255,
+			Ristretto255Sha3Argon2 | X25519Ristretto255Sha3Argon2 => Group::Ristretto255,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Ristretto255Sha3_512Pbkdf2 => Group::Ristretto255,
+			Ristretto255Sha3Pbkdf2 | X25519Ristretto255Sha3Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "blake3")]
-			Ristretto255Blake3Argon2 => Group::Ristretto255,
+			Ristretto255Blake3Argon2 | X25519Ristretto255Blake3Argon2 => Group::Ristretto255,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Ristretto255Blake3Pbkdf2 => Group::Ristretto255,
+			Ristretto255Blake3Pbkdf2 | X25519Ristretto255Blake3Pbkdf2 => Group::Ristretto255,
 			#[cfg(feature = "p256")]
-			P256Sha256Argon2 => Group::P256,
+			P256Ristretto255Sha2Argon2 => Group::Ristretto255,
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-			P256Sha256Pbkdf2 => Group::P256,
+			P256Ristretto255Sha2Pbkdf2 => Group::Ristretto255,
 			#[cfg(all(feature = "p256", feature = "sha3"))]
-			P256Sha3_256Argon2 => Group::P256,
+			P256Ristretto255Sha3Argon2 => Group::Ristretto255,
 			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-			P256Sha3_256Pbkdf2 => Group::P256,
+			P256Ristretto255Sha3Pbkdf2 => Group::Ristretto255,
 			#[cfg(all(feature = "p256", feature = "blake3"))]
-			P256Blake3Argon2 => Group::P256,
+			P256Ristretto255Blake3Argon2 => Group::Ristretto255,
 			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-			P256Blake3Pbkdf2 => Group::P256,
+			P256Ristretto255Blake3Pbkdf2 => Group::Ristretto255,
+			#[cfg(feature = "p256")]
+			P256Sha2Argon2 | Ristretto255P256Sha2Argon2 | X25519P256Sha2Argon2 => Group::P256,
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			P256Sha2Pbkdf2 | Ristretto255P256Sha2Pbkdf2 | X25519P256Sha2Pbkdf2 => Group::P256,
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			P256Sha3Argon2 | Ristretto255P256Sha3Argon2 | X25519P256Sha3Argon2 => Group::P256,
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			P256Sha3Pbkdf2 | Ristretto255P256Sha3Pbkdf2 | X25519P256Sha3Pbkdf2 => Group::P256,
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			P256Blake3Argon2 | Ristretto255P256Blake3Argon2 | X25519P256Blake3Argon2 => Group::P256,
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			P256Blake3Pbkdf2 | Ristretto255P256Blake3Pbkdf2 | X25519P256Blake3Pbkdf2 => Group::P256,
 		}
 	}
 
@@ -140,29 +277,47 @@ impl Config {
 
 		#[allow(clippy::match_same_arms)]
 		match self.cipher_suite {
-			Ristretto255Sha512Argon2 => Hash::Sha2,
+			Ristretto255Sha2Argon2 | X25519Ristretto255Sha2Argon2 => Hash::Sha2,
 			#[cfg(feature = "pbkdf2")]
-			Ristretto255Sha512Pbkdf2 => Hash::Sha2,
+			Ristretto255Sha2Pbkdf2 | X25519Ristretto255Sha2Pbkdf2 => Hash::Sha2,
 			#[cfg(feature = "sha3")]
-			Ristretto255Sha3_512Argon2 => Hash::Sha3,
+			Ristretto255Sha3Argon2 | X25519Ristretto255Sha3Argon2 => Hash::Sha3,
 			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-			Ristretto255Sha3_512Pbkdf2 => Hash::Sha3,
+			Ristretto255Sha3Pbkdf2 | X25519Ristretto255Sha3Pbkdf2 => Hash::Sha3,
 			#[cfg(feature = "blake3")]
-			Ristretto255Blake3Argon2 => Hash::Blake3,
+			Ristretto255Blake3Argon2 | X25519Ristretto255Blake3Argon2 => Hash::Blake3,
 			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-			Ristretto255Blake3Pbkdf2 => Hash::Blake3,
+			Ristretto255Blake3Pbkdf2 | X25519Ristretto255Blake3Pbkdf2 => Hash::Blake3,
 			#[cfg(feature = "p256")]
-			P256Sha256Argon2 => Hash::Sha2,
+			P256Sha2Argon2
+			| P256Ristretto255Sha2Argon2
+			| Ristretto255P256Sha2Argon2
+			| X25519P256Sha2Argon2 => Hash::Sha2,
 			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-			P256Sha256Pbkdf2 => Hash::Sha2,
+			P256Sha2Pbkdf2
+			| P256Ristretto255Sha2Pbkdf2
+			| Ristretto255P256Sha2Pbkdf2
+			| X25519P256Sha2Pbkdf2 => Hash::Sha2,
 			#[cfg(all(feature = "p256", feature = "sha3"))]
-			P256Sha3_256Argon2 => Hash::Sha3,
+			P256Sha3Argon2
+			| P256Ristretto255Sha3Argon2
+			| Ristretto255P256Sha3Argon2
+			| X25519P256Sha3Argon2 => Hash::Sha3,
 			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-			P256Sha3_256Pbkdf2 => Hash::Sha3,
+			P256Sha3Pbkdf2
+			| P256Ristretto255Sha3Pbkdf2
+			| Ristretto255P256Sha3Pbkdf2
+			| X25519P256Sha3Pbkdf2 => Hash::Sha3,
 			#[cfg(all(feature = "p256", feature = "blake3"))]
-			P256Blake3Argon2 => Hash::Blake3,
+			P256Blake3Argon2
+			| P256Ristretto255Blake3Argon2
+			| Ristretto255P256Blake3Argon2
+			| X25519P256Blake3Argon2 => Hash::Blake3,
 			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-			P256Blake3Pbkdf2 => Hash::Blake3,
+			P256Blake3Pbkdf2
+			| P256Ristretto255Blake3Pbkdf2
+			| Ristretto255P256Blake3Pbkdf2
+			| X25519P256Blake3Pbkdf2 => Hash::Blake3,
 		}
 	}
 
@@ -170,6 +325,24 @@ impl Config {
 	#[must_use]
 	pub const fn mhf(self) -> Mhf {
 		self.mhf
+	}
+}
+
+/// Authenticated Key-Exchange for OPAQUE.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum Ake {
+	/// Ristretto255.
+	Ristretto255,
+	/// X25519.
+	X25519,
+	/// P256.
+	#[cfg(feature = "p256")]
+	P256,
+}
+
+impl Default for Ake {
+	fn default() -> Self {
+		Self::Ristretto255
 	}
 }
 
