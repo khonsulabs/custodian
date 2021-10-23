@@ -31,7 +31,7 @@ impl PublicKey {
 
 	/// Returns an [`ArrayVec`] of this key.
 	#[must_use]
-	pub fn as_bytes(&self) -> ArrayVec<u8, 33> {
+	pub fn to_bytes(&self) -> ArrayVec<u8, 33> {
 		let mut bytes = ArrayVec::from(self.key);
 
 		match self.config.group() {

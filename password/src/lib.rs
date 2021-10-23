@@ -60,6 +60,7 @@
 		clippy::panic,
 		clippy::panic_in_result_fn,
 		clippy::similar_names,
+		clippy::unwrap_used,
 	)
 )]
 
@@ -67,7 +68,6 @@
 // TODO: start registration and login process from `Server/ClientConfig`
 // TODO: implement credential identifier
 // TODO: option to save credential identifier in plaintext to support renaming
-// TODO: implement encryption for export key
 // TODO: expose custom identifier
 // TODO: start `custodian-shared` for keypair types, algorithms and whatnot
 // TODO: start `custodian-pki` for shared pki system and key generation
@@ -292,6 +292,7 @@ fn wrong_client_config() -> anyhow::Result<()> {
 }
 
 #[test]
+#[allow(clippy::too_many_lines)]
 fn cipher_suites() -> anyhow::Result<()> {
 	const PASSWORD: &[u8] = b"password";
 
@@ -311,12 +312,32 @@ fn cipher_suites() -> anyhow::Result<()> {
 		let server_file = server.finish(finalization)?;
 
 		let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
-		let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
+		let (server, response) =
+			ServerLogin::login(&server_config, Some(server_file.clone()), request)?;
 		let (new_client_file, finalization, new_export_key) = client.finish(response)?;
 		server.finish(finalization)?;
 
 		assert_eq!(client_file, new_client_file);
+		assert_eq!(
+			client_config.public_key().unwrap().to_bytes(),
+			client_config.public_key().unwrap().to_bytes()
+		);
+		assert_eq!(
+			client_file.public_key().to_bytes(),
+			new_client_file.public_key().to_bytes()
+		);
+		assert_eq!(
+			server_config.public_key().to_bytes(),
+			server_config.public_key().to_bytes()
+		);
+		assert_eq!(
+			server_file.public_key().to_bytes(),
+			server_file.public_key().to_bytes()
+		);
 		assert_eq!(export_key, new_export_key);
+		assert_eq!(export_key.as_bytes(), new_export_key.as_bytes());
+		assert_eq!(export_key.as_ref(), new_export_key.as_ref());
+		assert_eq!(&*export_key, &*new_export_key);
 
 		Ok(())
 	}
@@ -522,16 +543,21 @@ fn getters() -> anyhow::Result<()> {
 
 	assert_eq!(client.config().config(), config);
 	assert_eq!(client.config().public_key(), Some(public_key));
+	assert_eq!(request.config(), config);
 
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 
 	assert_eq!(server.config(), config);
 	assert_eq!(server.public_key(), public_key);
+	assert_eq!(response.config(), config);
 
-	let (client_file, finalization, _) = client.finish(response)?;
+	let (client_file, finalization, export_key) = client.finish(response)?;
 
 	assert_eq!(client_file.config(), config);
 	assert_eq!(client_file.public_key(), public_key);
+	assert_eq!(export_key.as_ref(), export_key.as_bytes());
+	assert_eq!(&*export_key, export_key.as_bytes());
+	assert_eq!(finalization.config(), config);
 
 	let server_file = server.finish(finalization)?;
 
@@ -542,15 +568,20 @@ fn getters() -> anyhow::Result<()> {
 
 	assert_eq!(client.config().config(), config);
 	assert_eq!(client.config().public_key(), Some(public_key));
+	assert_eq!(request.config(), config);
 
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 
 	assert_eq!(server.config(), config);
+	assert_eq!(response.config(), config);
 
-	let (new_client_file, finalization, _) = client.finish(response)?;
+	let (new_client_file, finalization, export_key) = client.finish(response)?;
 
 	assert_eq!(new_client_file.config(), config);
 	assert_eq!(new_client_file.public_key(), public_key);
+	assert_eq!(export_key.as_ref(), export_key.as_bytes());
+	assert_eq!(&*export_key, export_key.as_bytes());
+	assert_eq!(finalization.config(), config);
 
 	server.finish(finalization)?;
 
