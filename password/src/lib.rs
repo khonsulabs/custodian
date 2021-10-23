@@ -300,6 +300,7 @@ fn cipher_suites() -> anyhow::Result<()> {
 	fn cipher_suite(ake: Ake, group: Group, hash: Hash, mhf: Mhf) -> anyhow::Result<()> {
 		let config = Config::new(ake, group, hash, mhf);
 
+		assert_eq!(config.ake(), ake);
 		assert_eq!(config.group(), group);
 		assert_eq!(config.crypto_hash(), hash);
 		assert_eq!(config.mhf(), mhf);

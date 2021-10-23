@@ -226,6 +226,75 @@ impl Config {
 		}
 	}
 
+	/// Returns [`Ake`] of this [`Config`].
+	#[must_use]
+	pub const fn ake(self) -> Ake {
+		#[allow(clippy::enum_glob_use)]
+		use CipherSuite::*;
+
+		#[allow(clippy::match_same_arms)]
+		match self.cipher_suite {
+			Ristretto255Sha2Argon2 => Ake::Ristretto255,
+			#[cfg(feature = "pbkdf2")]
+			Ristretto255Sha2Pbkdf2 => Ake::Ristretto255,
+			#[cfg(feature = "sha3")]
+			Ristretto255Sha3Argon2 => Ake::Ristretto255,
+			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+			Ristretto255Sha3Pbkdf2 => Ake::Ristretto255,
+			#[cfg(feature = "blake3")]
+			Ristretto255Blake3Argon2 => Ake::Ristretto255,
+			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+			Ristretto255Blake3Pbkdf2 => Ake::Ristretto255,
+			X25519Ristretto255Sha2Argon2 => Ake::X25519,
+			#[cfg(feature = "pbkdf2")]
+			X25519Ristretto255Sha2Pbkdf2 => Ake::X25519,
+			#[cfg(feature = "sha3")]
+			X25519Ristretto255Sha3Argon2 => Ake::X25519,
+			#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+			X25519Ristretto255Sha3Pbkdf2 => Ake::X25519,
+			#[cfg(feature = "blake3")]
+			X25519Ristretto255Blake3Argon2 => Ake::X25519,
+			#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+			X25519Ristretto255Blake3Pbkdf2 => Ake::X25519,
+			#[cfg(feature = "p256")]
+			P256Sha2Argon2 | P256Ristretto255Sha2Argon2 => Ake::P256,
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			P256Sha2Pbkdf2 | P256Ristretto255Sha2Pbkdf2 => Ake::P256,
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			P256Sha3Argon2 | P256Ristretto255Sha3Argon2 => Ake::P256,
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			P256Sha3Pbkdf2 | P256Ristretto255Sha3Pbkdf2 => Ake::P256,
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			P256Blake3Argon2 | P256Ristretto255Blake3Argon2 => Ake::P256,
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			P256Blake3Pbkdf2 | P256Ristretto255Blake3Pbkdf2 => Ake::P256,
+			#[cfg(feature = "p256")]
+			Ristretto255P256Sha2Argon2 => Ake::Ristretto255,
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			Ristretto255P256Sha2Pbkdf2 => Ake::Ristretto255,
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			Ristretto255P256Sha3Argon2 => Ake::Ristretto255,
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			Ristretto255P256Sha3Pbkdf2 => Ake::Ristretto255,
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			Ristretto255P256Blake3Argon2 => Ake::Ristretto255,
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			Ristretto255P256Blake3Pbkdf2 => Ake::Ristretto255,
+			#[cfg(feature = "p256")]
+			X25519P256Sha2Argon2 => Ake::X25519,
+			#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+			X25519P256Sha2Pbkdf2 => Ake::X25519,
+			#[cfg(all(feature = "p256", feature = "sha3"))]
+			X25519P256Sha3Argon2 => Ake::X25519,
+			#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+			X25519P256Sha3Pbkdf2 => Ake::X25519,
+			#[cfg(all(feature = "p256", feature = "blake3"))]
+			X25519P256Blake3Argon2 => Ake::X25519,
+			#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+			X25519P256Blake3Pbkdf2 => Ake::X25519,
+		}
+	}
+
 	/// Returns [`Group`] of this [`Config`].
 	#[must_use]
 	pub const fn group(self) -> Group {
