@@ -28,12 +28,27 @@
 <span id="28">28</span>
 <span id="29">29</span>
 <span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
 </pre><pre class="rust"><code><span class="doccomment">//! See [`PublicKey`].</span>
 
+<span class="kw">use</span> <span class="ident">arrayvec::ArrayVec</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 <span class="kw">use</span> <span class="ident">serde_big_array::BigArray</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Config</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Config</span>, <span class="ident">Group</span>};
 
 <span class="doccomment">/// Public key, used to verify the server by the client. See</span>
 <span class="doccomment">/// [`ClientRegistration::register()`](crate::ClientRegistration::register).</span>
@@ -54,8 +69,21 @@
 
 	<span class="doccomment">/// Returns the [`Config`] associated with this [`PublicKey`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="self">self</span>) -&gt; <span class="ident">Config</span> {
 		<span class="self">self</span>.<span class="ident">config</span>
+	}
+
+	<span class="doccomment">/// Returns an [`ArrayVec`] of this key.</span>
+	<span class="attribute">#[<span class="ident">must_use</span>]</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">33</span><span class="op">&gt;</span> {
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">ArrayVec::from</span>(<span class="self">self</span>.<span class="ident">key</span>);
+
+		<span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">group</span>() {
+			<span class="ident">Group::Ristretto255</span> =&gt; <span class="ident">bytes</span>.<span class="ident">truncate</span>(<span class="number">32</span>),
+			<span class="ident">Group::P256</span> =&gt; <span class="ident">bytes</span>.<span class="ident">truncate</span>(<span class="number">33</span>),
+		}
+
+		<span class="ident">bytes</span>
 	}
 }
 </code></pre></div>

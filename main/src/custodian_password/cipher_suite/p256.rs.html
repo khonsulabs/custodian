@@ -134,24 +134,19 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
 </pre><pre class="rust"><code><span class="doccomment">//! See [`P256`].</span>
 
 <span class="kw">use</span> <span class="ident">std::ops::Mul</span>;
 
 <span class="kw">use</span> <span class="ident">generic_array::GenericArray</span>;
 <span class="kw">use</span> <span class="ident">opaque_ke</span>::{
-	<span class="ident">errors::InternalError</span>,
+	<span class="ident">errors</span>::{<span class="ident">InternalError</span>, <span class="ident">ProtocolError</span>},
 	<span class="ident">group::Group</span>,
+	<span class="ident">hash::Hash</span>,
 	<span class="ident">rand</span>::{<span class="ident">CryptoRng</span>, <span class="ident">RngCore</span>},
 };
 <span class="kw">use</span> <span class="ident">p256_::ProjectivePoint</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de</span>, <span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Serialize</span>, <span class="ident">Serializer</span>};
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::Error</span>, <span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Serialize</span>, <span class="ident">Serializer</span>};
 <span class="kw">use</span> <span class="ident">zeroize::Zeroize</span>;
 
 <span class="doccomment">/// Object implementing [`Group`] for P256. This encapsulates</span>
@@ -164,8 +159,7 @@
 	<span class="kw">where</span>
 		<span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
 	{
-		<span class="ident"><span class="self">Self</span>::from_element_slice</span>(<span class="kw-2">&amp;</span><span class="ident">GenericArray::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>)
-			.<span class="ident">map_err</span>(<span class="ident">de::Error::custom</span>)
+		<span class="ident"><span class="self">Self</span>::from_element_slice</span>(<span class="kw-2">&amp;</span><span class="ident">GenericArray::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>).<span class="ident">map_err</span>(<span class="ident">Error::custom</span>)
 	}
 }
 
@@ -193,17 +187,11 @@
 
 	<span class="kw">const</span> <span class="ident">SUITE_ID</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">ProjectivePoint</span> <span class="kw">as</span> <span class="ident">Group</span><span class="op">&gt;</span><span class="ident">::SUITE_ID</span>;
 
-	<span class="kw">fn</span> <span class="ident">map_to_curve</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">opaque_ke::hash::Hash</span><span class="op">&gt;</span>(
-		<span class="ident">msg</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-		<span class="ident">dst</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">opaque_ke::errors::ProtocolError</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">map_to_curve</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Hash</span><span class="op">&gt;</span>(<span class="ident">msg</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">dst</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span> {
 		<span class="ident">ProjectivePoint::map_to_curve</span>::<span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">msg</span>, <span class="ident">dst</span>).<span class="ident">map</span>(<span class="self">Self</span>)
 	}
 
-	<span class="kw">fn</span> <span class="ident">hash_to_scalar</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">opaque_ke::hash::Hash</span><span class="op">&gt;</span>(
-		<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-		<span class="ident">dst</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Scalar</span>, <span class="ident">opaque_ke::errors::ProtocolError</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">hash_to_scalar</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Hash</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">dst</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Scalar</span>, <span class="ident">ProtocolError</span><span class="op">&gt;</span> {
 		<span class="ident">ProjectivePoint::hash_to_scalar</span>::<span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">input</span>, <span class="ident">dst</span>).<span class="ident">map</span>(<span class="ident">Scalar</span>)
 	}
 

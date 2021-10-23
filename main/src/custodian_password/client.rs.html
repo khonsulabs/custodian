@@ -267,6 +267,9 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_name_repetitions</span>)]</span>
 
 <span class="doccomment">//! OPAQUE client side handling.</span>
@@ -280,8 +283,7 @@
 };
 
 <span class="doccomment">/// Client configuration.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_copy_implementations</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientConfig</span> {
 	<span class="doccomment">/// Common config.</span>
 	<span class="ident">config</span>: <span class="ident">Config</span>,
@@ -326,23 +328,18 @@
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Use `finish()` to complete the registration process&quot;</span>]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientRegistration</span> {
+	<span class="doccomment">/// [`ClientConfig`] of this [`ClientRegistration`].</span>
+	<span class="ident">config</span>: <span class="ident">ClientConfig</span>,
 	<span class="doccomment">/// Client registration state.</span>
 	<span class="ident">state</span>: <span class="ident">cipher_suite::ClientRegistration</span>,
-	<span class="doccomment">/// Server public key.</span>
-	<span class="ident">public_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ClientRegistration</span> {
-	<span class="doccomment">/// Returns the [`Config`] associated with this [`ClientRegistration`].</span>
+	<span class="doccomment">/// Returns the [`ClientConfig`] associated with this</span>
+	<span class="doccomment">/// [`ClientRegistration`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
-		<span class="ident">Config</span>(<span class="self">self</span>.<span class="ident">state</span>.<span class="ident">cipher_suite</span>())
-	}
-
-	<span class="doccomment">/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].</span>
-	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">public_key</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ClientConfig</span> {
+		<span class="self">self</span>.<span class="ident">config</span>
 	}
 
 	<span class="doccomment">/// Starts the registration process. The returned [`RegistrationRequest`]</span>
@@ -352,19 +349,18 @@
 	<span class="doccomment">/// # Errors</span>
 	<span class="doccomment">/// [`Error::Opaque`] on internal OPAQUE error.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(
-		<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ClientConfig</span>,
+		<span class="ident">config</span>: <span class="ident">ClientConfig</span>,
 		<span class="ident">password</span>: <span class="ident">P</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">RegistrationRequest</span>)<span class="op">&gt;</span> {
-		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">message</span>) <span class="op">=</span>
-			<span class="ident">cipher_suite::ClientRegistration::register</span>(<span class="ident">config</span>.<span class="ident">config</span>.<span class="number">0</span>, <span class="ident">password</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">message</span>) <span class="op">=</span> <span class="ident">cipher_suite::ClientRegistration::register</span>(
+			<span class="ident">config</span>.<span class="ident">config</span>.<span class="ident">cipher_suite</span>,
+			<span class="ident">password</span>.<span class="ident">as_ref</span>(),
+		)<span class="question-mark">?</span>;
 
-		<span class="prelude-val">Ok</span>((
-			<span class="self">Self</span> {
-				<span class="ident">state</span>,
-				<span class="ident">public_key</span>: <span class="ident">config</span>.<span class="ident">public_key</span>,
-			},
-			<span class="ident">RegistrationRequest</span>(<span class="ident">message</span>),
-		))
+		<span class="prelude-val">Ok</span>((<span class="self">Self</span> { <span class="ident">config</span>, <span class="ident">state</span> }, <span class="ident">RegistrationRequest</span> {
+			<span class="ident">config</span>: <span class="ident">config</span>.<span class="ident">config</span>,
+			<span class="ident">message</span>,
+		}))
 	}
 
 	<span class="doccomment">/// Finishes the registration process. The returned</span>
@@ -388,30 +384,37 @@
 		<span class="self">self</span>,
 		<span class="ident">response</span>: <span class="ident">RegistrationResponse</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">ClientFile</span>, <span class="ident">RegistrationFinalization</span>, <span class="ident">ExportKey</span>)<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>();
-		<span class="kw">let</span> (<span class="ident">finalization</span>, <span class="ident">new_public_key</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">finish</span>(<span class="ident">response</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
+		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span> <span class="op">!</span><span class="op">=</span> <span class="ident">response</span>.<span class="ident">config</span> {
+			<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>);
+		}
 
-		<span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">public_key</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">public_key</span> {
+		<span class="kw">let</span> (<span class="ident">message</span>, <span class="ident">new_public_key</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="self">self</span>
+			.<span class="ident">state</span>
+			.<span class="ident">finish</span>(<span class="ident">response</span>.<span class="ident">message</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>.<span class="ident">mhf</span>().<span class="ident">to_slow_hash</span>())<span class="question-mark">?</span>;
+
+		<span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">public_key</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">public_key</span> {
 			<span class="kw">if</span> <span class="ident">public_key</span>.<span class="ident">key</span> <span class="op">!</span><span class="op">=</span> <span class="ident">new_public_key</span> {
 				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidServer</span>);
 			}
 
 			<span class="ident">public_key</span>
 		} <span class="kw">else</span> {
-			<span class="ident">PublicKey::new</span>(<span class="ident">config</span>, <span class="ident">new_public_key</span>)
+			<span class="ident">PublicKey::new</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>, <span class="ident">new_public_key</span>)
 		};
 
 		<span class="prelude-val">Ok</span>((
 			<span class="ident">ClientFile</span>(<span class="ident">public_key</span>),
-			<span class="ident">RegistrationFinalization</span>(<span class="ident">finalization</span>),
-			<span class="ident">ExportKey::new</span>(<span class="ident">config</span>, <span class="ident">export_key</span>),
+			<span class="ident">RegistrationFinalization</span> {
+				<span class="ident">config</span>: <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>,
+				<span class="ident">message</span>,
+			},
+			<span class="ident">ExportKey::new</span>(<span class="ident">export_key</span>),
 		))
 	}
 }
 
 <span class="doccomment">/// Use this to enable server validation during login.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_copy_implementations</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientFile</span>(<span class="ident">PublicKey</span>);
 
 <span class="kw">impl</span> <span class="ident">ClientFile</span> {
@@ -432,23 +435,17 @@
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Does nothing if not `finish`ed&quot;</span>]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ClientLogin</span> {
+	<span class="doccomment">/// [`ClientConfig`] of this [`ClientLogin`].</span>
+	<span class="ident">config</span>: <span class="ident">ClientConfig</span>,
 	<span class="doccomment">/// Client login state.</span>
 	<span class="ident">state</span>: <span class="ident">cipher_suite::ClientLogin</span>,
-	<span class="doccomment">/// Server public key.</span>
-	<span class="ident">public_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ClientLogin</span> {
-	<span class="doccomment">/// Returns the [`Config`] associated with this [`ClientLogin`].</span>
+	<span class="doccomment">/// Returns the [`ClientConfig`] associated with this [`ClientLogin`].</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Config</span> {
-		<span class="ident">Config</span>(<span class="self">self</span>.<span class="ident">state</span>.<span class="ident">cipher_suite</span>())
-	}
-
-	<span class="doccomment">/// Returns the servers [`ClientLogin`] associated with this [`ClientFile`].</span>
-	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">public_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PublicKey</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">public_key</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ClientConfig</span> {
+		<span class="self">self</span>.<span class="ident">config</span>
 	}
 
 	<span class="doccomment">/// Starts the login process. The returned [`LoginRequest`] has to be send</span>
@@ -461,35 +458,35 @@
 	<span class="doccomment">/// # Errors</span>
 	<span class="doccomment">/// - [`Error::Config`] if [`ClientConfig`] and [`ClientFile`] were not</span>
 	<span class="doccomment">///   created with the same [`Config`]</span>
-	<span class="doccomment">/// - [`Error::PublicKey`] if [`PublicKey`] in [`ClientConfig`] and</span>
+	<span class="doccomment">/// - [`Error::ConfigPublicKey`] if [`PublicKey`] in [`ClientConfig`] and</span>
 	<span class="doccomment">///   [`ClientFile`] don&#39;t match</span>
 	<span class="doccomment">/// - [`Error::Opaque`] on internal OPAQUE error</span>
-	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::needless_pass_by_value</span>)]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">login</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(
-		<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ClientConfig</span>,
+		<span class="kw-2">mut</span> <span class="ident">config</span>: <span class="ident">ClientConfig</span>,
 		<span class="ident">file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ClientFile</span><span class="op">&gt;</span>,
 		<span class="ident">password</span>: <span class="ident">P</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">LoginRequest</span>)<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span> {
+		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">file</span> {
 			<span class="kw">if</span> <span class="ident">file</span>.<span class="number">0</span>.<span class="ident">config</span> <span class="op">!</span><span class="op">=</span> <span class="ident">config</span>.<span class="ident">config</span> {
 				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>);
 			}
 
 			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">public_key</span>) <span class="op">=</span> <span class="ident">config</span>.<span class="ident">public_key</span> {
 				<span class="kw">if</span> <span class="ident">public_key</span> <span class="op">!</span><span class="op">=</span> <span class="ident">file</span>.<span class="number">0</span> {
-					<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::PublicKey</span>);
+					<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ConfigPublicKey</span>);
 				}
+			} <span class="kw">else</span> {
+				<span class="ident">config</span>.<span class="ident">public_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>.<span class="number">0</span>);
 			}
+		}
 
-			<span class="prelude-val">Some</span>(<span class="ident">file</span>.<span class="number">0</span>)
-		} <span class="kw">else</span> {
-			<span class="ident">config</span>.<span class="ident">public_key</span>
-		};
+		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">message</span>) <span class="op">=</span>
+			<span class="ident">cipher_suite::ClientLogin::login</span>(<span class="ident">config</span>.<span class="ident">config</span>.<span class="ident">cipher_suite</span>, <span class="ident">password</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
 
-		<span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">request</span>) <span class="op">=</span>
-			<span class="ident">cipher_suite::ClientLogin::login</span>(<span class="ident">config</span>.<span class="ident">config</span>.<span class="number">0</span>, <span class="ident">password</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
-
-		<span class="prelude-val">Ok</span>((<span class="self">Self</span> { <span class="ident">state</span>, <span class="ident">public_key</span> }, <span class="ident">LoginRequest</span>(<span class="ident">request</span>)))
+		<span class="prelude-val">Ok</span>((<span class="self">Self</span> { <span class="ident">config</span>, <span class="ident">state</span> }, <span class="ident">LoginRequest</span> {
+			<span class="ident">config</span>: <span class="ident">config</span>.<span class="ident">config</span>,
+			<span class="ident">message</span>,
+		}))
 	}
 
 	<span class="doccomment">/// Finishes the login process. The returned [`LoginFinalization`] has to be</span>
@@ -512,27 +509,36 @@
 		<span class="self">self</span>,
 		<span class="ident">response</span>: <span class="ident">LoginResponse</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">ClientFile</span>, <span class="ident">LoginFinalization</span>, <span class="ident">ExportKey</span>)<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config</span>(<span class="self">self</span>.<span class="ident">state</span>.<span class="ident">cipher_suite</span>());
-		<span class="kw">let</span> (<span class="ident">finalization</span>, <span class="ident">new_public_key</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">finish</span>(<span class="ident">response</span>.<span class="number">0</span>) {
+		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span> <span class="op">!</span><span class="op">=</span> <span class="ident">response</span>.<span class="ident">config</span> {
+			<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Config</span>);
+		}
+
+		<span class="kw">let</span> (<span class="ident">message</span>, <span class="ident">new_public_key</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>
+			.<span class="ident">state</span>
+			.<span class="ident">finish</span>(<span class="ident">response</span>.<span class="ident">message</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>.<span class="ident">mhf</span>().<span class="ident">to_slow_hash</span>())
+		{
 			<span class="prelude-val">Ok</span>(<span class="ident">result</span>) =&gt; <span class="ident">result</span>,
 			<span class="prelude-val">Err</span>(<span class="ident">Error::Opaque</span>(<span class="ident">ProtocolError::InvalidLoginError</span>)) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Credentials</span>),
 			<span class="prelude-val">Err</span>(<span class="ident">error</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>),
 		};
 
-		<span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">public_key</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">public_key</span> {
+		<span class="kw">let</span> <span class="ident">public_key</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">public_key</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">public_key</span> {
 			<span class="kw">if</span> <span class="ident">public_key</span>.<span class="ident">key</span> <span class="op">!</span><span class="op">=</span> <span class="ident">new_public_key</span> {
 				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidServer</span>);
 			}
 
 			<span class="ident">public_key</span>
 		} <span class="kw">else</span> {
-			<span class="ident">PublicKey::new</span>(<span class="ident">config</span>, <span class="ident">new_public_key</span>)
+			<span class="ident">PublicKey::new</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>, <span class="ident">new_public_key</span>)
 		};
 
 		<span class="prelude-val">Ok</span>((
 			<span class="ident">ClientFile</span>(<span class="ident">public_key</span>),
-			<span class="ident">LoginFinalization</span>(<span class="ident">finalization</span>),
-			<span class="ident">ExportKey::new</span>(<span class="ident">config</span>, <span class="ident">export_key</span>),
+			<span class="ident">LoginFinalization</span> {
+				<span class="ident">config</span>: <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">config</span>,
+				<span class="ident">message</span>,
+			},
+			<span class="ident">ExportKey::new</span>(<span class="ident">export_key</span>),
 		))
 	}
 }

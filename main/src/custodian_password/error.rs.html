@@ -33,6 +33,9 @@
 <span id="33">33</span>
 <span id="34">34</span>
 <span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::module_name_repetitions</span>)]</span>
 
 <span class="doccomment">//! See [`Error`](enum@Error). Also re-exports [`InternalError`] and</span>
@@ -53,20 +56,23 @@
 	<span class="doccomment">/// Servers public key didn&#39;t match expected one.</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Servers identity unexpected&quot;</span>)]</span>
 	<span class="ident">InvalidServer</span>,
+	<span class="doccomment">/// Failed to construct [`Mhf`](crate::Mhf) because out-of-range integers.</span>
+	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Integers used are out-of-range&quot;</span>)]</span>
+	<span class="ident">MhfConfig</span>,
 	<span class="doccomment">/// [`Config`](crate::Config) doesn&#39;t match.</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Configuration doesn&#39;t match&quot;</span>)]</span>
 	<span class="ident">Config</span>,
 	<span class="doccomment">/// [`PublicKey`](crate::PublicKey) in [`ClientConfig`](crate::ClientConfig)</span>
 	<span class="doccomment">/// and [`ClientFile`](crate::ClientFile) don&#39;t match.</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Public keys don&#39;t match&quot;</span>)]</span>
-	<span class="ident">PublicKey</span>,
+	<span class="ident">ConfigPublicKey</span>,
 	<span class="doccomment">/// Credentials don&#39;t match.</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Credentials don&#39;t match&quot;</span>)]</span>
 	<span class="ident">Credentials</span>,
 	<span class="doccomment">/// [`ServerFile`](crate::ServerFile) was not created with the same</span>
 	<span class="doccomment">/// [`ServerConfig`](crate::ServerConfig).</span>
 	<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Server file was not created with the same server configuration&quot;</span>)]</span>
-	<span class="ident">ServerConfig</span>,
+	<span class="ident">ServerFile</span>,
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="custodian_password" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>

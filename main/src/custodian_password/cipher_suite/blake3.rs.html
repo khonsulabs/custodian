@@ -41,7 +41,7 @@
 
 <span class="kw">use</span> <span class="ident">blake3::Hasher</span>;
 <span class="kw">use</span> <span class="ident">digest</span>::{<span class="ident">BlockInput</span>, <span class="ident">FixedOutput</span>, <span class="ident">Reset</span>, <span class="ident">Update</span>};
-<span class="kw">use</span> <span class="ident">generic_array::typenum::U64</span>;
+<span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="ident">typenum::U64</span>, <span class="ident">GenericArray</span>};
 
 <span class="doccomment">/// Object implementing [`Hash`](opaque_ke::hash::Hash) for BLAKE3. This</span>
 <span class="doccomment">/// encapsulates [`blake3::Hasher`] over a 64-bit output size.</span>
@@ -61,11 +61,11 @@
 <span class="kw">impl</span> <span class="ident">FixedOutput</span> <span class="kw">for</span> <span class="ident">Blake3</span> {
 	<span class="kw">type</span> <span class="ident">OutputSize</span> <span class="op">=</span> <span class="ident">U64</span>;
 
-	<span class="kw">fn</span> <span class="ident">finalize_into</span>(<span class="self">self</span>, <span class="ident">out</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">generic_array::GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident"><span class="self">Self</span>::OutputSize</span><span class="op">&gt;</span>) {
+	<span class="kw">fn</span> <span class="ident">finalize_into</span>(<span class="self">self</span>, <span class="ident">out</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident"><span class="self">Self</span>::OutputSize</span><span class="op">&gt;</span>) {
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">finalize_xof</span>().<span class="ident">fill</span>(<span class="ident">out</span>);
 	}
 
-	<span class="kw">fn</span> <span class="ident">finalize_into_reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">out</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">generic_array::GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident"><span class="self">Self</span>::OutputSize</span><span class="op">&gt;</span>) {
+	<span class="kw">fn</span> <span class="ident">finalize_into_reset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">out</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident"><span class="self">Self</span>::OutputSize</span><span class="op">&gt;</span>) {
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">finalize_xof</span>().<span class="ident">fill</span>(<span class="ident">out</span>);
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">reset</span>();
 	}
