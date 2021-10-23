@@ -75,7 +75,7 @@
 
 	<span class="doccomment">/// Returns an [`ArrayVec`] of this key.</span>
 	<span class="attribute">#[<span class="ident">must_use</span>]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">33</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">33</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">ArrayVec::from</span>(<span class="self">self</span>.<span class="ident">key</span>);
 
 		<span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">group</span>() {
