@@ -29,6 +29,7 @@
 	clippy::blanket_clippy_restriction_lints,
 	clippy::else_if_without_else,
 	clippy::exhaustive_enums,
+	clippy::exhaustive_structs,
 	clippy::expect_used,
 	clippy::future_not_send,
 	clippy::implicit_return,
@@ -57,7 +58,8 @@
 		box_pointers,
 		clippy::integer_arithmetic,
 		clippy::panic,
-		clippy::panic_in_result_fn
+		clippy::panic_in_result_fn,
+		clippy::similar_names,
 	)
 )]
 
@@ -81,11 +83,12 @@ mod message;
 mod public_key;
 mod server;
 
+pub use arrayvec;
 pub use serde;
 
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::{Config, Group, Hash, Mhf},
+	config::{Argon2Algorithm, Argon2Params, Config, Group, Hash, Mhf, Pbkdf2Hash, Pbkdf2Params},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{
@@ -155,7 +158,7 @@ fn not_validated() -> anyhow::Result<()> {
 
 	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 
-	assert_eq!(client.public_key(), None);
+	assert_eq!(client.config().public_key(), None);
 
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 	let (_, finalization, _) = client.finish(response)?;
@@ -163,7 +166,7 @@ fn not_validated() -> anyhow::Result<()> {
 
 	let (client, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 
-	assert_eq!(client.public_key(), None);
+	assert_eq!(client.config().public_key(), None);
 
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 	let (_, finalization, _) = client.finish(response)?;
@@ -251,7 +254,7 @@ fn wrong_server_config() -> anyhow::Result<()> {
 	let (_, request) = ClientLogin::login(client_config, None, PASSWORD)?;
 	assert_eq!(
 		ServerLogin::login(&server_config_wrong, Some(server_file), request),
-		Err(Error::ServerConfig)
+		Err(Error::ServerFile)
 	);
 
 	Ok(())
@@ -278,11 +281,11 @@ fn wrong_client_config() -> anyhow::Result<()> {
 
 	assert_eq!(
 		ClientLogin::login(client_config, Some(client_file_wrong), PASSWORD),
-		Err(Error::PublicKey)
+		Err(Error::ConfigPublicKey)
 	);
 	assert_eq!(
 		ClientLogin::login(client_config_wrong, Some(client_file), PASSWORD),
-		Err(Error::PublicKey)
+		Err(Error::ConfigPublicKey)
 	);
 
 	Ok(())
@@ -318,40 +321,67 @@ fn cipher_suites() -> anyhow::Result<()> {
 		Ok(())
 	}
 
-	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Argon2id)?;
-	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Argon2d)?;
+	let argon2id = Mhf::Argon2(Argon2Params::new(
+		Argon2Algorithm::Argon2id,
+		None,
+		None,
+		None,
+	)?);
+	let argon2d = Mhf::Argon2(Argon2Params::new(
+		Argon2Algorithm::Argon2d,
+		None,
+		None,
+		None,
+	)?);
+	let pbkdf2sha256 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha256, None)?);
+	let pbkdf2sha512 = Mhf::Pbkdf2(Pbkdf2Params::new(Pbkdf2Hash::Sha512, None)?);
+
+	cipher_suite(Group::Ristretto255, Hash::Sha2, argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha2, argon2d)?;
 	#[cfg(feature = "pbkdf2")]
-	cipher_suite(Group::Ristretto255, Hash::Sha2, Mhf::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha2, pbkdf2sha256)?;
+	#[cfg(feature = "pbkdf2")]
+	cipher_suite(Group::Ristretto255, Hash::Sha2, pbkdf2sha512)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, argon2id)?;
 	#[cfg(feature = "sha3")]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Argon2d)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, argon2d)?;
 	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Sha3, Mhf::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Sha3, pbkdf2sha256)?;
+	#[cfg(all(feature = "sha3", feature = "pbkdf2"))]
+	cipher_suite(Group::Ristretto255, Hash::Sha3, pbkdf2sha512)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2id)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, argon2id)?;
 	#[cfg(feature = "blake3")]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Argon2d)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, argon2d)?;
 	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::Ristretto255, Hash::Blake3, Mhf::Pbkdf2)?;
+	cipher_suite(Group::Ristretto255, Hash::Blake3, pbkdf2sha256)?;
+	#[cfg(all(feature = "blake3", feature = "pbkdf2"))]
+	cipher_suite(Group::Ristretto255, Hash::Blake3, pbkdf2sha512)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, Mhf::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Sha2, argon2id)?;
 	#[cfg(feature = "p256")]
-	cipher_suite(Group::P256, Hash::Sha2, Mhf::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Sha2, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha2, Mhf::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Sha2, pbkdf2sha256)?;
+	#[cfg(all(feature = "p256", feature = "pbkdf2"))]
+	cipher_suite(Group::P256, Hash::Sha2, pbkdf2sha512)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, Mhf::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Sha3, argon2id)?;
 	#[cfg(all(feature = "p256", feature = "sha3"))]
-	cipher_suite(Group::P256, Hash::Sha3, Mhf::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Sha3, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Sha3, Mhf::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Sha3, pbkdf2sha256)?;
+	#[cfg(all(feature = "p256", feature = "sha3", feature = "pbkdf2"))]
+	cipher_suite(Group::P256, Hash::Sha3, pbkdf2sha512)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, Mhf::Argon2id)?;
+	cipher_suite(Group::P256, Hash::Blake3, argon2id)?;
 	#[cfg(all(feature = "p256", feature = "blake3"))]
-	cipher_suite(Group::P256, Hash::Blake3, Mhf::Argon2d)?;
+	cipher_suite(Group::P256, Hash::Blake3, argon2d)?;
 	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
-	cipher_suite(Group::P256, Hash::Blake3, Mhf::Pbkdf2)?;
+	cipher_suite(Group::P256, Hash::Blake3, pbkdf2sha256)?;
+	#[cfg(all(feature = "p256", feature = "blake3", feature = "pbkdf2"))]
+	cipher_suite(Group::P256, Hash::Blake3, pbkdf2sha512)?;
 
 	Ok(())
 }
@@ -361,8 +391,26 @@ fn wrong_config() -> anyhow::Result<()> {
 	// Configuration
 	const PASSWORD: &[u8] = b"password";
 
-	let config = Config::new(Group::default(), Hash::default(), Mhf::Argon2id);
-	let wrong_config = Config::new(Group::default(), Hash::default(), Mhf::Argon2d);
+	let config = Config::new(
+		Group::default(),
+		Hash::default(),
+		Mhf::Argon2(Argon2Params::new(
+			Argon2Algorithm::Argon2id,
+			None,
+			None,
+			None,
+		)?),
+	);
+	let wrong_config = Config::new(
+		Group::default(),
+		Hash::default(),
+		Mhf::Argon2(Argon2Params::new(
+			Argon2Algorithm::Argon2d,
+			None,
+			None,
+			None,
+		)?),
+	);
 	let server_config = ServerConfig::new(config);
 	let wrong_server_config = ServerConfig::new(wrong_config);
 	let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
@@ -439,7 +487,7 @@ fn wrong_config() -> anyhow::Result<()> {
 	);
 	assert_eq!(
 		ServerLogin::login(&server_config, Some(wrong_server_file), request),
-		Err(Error::Config)
+		Err(Error::ServerFile)
 	);
 	assert_eq!(
 		ServerLogin::login(&server_config, Some(server_file), wrong_request),
@@ -472,8 +520,8 @@ fn getters() -> anyhow::Result<()> {
 
 	let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
 
-	assert_eq!(client.config(), config);
-	assert_eq!(client.public_key(), Some(public_key));
+	assert_eq!(client.config().config(), config);
+	assert_eq!(client.config().public_key(), Some(public_key));
 
 	let (server, response) = ServerRegistration::register(&server_config, request)?;
 
@@ -492,8 +540,8 @@ fn getters() -> anyhow::Result<()> {
 
 	let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
 
-	assert_eq!(client.config(), config);
-	assert_eq!(client.public_key(), Some(public_key));
+	assert_eq!(client.config().config(), config);
+	assert_eq!(client.config().public_key(), Some(public_key));
 
 	let (server, response) = ServerLogin::login(&server_config, Some(server_file), request)?;
 

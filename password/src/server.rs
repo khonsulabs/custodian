@@ -4,10 +4,9 @@
 
 use serde::{Deserialize, Serialize};
 
-#[cfg(doc)]
-use crate::Error;
 use crate::{
-	cipher_suite, Config, LoginFinalization, LoginRequest, LoginResponse, PublicKey,
+	cipher_suite::{self, ServerSetup},
+	Config, Error, LoginFinalization, LoginRequest, LoginResponse, PublicKey,
 	RegistrationFinalization, RegistrationRequest, RegistrationResponse, Result,
 };
 
@@ -15,11 +14,21 @@ use crate::{
 /// [`ServerFile`]s, if it is lost, all corresponding [`ServerFile`]s become
 /// unusable.
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub struct ServerConfig(cipher_suite::ServerSetup);
+pub struct ServerConfig {
+	/// [`Config`] of this [`ServerConfig`].
+	config: Config,
+	/// Holds the private key and OPRF seed.
+	setup: ServerSetup,
+}
 
 impl Default for ServerConfig {
 	fn default() -> Self {
-		Self(cipher_suite::ServerSetup::new(Config::default().0))
+		let config = Config::default();
+
+		Self {
+			config,
+			setup: ServerSetup::new(config.cipher_suite),
+		}
 	}
 }
 
@@ -29,38 +38,42 @@ impl ServerConfig {
 	/// [`ServerFile`]s become unusable.
 	#[must_use]
 	pub fn new(config: Config) -> Self {
-		Self(cipher_suite::ServerSetup::new(config.0))
+		Self {
+			config,
+			setup: ServerSetup::new(config.cipher_suite),
+		}
 	}
 
 	/// Returns the [`Config`] associated with this [`ServerConfig`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		Config(self.0.cipher_suite())
+		self.config
 	}
 
 	/// Returns the [`PublicKey`] associated with this [`ServerConfig`].
 	#[must_use]
 	pub fn public_key(&self) -> PublicKey {
-		PublicKey::new(self.config(), self.0.public_key())
+		PublicKey::new(self.config(), self.setup.public_key())
 	}
 }
 
 /// Holds the state of a registration process. See [`register`](Self::register).
-#[allow(missing_copy_implementations)]
 #[must_use = "Does nothing if not `finish`ed"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ServerRegistration {
-	/// Registration process sate.
-	state: cipher_suite::ServerRegistration,
+	/// [`Config`] of the corresponding [`ServerConfig`].
+	config: Config,
 	/// Public key of the corresponding [`ServerConfig`].
 	public_key: PublicKey,
+	/// Registration process sate.
+	state: cipher_suite::ServerRegistration,
 }
 
 impl ServerRegistration {
 	/// Returns the [`Config`] associated with this [`ServerRegistration`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		Config(self.state.cipher_suite())
+		self.config
 	}
 
 	/// Returns the [`PublicKey`] associated with this [`ServerRegistration`].
@@ -74,21 +87,30 @@ impl ServerRegistration {
 	/// [`ClientRegistration::finish()`](crate::ClientRegistration::finish).
 	///
 	/// # Errors
-	/// - [`Error::Config`](crate::Error::Config) if [`ServerConfig`] and
-	///   [`RegistrationRequest`] were not created with the same [`Config`]
-	/// - [`Error::Opaque`](crate::Error::Opaque) on internal OPAQUE error
+	/// - [`Error::Config`] if [`ServerConfig`] and [`RegistrationRequest`] were
+	///   not created with the same [`Config`]
+	/// - [`Error::Opaque`] on internal OPAQUE error
 	pub fn register(
 		config: &ServerConfig,
 		request: RegistrationRequest,
 	) -> Result<(Self, RegistrationResponse)> {
-		let (state, response) = cipher_suite::ServerRegistration::register(&config.0, request.0)?;
+		if config.config != request.config {
+			return Err(Error::Config);
+		}
+
+		let (state, message) =
+			cipher_suite::ServerRegistration::register(&config.setup, request.message)?;
 
 		Ok((
 			Self {
-				state,
+				config: config.config,
 				public_key: config.public_key(),
+				state,
 			},
-			RegistrationResponse(response),
+			RegistrationResponse {
+				config: config.config,
+				message,
+			},
 		))
 	}
 
@@ -96,14 +118,19 @@ impl ServerRegistration {
 	/// needed for the client to login. See [`ServerLogin::login()`].
 	///
 	/// # Errors
-	/// [`Error::Config`](crate::Error::Config) if [`ServerConfig`] and
-	/// [`RegistrationRequest`] were not created with the same [`Config`].
+	/// [`Error::Config`] if [`ServerConfig`] and [`RegistrationRequest`] were
+	/// not created with the same [`Config`].
 	pub fn finish(self, finalization: RegistrationFinalization) -> Result<ServerFile> {
-		let file = self.state.finish(finalization.0)?;
+		if self.config != finalization.config {
+			return Err(Error::Config);
+		}
+
+		let file = self.state.finish(finalization.message)?;
 
 		Ok(ServerFile {
-			file,
+			config: self.config,
 			public_key: self.public_key,
+			file,
 		})
 	}
 }
@@ -113,17 +140,19 @@ impl ServerRegistration {
 #[must_use = "Without this the client can't login"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ServerFile {
-	/// Password envelope.
-	file: cipher_suite::ServerFile,
+	/// [`Config`] of the corresponding [`ServerConfig`].
+	config: Config,
 	/// Public key of the corresponding [`ServerConfig`].
 	public_key: PublicKey,
+	/// Password envelope.
+	file: cipher_suite::ServerFile,
 }
 
 impl ServerFile {
 	/// Returns the [`Config`] associated with this [`ServerFile`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		Config(self.file.cipher_suite())
+		self.config
 	}
 
 	/// Returns the [`PublicKey`] associated with this [`ServerFile`].
@@ -136,13 +165,26 @@ impl ServerFile {
 /// Starts the login process on the server.
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 #[must_use = "Does nothing if not `finish`ed"]
-pub struct ServerLogin(cipher_suite::ServerLogin);
+pub struct ServerLogin {
+	/// [`Config`] of the corresponding [`ServerConfig`].
+	config: Config,
+	/// Public key of the corresponding [`ServerConfig`].
+	public_key: PublicKey,
+	/// Login process state.
+	state: cipher_suite::ServerLogin,
+}
 
 impl ServerLogin {
-	/// Returns the [`Config`] associated with this [`ServerRegistration`].
+	/// Returns the [`Config`] associated with this [`ServerLogin`].
 	#[must_use]
 	pub const fn config(&self) -> Config {
-		Config(self.0.cipher_suite())
+		self.config
+	}
+
+	/// Returns the [`PublicKey`] associated with this [`ServerLogin`].
+	#[must_use]
+	pub const fn public_key(&self) -> PublicKey {
+		self.public_key
 	}
 
 	/// Starts the login process. The returned [`LoginResponse`] has to
@@ -157,28 +199,46 @@ impl ServerLogin {
 	/// # Errors
 	/// - [`Error::Config`] if [`ServerConfig`], [`ServerFile`] or
 	///   [`LoginRequest`] were not created with the same [`Config`]
-	/// - [`Error::ServerConfig`] if [`ServerFile`] was not created with the
-	///   same [`ServerConfig`]
+	/// - [`Error::ServerFile`] if [`ServerFile`] was not created with the same
+	///   [`ServerConfig`]
 	/// - [`Error::Opaque`] on internal OPAQUE error
 	pub fn login(
 		config: &ServerConfig,
 		file: Option<ServerFile>,
 		request: LoginRequest,
 	) -> Result<(Self, LoginResponse)> {
-		let (state, response) = cipher_suite::ServerLogin::login(
-			&config.0,
+		if config.config != request.config {
+			return Err(Error::Config);
+		}
+
+		let (state, message) = cipher_suite::ServerLogin::login(
+			&config.setup,
 			file.map(|file| (file.file, file.public_key.key)),
-			request.0,
+			request.message,
 		)?;
 
-		Ok((Self(state), LoginResponse(response)))
+		Ok((
+			Self {
+				config: config.config,
+				public_key: config.public_key(),
+				state,
+			},
+			LoginResponse {
+				config: config.config,
+				message,
+			},
+		))
 	}
 
 	/// Finishes the login process.
 	///
 	/// # Errors
-	/// [`Error::Opaque`](crate::Error::Opaque) on internal OPAQUE error.
+	/// [`Error::Opaque`] on internal OPAQUE error.
 	pub fn finish(self, finalization: LoginFinalization) -> Result<()> {
-		self.0.finish(finalization.0)
+		if self.config != finalization.config {
+			return Err(Error::Config);
+		}
+
+		self.state.finish(finalization.message)
 	}
 }

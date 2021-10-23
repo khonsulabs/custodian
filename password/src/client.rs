@@ -56,23 +56,18 @@ impl ClientConfig {
 #[must_use = "Use `finish()` to complete the registration process"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientRegistration {
+	/// [`ClientConfig`] of this [`ClientRegistration`].
+	config: ClientConfig,
 	/// Client registration state.
 	state: cipher_suite::ClientRegistration,
-	/// Server public key.
-	public_key: Option<PublicKey>,
 }
 
 impl ClientRegistration {
-	/// Returns the [`Config`] associated with this [`ClientRegistration`].
+	/// Returns the [`ClientConfig`] associated with this
+	/// [`ClientRegistration`].
 	#[must_use]
-	pub const fn config(&self) -> Config {
-		Config(self.state.cipher_suite())
-	}
-
-	/// Returns the servers [`PublicKey`] associated with this [`ClientFile`].
-	#[must_use]
-	pub const fn public_key(&self) -> Option<PublicKey> {
-		self.public_key
+	pub const fn config(&self) -> ClientConfig {
+		self.config
 	}
 
 	/// Starts the registration process. The returned [`RegistrationRequest`]
@@ -85,16 +80,15 @@ impl ClientRegistration {
 		config: ClientConfig,
 		password: P,
 	) -> Result<(Self, RegistrationRequest)> {
-		let (state, message) =
-			cipher_suite::ClientRegistration::register(config.config.0, password.as_ref())?;
+		let (state, message) = cipher_suite::ClientRegistration::register(
+			config.config.cipher_suite,
+			password.as_ref(),
+		)?;
 
-		Ok((
-			Self {
-				state,
-				public_key: config.public_key,
-			},
-			RegistrationRequest(message),
-		))
+		Ok((Self { config, state }, RegistrationRequest {
+			config: config.config,
+			message,
+		}))
 	}
 
 	/// Finishes the registration process. The returned
@@ -118,22 +112,30 @@ impl ClientRegistration {
 		self,
 		response: RegistrationResponse,
 	) -> Result<(ClientFile, RegistrationFinalization, ExportKey)> {
-		let config = self.config();
-		let (finalization, new_public_key, export_key) = self.state.finish(response.0)?;
+		if self.config.config != response.config {
+			return Err(Error::Config);
+		}
 
-		let public_key = if let Some(public_key) = self.public_key {
+		let (message, new_public_key, export_key) = self
+			.state
+			.finish(response.message, &self.config.config.mhf().to_slow_hash())?;
+
+		let public_key = if let Some(public_key) = self.config.public_key {
 			if public_key.key != new_public_key {
 				return Err(Error::InvalidServer);
 			}
 
 			public_key
 		} else {
-			PublicKey::new(config, new_public_key)
+			PublicKey::new(self.config.config, new_public_key)
 		};
 
 		Ok((
 			ClientFile(public_key),
-			RegistrationFinalization(finalization),
+			RegistrationFinalization {
+				config: self.config.config,
+				message,
+			},
 			ExportKey::new(export_key),
 		))
 	}
@@ -161,23 +163,17 @@ impl ClientFile {
 #[must_use = "Does nothing if not `finish`ed"]
 #[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub struct ClientLogin {
+	/// [`ClientConfig`] of this [`ClientLogin`].
+	config: ClientConfig,
 	/// Client login state.
 	state: cipher_suite::ClientLogin,
-	/// Server public key.
-	public_key: Option<PublicKey>,
 }
 
 impl ClientLogin {
-	/// Returns the [`Config`] associated with this [`ClientLogin`].
+	/// Returns the [`ClientConfig`] associated with this [`ClientLogin`].
 	#[must_use]
-	pub const fn config(&self) -> Config {
-		Config(self.state.cipher_suite())
-	}
-
-	/// Returns the servers [`ClientLogin`] associated with this [`ClientFile`].
-	#[must_use]
-	pub const fn public_key(&self) -> Option<PublicKey> {
-		self.public_key
+	pub const fn config(&self) -> ClientConfig {
+		self.config
 	}
 
 	/// Starts the login process. The returned [`LoginRequest`] has to be send
@@ -190,34 +186,35 @@ impl ClientLogin {
 	/// # Errors
 	/// - [`Error::Config`] if [`ClientConfig`] and [`ClientFile`] were not
 	///   created with the same [`Config`]
-	/// - [`Error::PublicKey`] if [`PublicKey`] in [`ClientConfig`] and
+	/// - [`Error::ConfigPublicKey`] if [`PublicKey`] in [`ClientConfig`] and
 	///   [`ClientFile`] don't match
 	/// - [`Error::Opaque`] on internal OPAQUE error
 	pub fn login<P: AsRef<[u8]>>(
-		config: ClientConfig,
+		mut config: ClientConfig,
 		file: Option<ClientFile>,
 		password: P,
 	) -> Result<(Self, LoginRequest)> {
-		let public_key = if let Some(file) = &file {
+		if let Some(file) = &file {
 			if file.0.config != config.config {
 				return Err(Error::Config);
 			}
 
 			if let Some(public_key) = config.public_key {
 				if public_key != file.0 {
-					return Err(Error::PublicKey);
+					return Err(Error::ConfigPublicKey);
 				}
+			} else {
+				config.public_key = Some(file.0);
 			}
+		}
 
-			Some(file.0)
-		} else {
-			config.public_key
-		};
+		let (state, message) =
+			cipher_suite::ClientLogin::login(config.config.cipher_suite, password.as_ref())?;
 
-		let (state, request) =
-			cipher_suite::ClientLogin::login(config.config.0, password.as_ref())?;
-
-		Ok((Self { state, public_key }, LoginRequest(request)))
+		Ok((Self { config, state }, LoginRequest {
+			config: config.config,
+			message,
+		}))
 	}
 
 	/// Finishes the login process. The returned [`LoginFinalization`] has to be
@@ -240,26 +237,35 @@ impl ClientLogin {
 		self,
 		response: LoginResponse,
 	) -> Result<(ClientFile, LoginFinalization, ExportKey)> {
-		let config = Config(self.state.cipher_suite());
-		let (finalization, new_public_key, export_key) = match self.state.finish(response.0) {
+		if self.config.config != response.config {
+			return Err(Error::Config);
+		}
+
+		let (message, new_public_key, export_key) = match self
+			.state
+			.finish(response.message, &self.config.config.mhf().to_slow_hash())
+		{
 			Ok(result) => result,
 			Err(Error::Opaque(ProtocolError::InvalidLoginError)) => return Err(Error::Credentials),
 			Err(error) => return Err(error),
 		};
 
-		let public_key = if let Some(public_key) = self.public_key {
+		let public_key = if let Some(public_key) = self.config.public_key {
 			if public_key.key != new_public_key {
 				return Err(Error::InvalidServer);
 			}
 
 			public_key
 		} else {
-			PublicKey::new(config, new_public_key)
+			PublicKey::new(self.config.config, new_public_key)
 		};
 
 		Ok((
 			ClientFile(public_key),
-			LoginFinalization(finalization),
+			LoginFinalization {
+				config: self.config.config,
+				message,
+			},
 			ExportKey::new(export_key),
 		))
 	}

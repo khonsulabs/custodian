@@ -19,6 +19,7 @@ argon2 = "0.3"
 arrayvec = { version = "0.7", default-features = false, features = ["serde"] }
 blake3 = { version = "1", features = ["traits-preview"], optional = true }
 curve25519-dalek = "3"
+deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
