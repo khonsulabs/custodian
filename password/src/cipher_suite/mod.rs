@@ -34,6 +34,7 @@ use sha2::Sha512;
 use sha3::Sha3_256;
 #[cfg(feature = "sha3")]
 use sha3::Sha3_512;
+use zeroize::Zeroize;
 
 #[cfg(feature = "blake3")]
 use self::blake3::Blake3;
