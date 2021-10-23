@@ -99,7 +99,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">use generic_array::typenum::U64;</pre>
+                <pre class="has-background-white py-0 px-2">use generic_array::{typenum::U64, GenericArray};</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -148,7 +148,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1566
+                1696
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Default)]</pre>
@@ -200,7 +200,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2692
+                2915
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	fn update(&amp;mut self, data: impl AsRef&lt;[u8]&gt;) {</pre>
@@ -213,7 +213,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2692
+                2915
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">		Update::update(&amp;mut self.0, data);</pre>
@@ -226,7 +226,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2692
+                2915
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	}</pre>
@@ -356,10 +356,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1113
+                1205
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn finalize_into(self, out: &amp;mut generic_array::GenericArray&lt;u8, Self::OutputSize&gt;) {</pre>
+                <pre class="has-background-success-light py-0 px-2">	fn finalize_into(self, out: &amp;mut GenericArray&lt;u8, Self::OutputSize&gt;) {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -369,7 +369,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1113
+                1205
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">		self.0.finalize_xof().fill(out);</pre>
@@ -382,7 +382,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1113
+                1205
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	}</pre>
@@ -411,7 +411,7 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	fn finalize_into_reset(&amp;mut self, out: &amp;mut generic_array::GenericArray&lt;u8, Self::OutputSize&gt;) {</pre>
+                <pre class="has-background-danger-light py-0 px-2">	fn finalize_into_reset(&amp;mut self, out: &amp;mut GenericArray&lt;u8, Self::OutputSize&gt;) {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -499,7 +499,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                345
+                373
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	fn reset(&amp;mut self) {</pre>
@@ -512,7 +512,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                345
+                373
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">		Reset::reset(&amp;mut self.0);</pre>
@@ -525,7 +525,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                345
+                373
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">	}</pre>
@@ -546,7 +546,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-10-22 15:34</p>
+                <p class="heading">Date: 2021-10-23 02:06</p>
             </div>
         </footer>
     </body>
