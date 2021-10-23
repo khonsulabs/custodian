@@ -12,6 +12,7 @@ edition = "2018"
 [features]
 default = ["blake3"]
 p256 = ["opaque-ke/p256", "p256_"]
+parallel = ["argon2/parallel"]
 pbkdf2 = ["hmac", "pbkdf2_"]
 
 [dependencies]
