@@ -24,7 +24,7 @@ deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { git = "https://github.com/novifinancial/opaque-ke", features = [
+opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", branch = "kegroup-fix", features = [
 	"slow-hash",
 	"std"
 ] }
