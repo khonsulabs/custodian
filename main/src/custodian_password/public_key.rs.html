@@ -42,6 +42,7 @@
 <span id="42">42</span>
 <span id="43">43</span>
 <span id="44">44</span>
+<span id="45">45</span>
 </pre><pre class="rust"><code><span class="doccomment">//! See [`PublicKey`].</span>
 
 <span class="kw">use</span> <span class="ident">arrayvec::ArrayVec</span>;
@@ -80,6 +81,7 @@
 
 		<span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">group</span>() {
 			<span class="ident">Group::Ristretto255</span> =&gt; <span class="ident">bytes</span>.<span class="ident">truncate</span>(<span class="number">32</span>),
+			<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;p256&quot;</span>)]</span>
 			<span class="ident">Group::P256</span> =&gt; <span class="ident">bytes</span>.<span class="ident">truncate</span>(<span class="number">33</span>),
 		}
 
