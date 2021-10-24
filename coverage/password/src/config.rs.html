@@ -5932,11 +5932,11 @@
                 <a href="#454">454</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			Self::Sha3 =&gt; write!(f, &quot;SHA-3&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;sha3&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5949,7 +5949,7 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			Self::Blake3 =&gt; write!(f, &quot;BLAKE3&quot;),</pre>
+                <pre class="has-background-danger-light py-0 px-2">			Self::Sha3 =&gt; write!(f, &quot;SHA-3&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5962,7 +5962,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">		}</pre>
+                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;blake3&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5975,7 +5975,7 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	}</pre>
+                <pre class="has-background-danger-light py-0 px-2">			Self::Blake3 =&gt; write!(f, &quot;BLAKE3&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5988,7 +5988,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">		}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -5997,11 +5997,11 @@
                 <a href="#459">459</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6014,7 +6014,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Hash {</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6023,11 +6023,11 @@
                 <a href="#461">461</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                27
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6036,11 +6036,11 @@
                 <a href="#462">462</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                27
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		#[cfg(feature = &quot;blake3&quot;)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl Default for Hash {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6053,7 +6053,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		return Self::Blake3;</pre>
+                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6066,7 +6066,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		#[cfg(all(not(feature = &quot;blake3&quot;), feature = &quot;sha3&quot;))]</pre>
+                <pre class="has-background-success-light py-0 px-2">		#[cfg(feature = &quot;blake3&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6079,7 +6079,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		return Self::Sha3;</pre>
+                <pre class="has-background-success-light py-0 px-2">		return Self::Blake3;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6092,7 +6092,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		#[cfg(all(not(feature = &quot;blake3&quot;), not(feature = &quot;sha3&quot;)))]</pre>
+                <pre class="has-background-success-light py-0 px-2">		#[cfg(all(not(feature = &quot;blake3&quot;), feature = &quot;sha3&quot;))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6105,7 +6105,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		return Self::Sha2;</pre>
+                <pre class="has-background-success-light py-0 px-2">		return Self::Sha3;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6118,7 +6118,7 @@
                 27
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">		#[cfg(all(not(feature = &quot;blake3&quot;), not(feature = &quot;sha3&quot;)))]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6127,11 +6127,11 @@
                 <a href="#469">469</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                27
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		return Self::Sha2;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6140,11 +6140,11 @@
                 <a href="#470">470</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                27
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6157,7 +6157,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Memory-hardening function for OPAQUE.</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6166,11 +6166,11 @@
                 <a href="#472">472</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                912
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6183,7 +6183,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub enum Mhf {</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Memory-hardening function for OPAQUE.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6192,11 +6192,11 @@
                 <a href="#474">474</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                912
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2.</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6209,7 +6209,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Argon2(Argon2Params),</pre>
+                <pre class="has-background-white py-0 px-2">pub enum Mhf {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6222,7 +6222,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; PBKDF2.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6235,7 +6235,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+                <pre class="has-background-white py-0 px-2">	Argon2(Argon2Params),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6248,7 +6248,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Pbkdf2(Pbkdf2Params),</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; PBKDF2.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6261,7 +6261,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">	#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6274,7 +6274,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	Pbkdf2(Pbkdf2Params),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6287,7 +6287,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Debug for Mhf {</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6300,7 +6300,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	fn fmt(&amp;self, f: &amp;mut Formatter&lt;&#x27;_&gt;) -&gt; fmt::Result {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6309,11 +6309,11 @@
                 <a href="#483">483</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">		match self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl Debug for Mhf {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6326,7 +6326,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			Self::Argon2(Argon2Params {</pre>
+                <pre class="has-background-white py-0 px-2">	fn fmt(&amp;self, f: &amp;mut Formatter&lt;&#x27;_&gt;) -&gt; fmt::Result {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6335,11 +6335,11 @@
                 <a href="#485">485</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				algorithm: Argon2Algorithm::Argon2id,</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">		match self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6352,7 +6352,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				..</pre>
+                <pre class="has-background-white py-0 px-2">			Self::Argon2(Argon2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6361,11 +6361,11 @@
                 <a href="#487">487</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;Argon2id&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">				algorithm: Argon2Algorithm::Argon2id,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6378,7 +6378,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			Self::Argon2(Argon2Params {</pre>
+                <pre class="has-background-white py-0 px-2">				..</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6387,11 +6387,11 @@
                 <a href="#489">489</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				algorithm: Argon2Algorithm::Argon2d,</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;Argon2id&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6404,7 +6404,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				..</pre>
+                <pre class="has-background-white py-0 px-2">			Self::Argon2(Argon2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6413,11 +6413,11 @@
                 <a href="#491">491</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;Argon2d&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">				algorithm: Argon2Algorithm::Argon2d,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6430,7 +6430,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			Self::Pbkdf2(Pbkdf2Params {</pre>
+                <pre class="has-background-white py-0 px-2">				..</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6439,11 +6439,11 @@
                 <a href="#493">493</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				hash: Pbkdf2Hash::Sha256,</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;Argon2d&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6456,7 +6456,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				..</pre>
+                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6465,11 +6465,11 @@
                 <a href="#495">495</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;PBKDF2-SHA256&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">			Self::Pbkdf2(Pbkdf2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6482,7 +6482,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			Self::Pbkdf2(Pbkdf2Params {</pre>
+                <pre class="has-background-white py-0 px-2">				hash: Pbkdf2Hash::Sha256,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6495,7 +6495,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				hash: Pbkdf2Hash::Sha512,</pre>
+                <pre class="has-background-white py-0 px-2">				..</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6504,11 +6504,11 @@
                 <a href="#498">498</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">				..</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;PBKDF2-SHA256&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6517,11 +6517,11 @@
                 <a href="#499">499</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;PBKDF2-SHA512&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6534,7 +6534,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">		}</pre>
+                <pre class="has-background-white py-0 px-2">			Self::Pbkdf2(Pbkdf2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6543,11 +6543,11 @@
                 <a href="#501">501</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	}</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">				hash: Pbkdf2Hash::Sha512,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6560,7 +6560,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">				..</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6569,11 +6569,11 @@
                 <a href="#503">503</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			}) =&gt; write!(f, &quot;PBKDF2-SHA512&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6586,7 +6586,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Mhf {</pre>
+                <pre class="has-background-white py-0 px-2">		}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6595,11 +6595,11 @@
                 <a href="#505">505</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6608,11 +6608,11 @@
                 <a href="#506">506</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Self::Argon2(Argon2Params::default())</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6621,11 +6621,11 @@
                 <a href="#507">507</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6638,13 +6638,65 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl Default for Mhf {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="509">
                 <a href="#509">509</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="510">
+                <a href="#510">510</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		Self::Argon2(Argon2Params::default())</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="511">
+                <a href="#511">511</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="512">
+                <a href="#512">512</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="513">
+                <a href="#513">513</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -6656,8 +6708,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="510">
-                <a href="#510">510</a>
+                id="514">
+                <a href="#514">514</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -6669,8 +6721,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="511">
-                <a href="#511">511</a>
+                id="515">
+                <a href="#515">515</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -6682,8 +6734,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="512">
-                <a href="#512">512</a>
+                id="516">
+                <a href="#516">516</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6695,8 +6747,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="513">
-                <a href="#513">513</a>
+                id="517">
+                <a href="#517">517</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6708,8 +6760,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="514">
-                <a href="#514">514</a>
+                id="518">
+                <a href="#518">518</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6721,8 +6773,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="515">
-                <a href="#515">515</a>
+                id="519">
+                <a href="#519">519</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6734,8 +6786,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="516">
-                <a href="#516">516</a>
+                id="520">
+                <a href="#520">520</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6747,8 +6799,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="517">
-                <a href="#517">517</a>
+                id="521">
+                <a href="#521">521</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -6760,8 +6812,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="518">
-                <a href="#518">518</a>
+                id="522">
+                <a href="#522">522</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -6773,8 +6825,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="519">
-                <a href="#519">519</a>
+                id="523">
+                <a href="#523">523</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -6782,58 +6834,6 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2"></pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="520">
-                <a href="#520">520</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                93
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				SlowHashParams::Argon2(Argon2::new(</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="521">
-                <a href="#521">521</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                93
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">					algorithm,</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="522">
-                <a href="#522">522</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                93
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">					Version::default(),</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="523">
-                <a href="#523">523</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                93
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">					Params::new(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6846,7 +6846,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">						config.m_cost.get(),</pre>
+                <pre class="has-background-success-light py-0 px-2">				SlowHashParams::Argon2(Argon2::new(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6859,7 +6859,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">						config.t_cost.get(),</pre>
+                <pre class="has-background-success-light py-0 px-2">					algorithm,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6872,7 +6872,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">						config.p_cost.get(),</pre>
+                <pre class="has-background-success-light py-0 px-2">					Version::default(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6885,7 +6885,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">						None,</pre>
+                <pre class="has-background-success-light py-0 px-2">					Params::new(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6898,7 +6898,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">					)</pre>
+                <pre class="has-background-success-light py-0 px-2">						config.m_cost.get(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6911,7 +6911,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">					.expect(&quot;unexpected parameter&quot;),</pre>
+                <pre class="has-background-success-light py-0 px-2">						config.t_cost.get(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6924,7 +6924,7 @@
                 93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				))</pre>
+                <pre class="has-background-success-light py-0 px-2">						config.p_cost.get(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6933,11 +6933,11 @@
                 <a href="#531">531</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                93
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">						None,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6946,11 +6946,11 @@
                 <a href="#532">532</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                93
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">					)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6960,10 +6960,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                72
+                93
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			Self::Pbkdf2(config) =&gt; SlowHashParams::Pbkdf2(Pbkdf2(config)),</pre>
+                <pre class="has-background-success-light py-0 px-2">					.expect(&quot;unexpected parameter&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6972,11 +6972,11 @@
                 <a href="#534">534</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                93
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">		}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">				))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -6985,11 +6985,11 @@
                 <a href="#535">535</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                165
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">			}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7002,7 +7002,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">			#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7011,11 +7011,11 @@
                 <a href="#537">537</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                72
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			Self::Pbkdf2(config) =&gt; SlowHashParams::Pbkdf2(Pbkdf2(config)),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7028,7 +7028,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Configuration for [`Mhf::Argon2`].</pre>
+                <pre class="has-background-white py-0 px-2">		}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7038,10 +7038,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                516
+                165
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7054,7 +7054,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct Argon2Params {</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7067,7 +7067,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Specific algorithm to use.</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7080,7 +7080,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub algorithm: Argon2Algorithm,</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Configuration for [`Mhf::Argon2`].</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7089,11 +7089,11 @@
                 <a href="#543">543</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                516
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of memory blocks.</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7106,7 +7106,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub m_cost: U32&lt;{ Params::MIN_M_COST }, { Params::MAX_M_COST }&gt;,</pre>
+                <pre class="has-background-white py-0 px-2">pub struct Argon2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7119,7 +7119,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of passes.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Specific algorithm to use.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7132,7 +7132,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub t_cost: NonZeroU32,</pre>
+                <pre class="has-background-white py-0 px-2">	pub algorithm: Argon2Algorithm,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7145,7 +7145,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of threads.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of memory blocks.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7158,7 +7158,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub p_cost: U32&lt;{ Params::MIN_P_COST }, { Params::MAX_P_COST }&gt;,</pre>
+                <pre class="has-background-white py-0 px-2">	pub m_cost: U32&lt;{ Params::MIN_M_COST }, { Params::MAX_M_COST }&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7171,7 +7171,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of passes.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7184,7 +7184,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	pub t_cost: NonZeroU32,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7193,11 +7193,11 @@
                 <a href="#551">551</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of threads.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7206,11 +7206,11 @@
                 <a href="#552">552</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">fn argon2_ranges() {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	pub p_cost: U32&lt;{ Params::MIN_P_COST }, { Params::MAX_P_COST }&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7219,11 +7219,11 @@
                 <a href="#553">553</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(8, Params::MIN_M_COST);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7232,11 +7232,11 @@
                 <a href="#554">554</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0x0fff_ffff, Params::MAX_M_COST);</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7249,7 +7249,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(1, Params::MIN_T_COST);</pre>
+                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7262,7 +7262,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0xffff_ffff, Params::MAX_T_COST);</pre>
+                <pre class="has-background-success-light py-0 px-2">fn argon2_ranges() {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7275,7 +7275,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(1, Params::MIN_P_COST);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(8, Params::MIN_M_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7288,7 +7288,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0x00ff_ffff, Params::MAX_P_COST);</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0x0fff_ffff, Params::MAX_M_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7301,7 +7301,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">}</pre>
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(1, Params::MIN_T_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7310,11 +7310,11 @@
                 <a href="#560">560</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0xffff_ffff, Params::MAX_T_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7323,11 +7323,11 @@
                 <a href="#561">561</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Argon2Params {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(1, Params::MIN_P_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7336,11 +7336,11 @@
                 <a href="#562">562</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Construct a new [`Argon2Params`], checking for correct integer ranges.</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	assert_eq!(0x00ff_ffff, Params::MAX_P_COST);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7349,11 +7349,11 @@
                 <a href="#563">563</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7366,7 +7366,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7379,7 +7379,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::MhfConfig`] if `m_cost`, `t_cost` or `p_cost` are out of range:</pre>
+                <pre class="has-background-white py-0 px-2">impl Argon2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7392,7 +7392,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `m_cost`: 8 - 0x0fffffff</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Construct a new [`Argon2Params`], checking for correct integer ranges.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7405,7 +7405,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `t_cost`: 1 - 0xffffffff</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7418,7 +7418,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `p_cost`: 1 - 0x00ffffff</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7427,11 +7427,11 @@
                 <a href="#569">569</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                4
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	pub fn new&lt;</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::MhfConfig`] if `m_cost`, `t_cost` or `p_cost` are out of range:</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7440,11 +7440,11 @@
                 <a href="#570">570</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                4
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		A: Into&lt;Option&lt;Argon2Algorithm&gt;&gt;,</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `m_cost`: 8 - 0x0fffffff</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7453,11 +7453,11 @@
                 <a href="#571">571</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                4
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		M: Into&lt;Option&lt;u32&gt;&gt;,</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `t_cost`: 1 - 0xffffffff</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7466,11 +7466,11 @@
                 <a href="#572">572</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                4
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		T: Into&lt;Option&lt;u32&gt;&gt;,</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; - `p_cost`: 1 - 0x00ffffff</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7483,7 +7483,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		P: Into&lt;Option&lt;u32&gt;&gt;,</pre>
+                <pre class="has-background-success-light py-0 px-2">	pub fn new&lt;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7496,7 +7496,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	&gt;(</pre>
+                <pre class="has-background-success-light py-0 px-2">		A: Into&lt;Option&lt;Argon2Algorithm&gt;&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7509,7 +7509,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		algorithm: A,</pre>
+                <pre class="has-background-success-light py-0 px-2">		M: Into&lt;Option&lt;u32&gt;&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7522,7 +7522,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		m_cost: M,</pre>
+                <pre class="has-background-success-light py-0 px-2">		T: Into&lt;Option&lt;u32&gt;&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7535,7 +7535,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		t_cost: T,</pre>
+                <pre class="has-background-success-light py-0 px-2">		P: Into&lt;Option&lt;u32&gt;&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7548,7 +7548,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		p_cost: P,</pre>
+                <pre class="has-background-success-light py-0 px-2">	&gt;(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7561,7 +7561,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Self&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">		algorithm: A,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7574,7 +7574,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok(Self {</pre>
+                <pre class="has-background-success-light py-0 px-2">		m_cost: M,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7587,7 +7587,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			algorithm: algorithm.into().unwrap_or_default(),</pre>
+                <pre class="has-background-success-light py-0 px-2">		t_cost: T,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7600,7 +7600,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			m_cost: U32::new(m_cost.into().unwrap_or(Params::DEFAULT_M_COST))</pre>
+                <pre class="has-background-success-light py-0 px-2">		p_cost: P,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7613,7 +7613,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				.ok_or(Error::MhfConfig)?,</pre>
+                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Self&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7626,7 +7626,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			t_cost: NonZeroU32::new(t_cost.into().unwrap_or(Params::DEFAULT_T_COST))</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok(Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7639,7 +7639,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">				.ok_or(Error::MhfConfig)?,</pre>
+                <pre class="has-background-success-light py-0 px-2">			algorithm: algorithm.into().unwrap_or_default(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7652,7 +7652,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			p_cost: U32::new(p_cost.into().unwrap_or(Params::DEFAULT_P_COST))</pre>
+                <pre class="has-background-success-light py-0 px-2">			m_cost: U32::new(m_cost.into().unwrap_or(Params::DEFAULT_M_COST))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7674,11 +7674,11 @@
                 <a href="#588">588</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                4
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">		})</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			t_cost: NonZeroU32::new(t_cost.into().unwrap_or(Params::DEFAULT_T_COST))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7691,7 +7691,7 @@
                 4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">				.ok_or(Error::MhfConfig)?,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7700,11 +7700,11 @@
                 <a href="#590">590</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                4
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			p_cost: U32::new(p_cost.into().unwrap_or(Params::DEFAULT_P_COST))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7713,11 +7713,11 @@
                 <a href="#591">591</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                4
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">				.ok_or(Error::MhfConfig)?,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7730,7 +7730,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Specific algorithm to use for [`Argon2Params`].</pre>
+                <pre class="has-background-white py-0 px-2">		})</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7740,10 +7740,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                516
+                4
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7756,7 +7756,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub enum Argon2Algorithm {</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7769,7 +7769,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2id algorithm. Slower then Argon2d, but resists side-channel</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7782,7 +7782,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; attacks.</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Specific algorithm to use for [`Argon2Params`].</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7791,11 +7791,11 @@
                 <a href="#597">597</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                516
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Argon2id,</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7808,7 +7808,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2d algorithm. Faster then Argon2id, but has no resistance against</pre>
+                <pre class="has-background-white py-0 px-2">pub enum Argon2Algorithm {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7821,7 +7821,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; side-channel attacks.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2id algorithm. Slower then Argon2d, but resists side-channel</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7834,7 +7834,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; attacks.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7847,7 +7847,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Caution</pre>
+                <pre class="has-background-white py-0 px-2">	Argon2id,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7860,7 +7860,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Only use this when you trust your host, e.g. not a shared cloud</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Argon2d algorithm. Faster then Argon2id, but has no resistance against</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7873,7 +7873,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; instance.</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; side-channel attacks.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7886,7 +7886,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Argon2d,</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7899,7 +7899,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Caution</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7912,7 +7912,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Only use this when you trust your host, e.g. not a shared cloud</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7925,7 +7925,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Argon2Params {</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; instance.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7934,11 +7934,11 @@
                 <a href="#608">608</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	Argon2d,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7947,11 +7947,11 @@
                 <a href="#609">609</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7960,11 +7960,11 @@
                 <a href="#610">610</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			algorithm: Argon2Algorithm::default(),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7973,11 +7973,11 @@
                 <a href="#611">611</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			m_cost: U32::new(Params::DEFAULT_M_COST).expect(&quot;unexpected cost&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl Default for Argon2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -7990,7 +7990,7 @@
                 25
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			t_cost: NonZeroU32::new(Params::DEFAULT_T_COST).expect(&quot;unexpected cost&quot;),</pre>
+                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8003,7 +8003,7 @@
                 25
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			p_cost: U32::new(Params::DEFAULT_P_COST).expect(&quot;unexpected cost&quot;),</pre>
+                <pre class="has-background-success-light py-0 px-2">		Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8016,7 +8016,7 @@
                 25
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		}</pre>
+                <pre class="has-background-success-light py-0 px-2">			algorithm: Argon2Algorithm::default(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8029,7 +8029,7 @@
                 25
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">			m_cost: U32::new(Params::DEFAULT_M_COST).expect(&quot;unexpected cost&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8038,11 +8038,11 @@
                 <a href="#616">616</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			t_cost: NonZeroU32::new(Params::DEFAULT_T_COST).expect(&quot;unexpected cost&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8051,11 +8051,11 @@
                 <a href="#617">617</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			p_cost: U32::new(Params::DEFAULT_P_COST).expect(&quot;unexpected cost&quot;),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8064,11 +8064,11 @@
                 <a href="#618">618</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Argon2Algorithm {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8081,7 +8081,7 @@
                 25
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8090,11 +8090,11 @@
                 <a href="#620">620</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Self::Argon2id</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8103,11 +8103,11 @@
                 <a href="#621">621</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                25
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8120,7 +8120,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl Default for Argon2Algorithm {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8129,11 +8129,11 @@
                 <a href="#623">623</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	fn default() -&gt; Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8142,11 +8142,11 @@
                 <a href="#624">624</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Configuration for [`Mhf::Pbkdf2`].</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">		Self::Argon2id</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8155,11 +8155,11 @@
                 <a href="#625">625</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                25
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8168,11 +8168,11 @@
                 <a href="#626">626</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                396
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8185,7 +8185,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct Pbkdf2Params {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8198,7 +8198,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Specific [hash](Pbkdf2Hash) to use with PBKDF2.</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Configuration for [`Mhf::Pbkdf2`].</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8211,7 +8211,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub hash: Pbkdf2Hash,</pre>
+                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8220,11 +8220,11 @@
                 <a href="#630">630</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                396
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of passes.</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8237,7 +8237,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	pub rounds: NonZeroU32,</pre>
+                <pre class="has-background-white py-0 px-2">pub struct Pbkdf2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8250,7 +8250,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Specific [hash](Pbkdf2Hash) to use with PBKDF2.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8263,7 +8263,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	pub hash: Pbkdf2Hash,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8276,7 +8276,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Number of passes.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8289,7 +8289,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Pbkdf2Params {</pre>
+                <pre class="has-background-white py-0 px-2">	pub rounds: NonZeroU32,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8302,7 +8302,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Construct a new [`Pbkdf2Params`], checking for correct integer ranges.</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8315,7 +8315,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8328,7 +8328,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
+                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8341,7 +8341,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::MhfConfig`] if `rounds` is `0`.</pre>
+                <pre class="has-background-white py-0 px-2">impl Pbkdf2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8350,11 +8350,11 @@
                 <a href="#640">640</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	pub fn new&lt;H: Into&lt;Option&lt;Pbkdf2Hash&gt;&gt;, R: Into&lt;Option&lt;u32&gt;&gt;&gt;(</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; Construct a new [`Pbkdf2Params`], checking for correct integer ranges.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8363,11 +8363,11 @@
                 <a href="#641">641</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		hash: H,</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8376,11 +8376,11 @@
                 <a href="#642">642</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		rounds: R,</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; # Errors</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8389,11 +8389,11 @@
                 <a href="#643">643</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Self&gt; {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; [`Error::MhfConfig`] if `rounds` is `0`.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8406,7 +8406,7 @@
                 2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">		Ok(Self {</pre>
+                <pre class="has-background-success-light py-0 px-2">	pub fn new&lt;H: Into&lt;Option&lt;Pbkdf2Hash&gt;&gt;, R: Into&lt;Option&lt;u32&gt;&gt;&gt;(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8419,7 +8419,7 @@
                 2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			hash: hash.into().unwrap_or_default(),</pre>
+                <pre class="has-background-success-light py-0 px-2">		hash: H,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8432,7 +8432,7 @@
                 2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">			rounds: NonZeroU32::new(rounds.into().unwrap_or(10000)).ok_or(Error::MhfConfig)?,</pre>
+                <pre class="has-background-success-light py-0 px-2">		rounds: R,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8441,11 +8441,11 @@
                 <a href="#647">647</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">		})</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	) -&gt; Result&lt;Self&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8458,7 +8458,7 @@
                 2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">	}</pre>
+                <pre class="has-background-success-light py-0 px-2">		Ok(Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8467,11 +8467,11 @@
                 <a href="#649">649</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			hash: hash.into().unwrap_or_default(),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8480,11 +8480,11 @@
                 <a href="#650">650</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">			rounds: NonZeroU32::new(rounds.into().unwrap_or(10000)).ok_or(Error::MhfConfig)?,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8497,7 +8497,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Specific hash to use with PBKDF2.</pre>
+                <pre class="has-background-white py-0 px-2">		})</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8506,11 +8506,11 @@
                 <a href="#652">652</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8519,11 +8519,11 @@
                 <a href="#653">653</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                396
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8536,7 +8536,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub enum Pbkdf2Hash {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8549,7 +8549,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; SHA-256.</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; Specific hash to use with PBKDF2.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8562,7 +8562,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Sha256,</pre>
+                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8571,11 +8571,11 @@
                 <a href="#657">657</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                396
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; SHA-512.</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8588,7 +8588,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">	Sha512,</pre>
+                <pre class="has-background-white py-0 px-2">pub enum Pbkdf2Hash {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8601,7 +8601,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; SHA-256.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8614,7 +8614,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">	Sha256,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8627,7 +8627,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
+                <pre class="has-background-white py-0 px-2">	&#x2F;&#x2F;&#x2F; SHA-512.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8640,7 +8640,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Pbkdf2Params {</pre>
+                <pre class="has-background-white py-0 px-2">	Sha512,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8649,11 +8649,11 @@
                 <a href="#663">663</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8662,11 +8662,11 @@
                 <a href="#664">664</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">		Self {</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8675,11 +8675,11 @@
                 <a href="#665">665</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			hash: Pbkdf2Hash::default(),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8688,11 +8688,11 @@
                 <a href="#666">666</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">			rounds: NonZeroU32::new(10000).expect(&quot;unexpected value&quot;),</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl Default for Pbkdf2Params {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8705,7 +8705,7 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">		}</pre>
+                <pre class="has-background-danger-light py-0 px-2">	fn default() -&gt; Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8718,13 +8718,65 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	}</pre>
+                <pre class="has-background-danger-light py-0 px-2">		Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="669">
                 <a href="#669">669</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			hash: Pbkdf2Hash::default(),</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="670">
+                <a href="#670">670</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">			rounds: NonZeroU32::new(10000).expect(&quot;unexpected value&quot;),</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="671">
+                <a href="#671">671</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">		}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="672">
+                <a href="#672">672</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">	}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="673">
+                <a href="#673">673</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -8736,8 +8788,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="670">
-                <a href="#670">670</a>
+                id="674">
+                <a href="#674">674</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -8749,8 +8801,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="671">
-                <a href="#671">671</a>
+                id="675">
+                <a href="#675">675</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -8758,58 +8810,6 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2">#[cfg(feature = &quot;pbkdf2&quot;)]</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="672">
-                <a href="#672">672</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
-            </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Default for Pbkdf2Hash {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="673">
-                <a href="#673">673</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
-                
-            </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	fn default() -&gt; Self {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="674">
-                <a href="#674">674</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
-                
-            </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">		Self::Sha256</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="675">
-                <a href="#675">675</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
-                
-            </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">	}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -8822,12 +8822,64 @@
                 
             </div>
             <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">impl Default for Pbkdf2Hash {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="677">
+                <a href="#677">677</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">	fn default() -&gt; Self {</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="678">
+                <a href="#678">678</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">		Self::Sha256</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="679">
+                <a href="#679">679</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                
+            </div>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">	}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="680">
+                <a href="#680">680</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2021-10-23 04:57</p>
+                <p class="heading">Date: 2021-10-24 16:19</p>
             </div>
         </footer>
     </body>
