@@ -587,6 +587,31 @@
 <span id="587">587</span>
 <span id="588">588</span>
 <span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">deny</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(
 	<span class="ident">clippy::cargo</span>,
@@ -884,28 +909,53 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::too_many_lines</span>)]</span>
 <span class="kw">fn</span> <span class="ident">cipher_suites</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
+
+	<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
+
 	<span class="kw">const</span> <span class="ident">PASSWORD</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="string">b&quot;password&quot;</span>;
 
 	<span class="kw">fn</span> <span class="ident">cipher_suite</span>(<span class="ident">ake</span>: <span class="ident">Ake</span>, <span class="ident">group</span>: <span class="ident">Group</span>, <span class="ident">hash</span>: <span class="ident">Hash</span>, <span class="ident">mhf</span>: <span class="ident">Mhf</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::new</span>(<span class="ident">ake</span>, <span class="ident">group</span>, <span class="ident">hash</span>, <span class="ident">mhf</span>);
+		<span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">DeserializeOwned</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Serialize</span><span class="op">&gt;</span>(
+			<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>,
+		) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+			<span class="kw">let</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">bincode::deserialize</span>(<span class="kw-2">&amp;</span><span class="ident">bincode::serialize</span>(<span class="ident">value</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+			<span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">new</span>, <span class="ident">value</span>);
+			<span class="prelude-val">Ok</span>(<span class="ident">new</span>)
+		}
+
+		<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">Config::new</span>(<span class="ident">ake</span>, <span class="ident">group</span>, <span class="ident">hash</span>, <span class="ident">mhf</span>))<span class="question-mark">?</span>;
 
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">ake</span>(), <span class="ident">ake</span>);
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">group</span>(), <span class="ident">group</span>);
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">crypto_hash</span>(), <span class="ident">hash</span>);
 		<span class="macro">assert_eq!</span>(<span class="ident">config</span>.<span class="ident">mhf</span>(), <span class="ident">mhf</span>);
 
-		<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig::new</span>(<span class="ident">config</span>);
-		<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">ClientConfig::new</span>(<span class="ident">config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()))<span class="question-mark">?</span>;
+		<span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">ServerConfig::new</span>(<span class="ident">config</span>))<span class="question-mark">?</span>;
+		<span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">ClientConfig::new</span>(
+			<span class="ident">config</span>,
+			<span class="prelude-val">Some</span>(<span class="ident">server_config</span>.<span class="ident">public_key</span>()),
+		)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
 		<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(<span class="ident">client_config</span>, <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> (<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>)<span class="question-mark">?</span>, <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">request</span>)<span class="question-mark">?</span>);
 		<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="ident">request</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> (<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">server</span>)<span class="question-mark">?</span>, <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)<span class="question-mark">?</span>);
 		<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">client_file</span>, <span class="ident">finalization</span>) <span class="op">=</span> (<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">client_file</span>)<span class="question-mark">?</span>, <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">finalization</span>)<span class="question-mark">?</span>);
+		<span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
 		<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(<span class="ident">client_config</span>, <span class="prelude-val">Some</span>(<span class="ident">client_file</span>), <span class="ident">PASSWORD</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">request</span>) <span class="op">=</span> (<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>)<span class="question-mark">?</span>, <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">request</span>)<span class="question-mark">?</span>);
 		<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span>
 			<span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">server_config</span>, <span class="prelude-val">Some</span>(<span class="ident">server_file</span>.<span class="ident">clone</span>()), <span class="ident">request</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">server</span>, <span class="ident">response</span>) <span class="op">=</span> (<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">server</span>)<span class="question-mark">?</span>, <span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)<span class="question-mark">?</span>);
 		<span class="kw">let</span> (<span class="ident">new_client_file</span>, <span class="ident">finalization</span>, <span class="ident">new_export_key</span>) <span class="op">=</span> <span class="ident">client</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
+		<span class="kw">let</span> (<span class="ident">new_client_file</span>, <span class="ident">finalization</span>, <span class="ident">new_export_key</span>) <span class="op">=</span> (
+			<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">new_client_file</span>)<span class="question-mark">?</span>,
+			<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">finalization</span>)<span class="question-mark">?</span>,
+			<span class="ident">serialize</span>(<span class="kw-2">&amp;</span><span class="ident">new_export_key</span>)<span class="question-mark">?</span>,
+		);
 		<span class="ident">server</span>.<span class="ident">finish</span>(<span class="ident">finalization</span>)<span class="question-mark">?</span>;
 
 		<span class="macro">assert_eq!</span>(<span class="ident">client_file</span>, <span class="ident">new_client_file</span>);
