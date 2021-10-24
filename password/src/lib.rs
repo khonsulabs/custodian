@@ -295,28 +295,53 @@ fn wrong_client_config() -> anyhow::Result<()> {
 #[test]
 #[allow(clippy::too_many_lines)]
 fn cipher_suites() -> anyhow::Result<()> {
+	use std::fmt::Debug;
+
+	use serde::{de::DeserializeOwned, Serialize};
+
 	const PASSWORD: &[u8] = b"password";
 
 	fn cipher_suite(ake: Ake, group: Group, hash: Hash, mhf: Mhf) -> anyhow::Result<()> {
-		let config = Config::new(ake, group, hash, mhf);
+		fn serialize<T: Debug + DeserializeOwned + PartialEq<T> + Serialize>(
+			value: &T,
+		) -> anyhow::Result<T> {
+			let new = bincode::deserialize(&bincode::serialize(value)?)?;
+			assert_eq!(&new, value);
+			Ok(new)
+		}
+
+		let config = serialize(&Config::new(ake, group, hash, mhf))?;
 
 		assert_eq!(config.ake(), ake);
 		assert_eq!(config.group(), group);
 		assert_eq!(config.crypto_hash(), hash);
 		assert_eq!(config.mhf(), mhf);
 
-		let server_config = ServerConfig::new(config);
-		let client_config = ClientConfig::new(config, Some(server_config.public_key()))?;
+		let server_config = serialize(&ServerConfig::new(config))?;
+		let client_config = serialize(&ClientConfig::new(
+			config,
+			Some(server_config.public_key()),
+		)?)?;
 
 		let (client, request) = ClientRegistration::register(client_config, PASSWORD)?;
+		let (client, request) = (serialize(&client)?, serialize(&request)?);
 		let (server, response) = ServerRegistration::register(&server_config, request)?;
+		let (server, response) = (serialize(&server)?, serialize(&response)?);
 		let (client_file, finalization, export_key) = client.finish(response)?;
-		let server_file = server.finish(finalization)?;
+		let (client_file, finalization) = (serialize(&client_file)?, serialize(&finalization)?);
+		let server_file = serialize(&server.finish(finalization)?)?;
 
 		let (client, request) = ClientLogin::login(client_config, Some(client_file), PASSWORD)?;
+		let (client, request) = (serialize(&client)?, serialize(&request)?);
 		let (server, response) =
 			ServerLogin::login(&server_config, Some(server_file.clone()), request)?;
+		let (server, response) = (serialize(&server)?, serialize(&response)?);
 		let (new_client_file, finalization, new_export_key) = client.finish(response)?;
+		let (new_client_file, finalization, new_export_key) = (
+			serialize(&new_client_file)?,
+			serialize(&finalization)?,
+			serialize(&new_export_key)?,
+		);
 		server.finish(finalization)?;
 
 		assert_eq!(client_file, new_client_file);
