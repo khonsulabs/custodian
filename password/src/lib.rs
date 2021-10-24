@@ -85,11 +85,11 @@ mod server;
 pub use arrayvec;
 pub use serde;
 
+#[cfg(feature = "pbkdf2")]
+pub use crate::config::{Pbkdf2Hash, Pbkdf2Params};
 pub use crate::{
 	client::{ClientConfig, ClientFile, ClientLogin, ClientRegistration},
-	config::{
-		Ake, Argon2Algorithm, Argon2Params, Config, Group, Hash, Mhf, Pbkdf2Hash, Pbkdf2Params,
-	},
+	config::{Ake, Argon2Algorithm, Argon2Params, Config, Group, Hash, Mhf},
 	error::{Error, Result},
 	export_key::ExportKey,
 	message::{

@@ -451,7 +451,9 @@ impl Debug for Hash {
 	fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::Sha2 => write!(f, "SHA-2"),
+			#[cfg(feature = "sha3")]
 			Self::Sha3 => write!(f, "SHA-3"),
+			#[cfg(feature = "blake3")]
 			Self::Blake3 => write!(f, "BLAKE3"),
 		}
 	}
@@ -489,10 +491,12 @@ impl Debug for Mhf {
 				algorithm: Argon2Algorithm::Argon2d,
 				..
 			}) => write!(f, "Argon2d"),
+			#[cfg(feature = "pbkdf2")]
 			Self::Pbkdf2(Pbkdf2Params {
 				hash: Pbkdf2Hash::Sha256,
 				..
 			}) => write!(f, "PBKDF2-SHA256"),
+			#[cfg(feature = "pbkdf2")]
 			Self::Pbkdf2(Pbkdf2Params {
 				hash: Pbkdf2Hash::Sha512,
 				..

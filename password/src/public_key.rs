@@ -36,6 +36,7 @@ impl PublicKey {
 
 		match self.config.group() {
 			Group::Ristretto255 => bytes.truncate(32),
+			#[cfg(feature = "p256")]
 			Group::P256 => bytes.truncate(33),
 		}
 
