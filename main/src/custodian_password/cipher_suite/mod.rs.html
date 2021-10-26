@@ -782,7 +782,7 @@
 
 		<span class="doccomment">/// [`opaque_ke::ClientRegistration`] wrapper.</span>
 		<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_docs_in_private_items</span>)]</span>
-		<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
+		<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 		<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">ClientRegistration</span> {
 			$($(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="question-mark">?</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span>(<span class="ident">opaque_ke::ClientRegistration</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cipher_suite</span><span class="op">&gt;</span>),)<span class="op">+</span>
 		}
