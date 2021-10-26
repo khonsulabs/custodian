@@ -24,7 +24,7 @@ deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", rev = "e6cb5b7d8ca83eb296ccbfbe1b26e16f36403fdc", features = [
+opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", rev = "b225879eda03fbd20f2724509b8d80e5c05ef4af", features = [
 	"slow-hash",
 	"std",
 ] }
