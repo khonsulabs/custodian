@@ -24,9 +24,9 @@ deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", branch = "kegroup-fix", features = [
+opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", rev = "c63df3312c33940adf897803c35f95cbf49a174f", features = [
 	"slow-hash",
-	"std"
+	"std",
 ] }
 p256_ = { package = "p256", version = "0.9", optional = true }
 pbkdf2_ = { package = "pbkdf2", version = "0.9", default-features = false, optional = true }
@@ -34,7 +34,9 @@ sha2 = "0.9"
 sha3 = { version = "0.9", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde-big-array = { version = "0.3", features = ["const-generics"] }
+subtle = "2"
 thiserror = "1"
+voprf = "0.2"
 zeroize = "1"
 
 [dev-dependencies]

@@ -1,16 +1,18 @@
 //! See [`P256`].
 
-use std::ops::Mul;
+use std::ops::{Add, Mul, Sub};
 
-use generic_array::GenericArray;
+use digest::{BlockInput, Digest};
+use generic_array::{typenum::U1, ArrayLength, GenericArray};
 use opaque_ke::{
-	errors::{InternalError, ProtocolError},
-	group::Group,
-	hash::Hash,
+	errors::InternalError,
+	key_exchange::group::KeGroup,
 	rand::{CryptoRng, RngCore},
 };
 use p256_::ProjectivePoint;
 use serde::{de::Error, Deserialize, Deserializer, Serialize, Serializer};
+use subtle::ConstantTimeEq;
+use voprf::{errors::InternalError as VoprfInternalError, group::Group};
 use zeroize::Zeroize;
 
 /// Object implementing [`Group`] for P256. This encapsulates
@@ -36,11 +38,50 @@ impl Serialize for P256 {
 	}
 }
 
+impl Add<&Self> for P256 {
+	type Output = Self;
+
+	fn add(self, other: &Self) -> Self {
+		Self(Add::add(self.0, other.0))
+	}
+}
+
 impl Mul<&Scalar> for P256 {
 	type Output = Self;
 
 	fn mul(self, other: &Scalar) -> Self {
 		Self(Mul::mul(self.0, other.0))
+	}
+}
+
+impl ConstantTimeEq for P256 {
+	fn ct_eq(&self, other: &Self) -> subtle::Choice {
+		self.0.ct_eq(&other.0)
+	}
+}
+
+impl KeGroup for P256 {
+	type PkLen = <ProjectivePoint as KeGroup>::PkLen;
+	type SkLen = <ProjectivePoint as KeGroup>::SkLen;
+
+	fn from_pk_slice(element_bits: &GenericArray<u8, Self::PkLen>) -> Result<Self, InternalError> {
+		ProjectivePoint::from_pk_slice(element_bits).map(Self)
+	}
+
+	fn random_sk<R: RngCore + CryptoRng>(rng: &mut R) -> GenericArray<u8, Self::SkLen> {
+		ProjectivePoint::random_sk(rng)
+	}
+
+	fn public_key(sk: &GenericArray<u8, Self::SkLen>) -> Self {
+		Self(ProjectivePoint::public_key(sk))
+	}
+
+	fn to_arr(&self) -> GenericArray<u8, Self::PkLen> {
+		<ProjectivePoint as KeGroup>::to_arr(&self.0)
+	}
+
+	fn diffie_hellman(&self, sk: &GenericArray<u8, Self::SkLen>) -> GenericArray<u8, Self::PkLen> {
+		self.0.diffie_hellman(sk)
 	}
 }
 
@@ -51,18 +92,36 @@ impl Group for P256 {
 
 	const SUITE_ID: usize = <ProjectivePoint as Group>::SUITE_ID;
 
-	fn map_to_curve<H: Hash>(msg: &[u8], dst: &[u8]) -> Result<Self, ProtocolError> {
-		ProjectivePoint::map_to_curve::<H>(msg, dst).map(Self)
+	fn hash_to_curve<H: BlockInput + Digest, D: ArrayLength<u8> + Add<U1>>(
+		msg: &[u8],
+		dst: GenericArray<u8, D>,
+	) -> Result<Self, VoprfInternalError>
+	where
+		<D as Add<U1>>::Output: ArrayLength<u8>,
+	{
+		ProjectivePoint::hash_to_curve::<H, _>(msg, dst).map(Self)
 	}
 
-	fn hash_to_scalar<H: Hash>(input: &[u8], dst: &[u8]) -> Result<Self::Scalar, ProtocolError> {
-		ProjectivePoint::hash_to_scalar::<H>(input, dst).map(Scalar)
+	#[allow(single_use_lifetimes)]
+	fn hash_to_scalar<
+		'a,
+		H: BlockInput + Digest,
+		D: ArrayLength<u8> + Add<U1>,
+		I: IntoIterator<Item = &'a [u8]>,
+	>(
+		input: I,
+		dst: GenericArray<u8, D>,
+	) -> Result<Self::Scalar, VoprfInternalError>
+	where
+		<D as Add<U1>>::Output: ArrayLength<u8>,
+	{
+		ProjectivePoint::hash_to_scalar::<H, _, _>(input, dst).map(Scalar)
 	}
 
-	fn from_scalar_slice(
+	fn from_scalar_slice_unchecked(
 		scalar_bits: &GenericArray<u8, Self::ScalarLen>,
-	) -> Result<Self::Scalar, InternalError> {
-		ProjectivePoint::from_scalar_slice(scalar_bits).map(Scalar)
+	) -> Result<Self::Scalar, VoprfInternalError> {
+		ProjectivePoint::from_scalar_slice_unchecked(scalar_bits).map(Scalar)
 	}
 
 	fn random_nonzero_scalar<R: RngCore + CryptoRng>(rng: &mut R) -> Self::Scalar {
@@ -77,30 +136,30 @@ impl Group for P256 {
 		Scalar(ProjectivePoint::scalar_invert(&scalar.0))
 	}
 
-	fn from_element_slice(
+	fn from_element_slice_unchecked(
 		element_bits: &GenericArray<u8, Self::ElemLen>,
-	) -> Result<Self, InternalError> {
-		ProjectivePoint::from_element_slice(element_bits).map(Self)
+	) -> Result<Self, VoprfInternalError> {
+		ProjectivePoint::from_element_slice_unchecked(element_bits).map(Self)
 	}
 
 	fn to_arr(&self) -> GenericArray<u8, Self::ElemLen> {
-		self.0.to_arr()
-	}
-
-	fn is_identity(&self) -> bool {
-		self.0.is_identity()
-	}
-
-	fn ct_equal(&self, other: &Self) -> bool {
-		self.0.ct_equal(&other.0)
+		<ProjectivePoint as Group>::to_arr(&self.0)
 	}
 
 	fn base_point() -> Self {
 		Self(ProjectivePoint::base_point())
 	}
 
-	fn mult_by_slice(&self, scalar: &GenericArray<u8, Self::ScalarLen>) -> Self {
-		Self(self.0.mult_by_slice(scalar))
+	fn is_identity(&self) -> bool {
+		self.0.is_identity()
+	}
+
+	fn identity() -> Self {
+		Self(ProjectivePoint::identity())
+	}
+
+	fn scalar_zero() -> Self::Scalar {
+		Scalar(ProjectivePoint::scalar_zero())
 	}
 }
 
@@ -132,5 +191,35 @@ impl Serialize for Scalar {
 		S: Serializer,
 	{
 		self.0.to_bytes().serialize(serializer)
+	}
+}
+
+impl Add<&Self> for Scalar {
+	type Output = Self;
+
+	fn add(self, rhs: &Self) -> Self::Output {
+		Self(self.0.add(&rhs.0))
+	}
+}
+
+impl Sub<&Self> for Scalar {
+	type Output = Self;
+
+	fn sub(self, rhs: &Self) -> Self::Output {
+		Self(self.0.sub(&rhs.0))
+	}
+}
+
+impl Mul<&Self> for Scalar {
+	type Output = Self;
+
+	fn mul(self, rhs: &Self) -> Self::Output {
+		Self(self.0.mul(&rhs.0))
+	}
+}
+
+impl ConstantTimeEq for Scalar {
+	fn ct_eq(&self, other: &Self) -> subtle::Choice {
+		self.0.ct_eq(&other.0)
 	}
 }
