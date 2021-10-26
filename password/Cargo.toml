@@ -24,7 +24,7 @@ deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"
 generic-array = { version = "0.14", features = ["more_lengths"] }
 hmac = { version = "0.11", optional = true }
-opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", rev = "c63df3312c33940adf897803c35f95cbf49a174f", features = [
+opaque-ke = { git = "https://github.com/daxpedda/opaque-ke", rev = "e6cb5b7d8ca83eb296ccbfbe1b26e16f36403fdc", features = [
 	"slow-hash",
 	"std",
 ] }
@@ -36,7 +36,9 @@ serde = { version = "1", features = ["derive"] }
 serde-big-array = { version = "0.3", features = ["const-generics"] }
 subtle = "2"
 thiserror = "1"
-voprf = "0.2"
+voprf = { git = "https://github.com/daxpedda/voprf", rev = "af90af97d52805775888a578253c669ed68df16b", default-features = false, features = [
+	"danger",
+] }
 zeroize = "1"
 
 [dev-dependencies]

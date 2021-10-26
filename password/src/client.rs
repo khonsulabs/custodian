@@ -54,7 +54,7 @@ impl ClientConfig {
 
 /// Holds the state of a registration process. See [`register`](Self::register).
 #[must_use = "Use `finish()` to complete the registration process"]
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ClientRegistration {
 	/// [`ClientConfig`] of this [`ClientRegistration`].
 	config: ClientConfig,

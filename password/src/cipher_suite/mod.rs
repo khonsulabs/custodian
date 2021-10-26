@@ -194,7 +194,7 @@ macro_rules! cipher_suite {
 
 		/// [`opaque_ke::ClientRegistration`] wrapper.
 		#[allow(clippy::missing_docs_in_private_items)]
-		#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
+		#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 		pub(crate) enum ClientRegistration {
 			$($(#[$attr])? $cipher_suite(opaque_ke::ClientRegistration<$cipher_suite>),)+
 		}

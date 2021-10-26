@@ -305,7 +305,9 @@ fn cipher_suites() -> anyhow::Result<()> {
 		fn serialize<T: Debug + DeserializeOwned + PartialEq<T> + Serialize>(
 			value: &T,
 		) -> anyhow::Result<T> {
-			let new = bincode::deserialize(&bincode::serialize(value)?)?;
+			let new = bincode::deserialize::<T>(&bincode::serialize(value)?)?;
+			assert_eq!(&new, value);
+			let new = bincode::deserialize_from(bincode::serialize(value)?.as_slice())?;
 			assert_eq!(&new, value);
 			Ok(new)
 		}
