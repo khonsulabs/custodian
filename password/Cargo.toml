@@ -18,7 +18,7 @@ pbkdf2 = ["hmac", "pbkdf2_"]
 [dependencies]
 argon2 = "0.3"
 arrayvec = { version = "0.7", default-features = false, features = ["serde"] }
-blake3 = { version = "1", features = ["traits-preview"], optional = true }
+blake3 = { version = "=1.2", features = ["traits-preview"], optional = true }
 curve25519-dalek = "3"
 deranged = { version = "0.2", features = ["serde"] }
 digest = "0.9"

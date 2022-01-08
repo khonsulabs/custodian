@@ -1,4 +1,4 @@
-use khonsu_tools::{
+use khonsu_tools::universal::{
 	anyhow,
 	code_coverage::{self, CodeCoverage},
 };
